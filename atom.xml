@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2023-02-03T19:17:43.937Z</updated>
+  <updated>2023-02-04T09:23:21.635Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -21,34 +21,27 @@
     <link href="http://example.com/2023/02/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%A4%8D%E4%B9%A0%E6%8F%90%E7%BA%B2/"/>
     <id>http://example.com/2023/02/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%A4%8D%E4%B9%A0%E6%8F%90%E7%BA%B2/</id>
     <published>2023-02-02T19:11:50.000Z</published>
-    <updated>2023-02-03T19:17:43.937Z</updated>
+    <updated>2023-02-04T09:23:21.635Z</updated>
     
-    <content type="html"><![CDATA[<h1 id="计算机网络复习提纲"><a href="#计算机网络复习提纲" class="headerlink" title="计算机网络复习提纲"></a>计算机网络复习提纲</h1><ul><li><p>考察题型</p><ul><li><p>选择题（单选：1分-20个；多选：2分-5个；共30分）</p></li><li><p>简答题（共20分，4小题，每小题5分）</p></li><li><p>分析计算题（共40分，4小题，分值分别为：7-8-10-15）</p></li><li><p>论述题（共10分，1小题）  </p></li></ul></li><li><p>复习计划</p><ul><li><p>1.熟记知识点</p></li><li><p><img                       lazyload                     alt="image"                     data-src="./image/2021-08-04.png"                      alt="图片"                ></p><ul><li><p>图片</p><p><img                       lazyload                     alt="image"                     data-src="https://api2.mubu.com/v3/document_image/c896262d-b118-4901-8207-ee8943ae0aae-14724662.jpg"                      alt="img"                ></p><ul><li><p>1.三种数据交换方式</p><ul><li>答：电路交换、报文交换、分组交换</li></ul></li><li><p>2.计算机网络的定义</p><ul><li>答：一些互相连接的、自治的计算机的集合</li></ul></li><li><p>3.计算机网络类型</p><ul><li><p>按照作用范围：广域网、城域网、局域网、个人区域网</p></li><li><p>按照网络的使用者：公用网、专用网。</p></li></ul></li><li><p>4.网络的性能指标</p><ul><li><p>速率：也称数据率或者比特率，单位bps；</p></li><li><p>带宽：最高速率，单位bps；</p></li><li><p>时延：包含发送时延、传播时延、处理时延、排队时延；</p></li><li><p>往返时间：强调发送方至少要经过这么长的时间，才可以知道自己所发送的数据被对方接收了（计算有效数据率）；</p></li><li><p>利用率：利用率增加会导致时延的增加。（高速公路的流量很大的时候排队时延也会增加）</p></li></ul></li><li><p>5.网络协议的三要素</p><ul><li><p>为进行网络中的数据交换而建立的规则、标准或者约定称为网络协议；</p></li><li><p>三要素：语法（数据和控制信息的结构和格式）、语义（需要发出何种控制信息、完成何种动作、以及作出何种反应）、同步（事件实现顺序的详细说明）</p></li><li><p>附加：</p><ul><li><p>在协议的控制下，两个对等实体间的通信使得本层能够向上一层提供服务。要实现本层协议，还需要使用下面一层所提供的服务。</p></li><li><p>下面的协议对上面的服务是透明的；</p></li><li><p>协议是水平的，是控制对等实体之间通信的规则；服务是垂直的，服务是由下层向上层通过层间接口提供的。（上层使用下层的服务会交换一些命令，这些命令在OSI中成为服务原语）</p></li></ul></li></ul></li><li><p>6.五层协议模型以及各层的功能</p><ul><li><p>应用层：通过应用进程间的交互来完成特定网络应用。DNS、SMTP、HTTP等；</p></li><li><p>运输层：负责向两台主机中进程之间的通信提供通用的数据传输服务；TCP、UDP等；</p></li><li><p>网络层：负责为分组交换网上的不同主机提供通信服务。</p></li><li><p>数据链路层：将网络层传输下来的IP数据报组装成帧，在两个相邻节点间的链路传输帧；</p></li><li><p>物理层：透明地传输比特流；</p></li></ul></li><li><p>7.数据传输模式</p><ul><li><p>若按数据传输的顺序可以分为并行传输和串行传输；</p></li><li><p>若按数据传输的同步方式可分为同步传输和异步传输；</p></li><li><p>若按数据传输的流向和时间关系可以分为单工、半双工和全双工数据传输。</p></li></ul></li><li><p>8.比特率和波特率</p></li></ul></li></ul></li><li><p>2.学习通的习题 </p></li><li></li></ul></li></ul>]]></content>
+    <content type="html"><![CDATA[<ul><li><p>考察题型</p><ul><li><p>选择题（单选：1分-20个；多选：2分-5个；共30分）</p></li><li><p>简答题（共20分，4小题，每小题5分）</p></li><li><p>分析计算题（共40分，4小题，分值分别为：7-8-10-15）</p></li><li><p>论述题（共10分，1小题）  </p></li></ul></li><li><p>复习计划</p><ul><li><p>1.熟记知识点</p><ul><li><p>图片</p><p><img                       lazyload                     alt="image"                     data-src="https://jsd.cdn.zzko.cn/gh/William3242/image_host@main/20230204/%E6%8F%90%E7%BA%B2.1v3xgdn1ftwg.webp"                      alt="提纲"                ></p></li><li><p>1.三种数据交换方式</p><ul><li>答：电路交换、报文交换、分组交换</li></ul></li><li><p>2.计算机网络的定义</p><ul><li>答：一些互相连接的、自治的计算机的集合</li></ul></li><li><p>3.计算机网络类型</p><ul><li><p>按照作用范围：广域网、城域网、局域网、个人区域网</p></li><li><p>按照网络的使用者：公用网、专用网。</p></li></ul></li><li><p>4.网络的性能指标</p><ul><li><p>速率：也称数据率或者比特率，单位bps；</p></li><li><p>带宽：最高速率，单位bps；</p></li><li><p>时延：包含发送时延、传播时延、处理时延、排队时延；</p></li><li><p>往返时间：强调发送方至少要经过这么长的时间，才可以知道自己所发送的数据被对方接收了（计算有效数据率）；</p></li><li><p>利用率：利用率增加会导致时延的增加。（高速公路的流量很大的时候排队时延也会增加）</p></li></ul></li><li><p>5.网络协议的三要素</p><ul><li><p>为进行网络中的数据交换而建立的规则、标准或者约定称为网络协议；</p></li><li><p>三要素：语法（数据和控制信息的结构和格式）、语义（需要发出何种控制信息、完成何种动作、以及作出何种反应）、同步（事件实现顺序的详细说明）</p></li><li><p>附加：</p><ul><li><p>在协议的控制下，两个对等实体间的通信使得本层能够向上一层提供服务。要实现本层协议，还需要使用下面一层所提供的服务。</p></li><li><p>下面的协议对上面的服务是透明的；</p></li><li><p>协议是水平的，是控制对等实体之间通信的规则；服务是垂直的，服务是由下层向上层通过层间接口提供的。（上层使用下层的服务会交换一些命令，这些命令在OSI中成为服务原语）</p></li></ul></li></ul></li><li><p>6.五层协议模型以及各层的功能</p><ul><li><p>应用层：通过应用进程间的交互来完成特定网络应用。DNS、SMTP、HTTP等；</p></li><li><p>运输层：负责向两台主机中进程之间的通信提供通用的数据传输服务；TCP、UDP等；</p></li><li><p>网络层：负责为分组交换网上的不同主机提供通信服务。</p></li><li><p>数据链路层：将网络层传输下来的IP数据报组装成帧，在两个相邻节点间的链路传输帧；</p></li><li><p>物理层：透明地传输比特流；</p></li></ul></li><li><p>7.数据传输模式</p><ul><li><p>若按数据传输的顺序可以分为并行传输和串行传输；</p></li><li><p>若按数据传输的同步方式可分为同步传输和异步传输；</p></li><li><p>若按数据传输的流向和时间关系可以分为单工、半双工和全双工数据传输。</p></li></ul></li><li><p>8.比特率和波特率</p></li></ul></li><li><p>2.学习通的习题 </p></li><li></li></ul></li></ul>]]></content>
     
     
       
       
-    <summary type="html">&lt;h1 id=&quot;计算机网络复习提纲&quot;&gt;&lt;a href=&quot;#计算机网络复习提纲&quot; class=&quot;headerlink&quot; title=&quot;计算机网络复习提纲&quot;&gt;&lt;/a&gt;计算机网络复习提纲&lt;/h1&gt;&lt;ul&gt;
+    <summary type="html">&lt;ul&gt;
 &lt;li&gt;&lt;p&gt;考察题型&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;p&gt;选择题（单选：1分-20</summary>
+&lt;li&gt;&lt;p&gt;选择题（单选：1分-20个；多选：2分-5个；共30分）&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;简答题（共20分，4小题，每小题5分）&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;分析计算题（共40分，4小题，分值分别为：7-8</summary>
       
     
     
     
     
-  </entry>
-  
-  <entry>
-    <title>myfristblog</title>
-    <link href="http://example.com/2023/02/03/myfristblog/"/>
-    <id>http://example.com/2023/02/03/myfristblog/</id>
-    <published>2023-02-02T19:05:43.000Z</published>
-    <updated>2023-02-02T19:05:43.620Z</updated>
-    
-    
-    
-    
+    <category term="计算机网络" scheme="http://example.com/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"/>
     
   </entry>
   
