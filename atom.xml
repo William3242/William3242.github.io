@@ -57,9 +57,9 @@
     <category term="考试复习" scheme="http://example.com/categories/%E8%80%83%E8%AF%95%E5%A4%8D%E4%B9%A0/"/>
     
     
-    <category term="考试复习" scheme="http://example.com/tags/%E8%80%83%E8%AF%95%E5%A4%8D%E4%B9%A0/"/>
-    
     <category term="计算机网络" scheme="http://example.com/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"/>
+    
+    <category term="考试复习" scheme="http://example.com/tags/%E8%80%83%E8%AF%95%E5%A4%8D%E4%B9%A0/"/>
     
   </entry>
   
