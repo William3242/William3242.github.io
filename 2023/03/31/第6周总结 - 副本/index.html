@@ -9,7 +9,7 @@
     
     <title>
         
-            ChatGPT API初探 |
+            第6周总结-副本 |
         
         William&#39;s Blog
     </title>
@@ -191,7 +191,7 @@
         <div class="article-content-container">
 
             <div class="article-title">
-                <span class="title-hover-animation">ChatGPT API初探</span>
+                <span class="title-hover-animation">第6周总结-副本</span>
             </div>
 
             
@@ -213,13 +213,13 @@
         
             <i class="fa-regular fa-calendar-plus"></i>&nbsp;
         
-        <span class="pc">2023-03-29 21:44:58</span>
-        <span class="mobile">2023-03-29 21:44</span>
+        <span class="pc">2023-03-31 19:00:00</span>
+        <span class="mobile">2023-03-31 19:00</span>
     </span>
     
         <span class="article-update-date article-meta-item">
         <i class="fas fa-file-pen"></i>&nbsp;
-        <span class="pc">2023-03-30 19:14:53</span>
+        <span class="pc">2023-03-31 17:18:51</span>
     </span>
     
     
@@ -228,7 +228,7 @@
             <ul>
                 
                     <li>
-                        <a href="/categories/%E6%8A%80%E6%9C%AF%E7%B1%BB/">技术类</a>&nbsp;
+                        <a href="/categories/%E6%80%BB%E7%BB%93%E4%B8%8E%E8%A7%84%E5%88%92/">总结与规划</a>&nbsp;
                     </li>
                 
             </ul>
@@ -240,7 +240,7 @@
             <ul>
                 
                     <li>
-                        <a href="/tags/ChatGPT/">ChatGPT</a>&nbsp;
+                        <a href="/tags/%E5%91%A8%E6%80%BB%E7%BB%93/">周总结</a>&nbsp;
                     </li>
                 
             </ul>
@@ -250,12 +250,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fas fa-file-word"></i>&nbsp;<span>517 字</span>
+            <i class="fas fa-file-word"></i>&nbsp;<span>1.1k 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fas fa-clock"></i>&nbsp;<span>1 分钟</span>
+            <i class="fas fa-clock"></i>&nbsp;<span>3 分钟</span>
         </span>
     
     
@@ -273,115 +273,77 @@
             <div class="article-content keep-markdown-body">
                 
 
-                <ul>
-<li>提示：本文图片比较多，记录了调用openai api的遇到的问题，以及几种ChatGPT几种模型的比较（GPT3.0、GPT3.5以及前不久刚出的GPT4.0都有测试到。欢迎共同学习交流！）</li>
+                <h2 id="上周计划的回顾："><a href="#上周计划的回顾：" class="headerlink" title="上周计划的回顾："></a>上周计划的回顾：</h2><ul>
+<li>下周大事件：<ul>
+<li>蓝桥杯的备赛（真题和算法体系学习结合，优先级1）</li>
+<li>ChatGPT分享话题的准备；（优先级2）</li>
+<li>特定对象群体检测和信息整理（标准文字识别，优先级2）<ul>
+<li>完成地较好；</li>
 </ul>
-<span id="more"></span>
-
-<h2 id="1-尝试跑一下预训练模型"><a href="#1-尝试跑一下预训练模型" class="headerlink" title="1.尝试跑一下预训练模型"></a>1.尝试跑一下预训练模型</h2><ul>
-<li>先是注册API key在PyCharm IDE运行调用openai api，在挂了daili的情况下依然没有反应：（再后来，C盘红了…）</li>
-</ul>
-<p><img  
-                     lazyload
-                     alt="image"
-                     data-src="https://api2.mubu.com/v3/document_image/5a310cc7-4051-48ad-a11c-77e8d8465ce3-14724662.jpg"
-                      alt="image"
-                ></p>
-<ul>
-<li>换用百度BML CodeLAB云平台，但是模型下载太慢了，也没有找到合适的镜像，所以好像也行不通。</li>
-</ul>
-<p><img  
-                     lazyload
-                     alt="image"
-                     data-src="https://api2.mubu.com/v3/document_image/d990c1da-3022-4b22-beb4-daab49f2e2f9-14724662.jpg"
-                      alt="image"
-                ></p>
-<ul>
-<li>那就向ChatGPT求助吧，它提示我可以换用Google Colaboratory，之后用了果然香！</li>
-</ul>
-<p><img  
-                     lazyload
-                     alt="image"
-                     data-src="https://api2.mubu.com/v3/document_image/15955937-7065-4cf3-82c8-0d8a5ee33f10-14724662.jpg"
-                      alt="image"
-                ></p>
-<p><img  
-                     lazyload
-                     alt="image"
-                     data-src="https://api2.mubu.com/v3/document_image/ffe79866-750a-4fdc-a141-4be55af09808-14724662.jpg"
-                      alt="image"
-                ></p>
-<ul>
-<li><p>比如这nb的下载速度！（可是找的模型参数还是太大了，内存耗尽跑不了。其实也能跑，但是要出钱租算力，寄，就此作罢）</p>
-<p><img  
-                     lazyload
-                     alt="image"
-                     data-src="https://api2.mubu.com/v3/document_image/2b5890fb-62bd-468b-90b2-70b129250f1e-14724662.jpg"
-                      alt="image"
-                ></p>
 </li>
-<li><p>（上面的预训练模型跑通和部署干不了，下面就只能调用openai 的api玩玩，并把几代gpt模型测试比较了。）</p>
+<li>数学建模的思考<ul>
+<li>可以多多考虑一下</li>
+</ul>
+</li>
+<li>这周英语打卡（200个）<ul>
+<li>20个单词</li>
+</ul>
 </li>
 </ul>
-<h2 id="2-在Google-Colaboratory上调用open-ai接口"><a href="#2-在Google-Colaboratory上调用open-ai接口" class="headerlink" title="2.在Google Colaboratory上调用open ai接口"></a>2.在Google Colaboratory上调用open ai接口</h2><h3 id="2-1准备Prompt（提示词），这里主要测试英文语料"><a href="#2-1准备Prompt（提示词），这里主要测试英文语料" class="headerlink" title="2.1准备Prompt（提示词），这里主要测试英文语料"></a>2.1准备Prompt（提示词），这里主要测试英文语料</h3><ul>
-<li>Can you recommend some delicious Chinese food?More detailed things is better.</li>
+</li>
 </ul>
-<h3 id="2-2调用模型【下面截图来自官网】"><a href="#2-2调用模型【下面截图来自官网】" class="headerlink" title="2.2调用模型【下面截图来自官网】"></a>2.2调用模型【下面截图来自官网】</h3><p><img  
+<p>（下面习惯养成：）</p>
+<ul>
+<li>越来越感受到规律作息的重要性了~，每天八小时睡眠；<ul>
+<li>每天八小时的睡眠做到了</li>
+<li>老生常谈：12:40之前入睡；8:40之前起床。</li>
+</ul>
+</li>
+</ul>
+<p>救命，早上还是起不来~~~</p>
+<h2 id="做得好的"><a href="#做得好的" class="headerlink" title="做得好的"></a>做得好的</h2><ul>
+<li>蓝桥杯的备赛一直在进行</li>
+<li>碧泉湖的散心</li>
+<li>OCR的demo完成的不错</li>
+<li>周二和James聊天</li>
+</ul>
+<h2 id="需要提升的"><a href="#需要提升的" class="headerlink" title="需要提升的"></a>需要提升的</h2><ul>
+<li>规律作息，规律作息，向汤周学长学习</li>
+<li>稳中求进，不倒退。</li>
+</ul>
+<h2 id="小确幸"><a href="#小确幸" class="headerlink" title="小确幸"></a>小确幸</h2><ul>
+<li>国励证书到手<ul>
+<li><img  
                      lazyload
                      alt="image"
-                     data-src="https://api2.mubu.com/v3/document_image/0852697e-765c-4dda-9a83-c794bdbbf197-14724662.jpg"
-                      alt="image"
-                ></p>
-<p><img  
-                     lazyload
-                     alt="image"
-                     data-src="https://api2.mubu.com/v3/document_image/551b157a-d21b-492f-bb79-5db6f90b1a17-14724662.jpg"
-                      alt="image"
-                ></p>
-<h3 id="2-3基于text-davinci-002（就较它GPT2-0吧-）"><a href="#2-3基于text-davinci-002（就较它GPT2-0吧-）" class="headerlink" title="2.3基于text-davinci-002（就较它GPT2.0吧~）"></a>2.3基于text-davinci-002（就较它GPT2.0吧~）<img  
-                     lazyload
-                     alt="image"
-                     data-src="https://api2.mubu.com/v3/document_image/a1c0e249-f9d3-40d5-bd22-944cce3c33a1-14724662.jpg"
-                      alt="image"
-                ></h3><h3 id="2-4基于text-davinci-003（GPT3-0）"><a href="#2-4基于text-davinci-003（GPT3-0）" class="headerlink" title="2.4基于text-davinci-003（GPT3.0）"></a>2.4基于text-davinci-003（GPT3.0）</h3><p><img  
-                     lazyload
-                     alt="image"
-                     data-src="https://api2.mubu.com/v3/document_image/b85141fa-7f93-4892-9cf2-a64ceadbe8b3-14724662.jpg"
-                      alt="image"
-                ></p>
-<h3 id="2-5基于gpt-3-5-turbo（GPT3-5，目前能免费在网页端用到的就是这个"><a href="#2-5基于gpt-3-5-turbo（GPT3-5，目前能免费在网页端用到的就是这个" class="headerlink" title="2.5基于gpt-3.5-turbo（GPT3.5，目前能免费在网页端用到的就是这个)"></a>2.5基于gpt-3.5-turbo（GPT3.5，目前能免费在网页端用到的就是这个)</h3><p><img  
-                     lazyload
-                     alt="image"
-                     data-src="https://api2.mubu.com/v3/document_image/b4b72605-f6ae-42d4-8e21-3b424539a577-14724662.jpg"
-                      alt="image"
-                ></p>
-<h3 id="2-6基于gpt-3-5-turbo（GPT3-5，这次用的是中文提示词"><a href="#2-6基于gpt-3-5-turbo（GPT3-5，这次用的是中文提示词" class="headerlink" title="2.6基于gpt-3.5-turbo（GPT3.5，这次用的是中文提示词)"></a>2.6基于gpt-3.5-turbo（GPT3.5，这次用的是中文提示词)</h3><p><img  
-                     lazyload
-                     alt="image"
-                     data-src="https://api2.mubu.com/v3/document_image/38cbf325-1c14-404b-8e9b-c1b76a26d9c7-14724662.jpg"
-                      alt="image"
-                ></p>
-<h3 id="2-7和网页端相同问题作比较（GPT3-5，网页端）"><a href="#2-7和网页端相同问题作比较（GPT3-5，网页端）" class="headerlink" title="2.7和网页端相同问题作比较（GPT3.5，网页端）"></a>2.7和网页端相同问题作比较（GPT3.5，网页端）</h3><p><img  
-                     lazyload
-                     alt="image"
-                     data-src="https://api2.mubu.com/v3/document_image/8a9c15af-637e-46d7-a4ac-2481d2c5fd42-14724662.jpg"
-                      alt="image"
-                ></p>
-<h3 id="2-8和网页端相同问题作比较（GPT4，目前api端使用有限制，网页端充会员可以使用）"><a href="#2-8和网页端相同问题作比较（GPT4，目前api端使用有限制，网页端充会员可以使用）" class="headerlink" title="2.8和网页端相同问题作比较（GPT4，目前api端使用有限制，网页端充会员可以使用）"></a>2.8和网页端相同问题作比较（GPT4，目前api端使用有限制，网页端充会员可以使用）</h3><h3 id=""><a href="#" class="headerlink" title=""></a><img  
-                     lazyload
-                     alt="image"
-                     data-src="https://api2.mubu.com/v3/document_image/dad0d986-eee1-443d-9788-5279203dca6a-14724662.jpg"
-                      alt="image"
-                ></h3><p><img  
-                     lazyload
-                     alt="image"
-                     data-src="https://api2.mubu.com/v3/document_image/275c44fa-c2ef-4b33-ad6e-db2adcfd40b8-14724662.jpg"
-                      alt="image"
-                ></p>
-<p>（可以看到针对此问题，相较于GPT3.5，GPT4的回答不仅文本更长，并且在结构上更美观，内容方面也更加细节了）。</p>
-<h2 id="下一步工作："><a href="#下一步工作：" class="headerlink" title="下一步工作："></a>下一步工作：</h2><ul>
-<li>寻找参数合适的模型在本地跑通；</li>
-<li>尝试训练或者调教（貌似难度有点大，说不定有大佬看到这里就给我推荐相关教程嘿嘿）</li>
+                     data-src="https://znl9ai9z2z.feishu.cn/space/api/box/stream/download/asynccode/?code=ZjgyMzVmZTMzZGIxMGQwMzhjYmFlZGQxZGViYTQ5MTRfcHFWVTNKR2ZnYUtMSjNzNEdCaEpDcEp4Q3dPSWVPWjRfVG9rZW46QlRXWmJEQ3Nob3pRQjd4MUJDYWMxcng2blhmXzE2ODAyNTM2Mzc6MTY4MDI1NzIzN19WNA"
+                      alt="img"
+                ></li>
+</ul>
+</li>
+<li>院优秀学生干部</li>
+<li>Table leader</li>
+<li>Have a chat with Wendell</li>
+</ul>
+<h2 id="下周大事件："><a href="#下周大事件：" class="headerlink" title="下周大事件："></a>下周大事件：</h2><ul>
+<li><input disabled="" type="checkbox"> 蓝桥杯的备赛（真题和算法体系学习结合，优先级1,目前还是回味真题）；<a class="link"   target="_blank" rel="noopener" href="https://znl9ai9z2z.feishu.cn/docx/Cenodwh6go2EpWxWPm6c3KPanDc" >算法学习<i class="fas fa-external-link-alt"></i></a></li>
+<li><input disabled="" type="checkbox"> 周日的算法竞赛：冲，二等奖up！（优先级1）</li>
+<li><input disabled="" type="checkbox"> 百度的PaddlleOCR课程学习；（优先级2）</li>
+<li><input disabled="" type="checkbox"> 见微TCM：ChatGPT的本地化部署；（优先级2–&gt;产出一个学习文档）<ul>
+<li>Gpt api已完成</li>
+<li>下一步测试具体的模型（可以问问小爱同学）</li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"> 分享会：ChatGPT分享话题的准备；（优先级3） <a class="link"   target="_blank" rel="noopener" href="https://znl9ai9z2z.feishu.cn/docx/RnPfdx4eooRXhGxRZgmc0Nq4nQh" >ChatGPT分享<i class="fas fa-external-link-alt"></i></a></li>
+</ul>
+<h2 id="上周的每日总结整理（下周请加入昨天的目标执行情况）"><a href="#上周的每日总结整理（下周请加入昨天的目标执行情况）" class="headerlink" title="上周的每日总结整理（下周请加入昨天的目标执行情况）"></a>上周的每日总结整理（下周请加入昨天的目标执行情况）</h2><ul>
+<li><input disabled="" type="checkbox"> 03.20总结： 好的：go with the schedule； 提升：无 三只青蛙🐸：1.使用ChatGPT一小时（和老师的项目相结合）； 2.两道算法题（题目思想和ChatGPT结合）1.5h； 3.今天的作业不是补上（1.5h）</li>
+<li><input disabled="" type="checkbox"> 03.21总结： 做得好的：算法题目持续；free talk；chat with James and get the encouragement from James！ 提升：算法题目的效率需要提升，现在自己的算法接受能力已经挺好的了，可以花时间在算法学习上，让自己认识得更加全面；学习免打扰能力需要增强； 明天：2h算法学习；分享会主题1的观点生成和资料搜寻（2h）熬夜也要高质量完成；后天完成第二部分；英语练习30mins。</li>
+<li><input disabled="" type="checkbox"> 3.23总结： 1.基本完成今天的任务； 2.要提升的：将算法学习放在上午完成，会有一种轻松的感觉； 3.明天：算法题目总结（基于今天的内容）（2h）；将今天的内容整理好并且初步探索问题二（2h，15:00）；</li>
+<li><input disabled="" type="checkbox"> 3.24今日总结： 做得好的：利用ChatGPT高效地完成OCR项目；算法题目准时按质量完成。 做的不好的：无 明天：上午进行3小时算法比赛模拟；下午准备ORC的项目；晚上准备CHatGPT分享，产出一份分享会的大致思路；按时吃饭、休息。</li>
+<li><input disabled="" type="checkbox"> 03.25总结： 做得好的：蓝桥杯准备地很认真；线段树；一次总结；去骑车锻炼。 需要提升：因为是周六，自定的假日，所以要求没有那么高； 明天：上午进行2h算法整理(10-12)；下午准备ORC的项目(3h14:30-17:30)；晚上准备CHatGPT分享(3h)，产出一份分享会的大致思路；按时吃饭、休息。</li>
+<li><input disabled="" type="checkbox"> 0326总结： 好：任务基本完成；空闲的时候看央视的访谈；财经频道； 提：五分钟投入状态法用起来，周末睡了懒觉，吃了烤鸭，下周要☞棱起来！！ 明天：放松地去了解分享会的主题（把握主动权2.5h达标即可，enjoy it，you’ll get unexpected things!;两道算法题（做没做过都可以）（2h）;胡老师项目推进（1h）；本周总结（常规0.5h）；预告（算法比赛热身赛）</li>
+<li><input disabled="" type="checkbox"> 0327总结： 好的：今天又掌握了线段树和GCD的方法；脑壳一直在线；胡老师项目持续推进； 要提升：时间分配要完善，雨露均沾； 明天：周总结（30mins）；上午进行2h算法整理(10-12)；下午准备ORC的项目(1.5h)；人工智能导论的作业和笔记要跟上了！</li>
 </ul>
 
             </div>
@@ -392,16 +354,16 @@
 <div class="article-copyright-info-container">
     <ul class="copyright-info-content">
         <li class="post-title">
-            <span class="type">本文标题</span>：<span class="content">ChatGPT API初探</span>
+            <span class="type">本文标题</span>：<span class="content">第6周总结-副本</span>
         </li>
         <li class="post-author">
             <span class="type">本文作者</span>：<span class="content">Weiliang Huang</span>
         </li>
         <li class="post-time">
-            <span class="type">创建时间</span>：<span class="content">2023-03-29 21:44:58</span>
+            <span class="type">创建时间</span>：<span class="content">2023-03-31 19:00:00</span>
         </li>
         <li class="post-link">
-            <span class="type">本文链接</span>：<span class="content">2023/03/29/ChatGPT API初探/</span>
+            <span class="type">本文链接</span>：<span class="content">2023/03/31/第6周总结 - 副本/</span>
         </li>
         <li class="post-license">
             <span class="type">版权声明</span>：<span class="content">本博客所有文章除特别声明外，均采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> 许可协议。转载请注明出处！</span>
@@ -419,7 +381,7 @@
                 <ul class="post-tags-box">
                     
                         <li class="tag-item">
-                            <a href="/tags/ChatGPT/">#ChatGPT</a>&nbsp;
+                            <a href="/tags/%E5%91%A8%E6%80%BB%E7%BB%93/">#周总结</a>&nbsp;
                         </li>
                     
                 </ul>
@@ -431,13 +393,13 @@
                         <div class="article-prev">
                             <a class="prev"
                                rel="prev"
-                               href="/2023/03/31/%E7%AC%AC6%E5%91%A8%E6%80%BB%E7%BB%93%20-%20%E5%89%AF%E6%9C%AC/"
+                               href="/2023/03/31/%E7%AC%AC6%E5%91%A8%E6%80%BB%E7%BB%93/"
                             >
                             <span class="left arrow-icon flex-center">
                               <i class="fas fa-chevron-left"></i>
                             </span>
                                 <span class="title flex-center">
-                                <span class="post-nav-title-item">第6周总结-副本</span>
+                                <span class="post-nav-title-item">第6周总结</span>
                                 <span class="post-nav-item">上一篇</span>
                             </span>
                             </a>
@@ -447,10 +409,10 @@
                         <div class="article-next">
                             <a class="next"
                                rel="next"
-                               href="/2023/02/14/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B%E5%A4%8D%E4%B9%A0%E6%8F%90%E7%BA%B2/"
+                               href="/2023/03/29/ChatGPT%20API%E5%88%9D%E6%8E%A2/"
                             >
                             <span class="title flex-center">
-                                <span class="post-nav-title-item">软件工程复习提纲</span>
+                                <span class="post-nav-title-item">ChatGPT API初探</span>
                                 <span class="post-nav-item">下一篇</span>
                             </span>
                                 <span class="right arrow-icon flex-center">
@@ -469,7 +431,7 @@
             <div class="toc-content-container">
                 <div class="post-toc-wrap">
     <div class="post-toc">
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%B0%9D%E8%AF%95%E8%B7%91%E4%B8%80%E4%B8%8B%E9%A2%84%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.</span> <span class="nav-text">1.尝试跑一下预训练模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%9C%A8Google-Colaboratory%E4%B8%8A%E8%B0%83%E7%94%A8open-ai%E6%8E%A5%E5%8F%A3"><span class="nav-number">2.</span> <span class="nav-text">2.在Google Colaboratory上调用open ai接口</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1%E5%87%86%E5%A4%87Prompt%EF%BC%88%E6%8F%90%E7%A4%BA%E8%AF%8D%EF%BC%89%EF%BC%8C%E8%BF%99%E9%87%8C%E4%B8%BB%E8%A6%81%E6%B5%8B%E8%AF%95%E8%8B%B1%E6%96%87%E8%AF%AD%E6%96%99"><span class="nav-number">2.1.</span> <span class="nav-text">2.1准备Prompt（提示词），这里主要测试英文语料</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2%E8%B0%83%E7%94%A8%E6%A8%A1%E5%9E%8B%E3%80%90%E4%B8%8B%E9%9D%A2%E6%88%AA%E5%9B%BE%E6%9D%A5%E8%87%AA%E5%AE%98%E7%BD%91%E3%80%91"><span class="nav-number">2.2.</span> <span class="nav-text">2.2调用模型【下面截图来自官网】</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3%E5%9F%BA%E4%BA%8Etext-davinci-002%EF%BC%88%E5%B0%B1%E8%BE%83%E5%AE%83GPT2-0%E5%90%A7-%EF%BC%89"><span class="nav-number">2.3.</span> <span class="nav-text">2.3基于text-davinci-002（就较它GPT2.0吧~）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4%E5%9F%BA%E4%BA%8Etext-davinci-003%EF%BC%88GPT3-0%EF%BC%89"><span class="nav-number">2.4.</span> <span class="nav-text">2.4基于text-davinci-003（GPT3.0）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5%E5%9F%BA%E4%BA%8Egpt-3-5-turbo%EF%BC%88GPT3-5%EF%BC%8C%E7%9B%AE%E5%89%8D%E8%83%BD%E5%85%8D%E8%B4%B9%E5%9C%A8%E7%BD%91%E9%A1%B5%E7%AB%AF%E7%94%A8%E5%88%B0%E7%9A%84%E5%B0%B1%E6%98%AF%E8%BF%99%E4%B8%AA"><span class="nav-number">2.5.</span> <span class="nav-text">2.5基于gpt-3.5-turbo（GPT3.5，目前能免费在网页端用到的就是这个)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-6%E5%9F%BA%E4%BA%8Egpt-3-5-turbo%EF%BC%88GPT3-5%EF%BC%8C%E8%BF%99%E6%AC%A1%E7%94%A8%E7%9A%84%E6%98%AF%E4%B8%AD%E6%96%87%E6%8F%90%E7%A4%BA%E8%AF%8D"><span class="nav-number">2.6.</span> <span class="nav-text">2.6基于gpt-3.5-turbo（GPT3.5，这次用的是中文提示词)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-7%E5%92%8C%E7%BD%91%E9%A1%B5%E7%AB%AF%E7%9B%B8%E5%90%8C%E9%97%AE%E9%A2%98%E4%BD%9C%E6%AF%94%E8%BE%83%EF%BC%88GPT3-5%EF%BC%8C%E7%BD%91%E9%A1%B5%E7%AB%AF%EF%BC%89"><span class="nav-number">2.7.</span> <span class="nav-text">2.7和网页端相同问题作比较（GPT3.5，网页端）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-8%E5%92%8C%E7%BD%91%E9%A1%B5%E7%AB%AF%E7%9B%B8%E5%90%8C%E9%97%AE%E9%A2%98%E4%BD%9C%E6%AF%94%E8%BE%83%EF%BC%88GPT4%EF%BC%8C%E7%9B%AE%E5%89%8Dapi%E7%AB%AF%E4%BD%BF%E7%94%A8%E6%9C%89%E9%99%90%E5%88%B6%EF%BC%8C%E7%BD%91%E9%A1%B5%E7%AB%AF%E5%85%85%E4%BC%9A%E5%91%98%E5%8F%AF%E4%BB%A5%E4%BD%BF%E7%94%A8%EF%BC%89"><span class="nav-number">2.8.</span> <span class="nav-text">2.8和网页端相同问题作比较（GPT4，目前api端使用有限制，网页端充会员可以使用）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">2.9.</span> <span class="nav-text"></span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8B%E4%B8%80%E6%AD%A5%E5%B7%A5%E4%BD%9C%EF%BC%9A"><span class="nav-number">3.</span> <span class="nav-text">下一步工作：</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8A%E5%91%A8%E8%AE%A1%E5%88%92%E7%9A%84%E5%9B%9E%E9%A1%BE%EF%BC%9A"><span class="nav-number">1.</span> <span class="nav-text">上周计划的回顾：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%81%9A%E5%BE%97%E5%A5%BD%E7%9A%84"><span class="nav-number">2.</span> <span class="nav-text">做得好的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9C%80%E8%A6%81%E6%8F%90%E5%8D%87%E7%9A%84"><span class="nav-number">3.</span> <span class="nav-text">需要提升的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E7%A1%AE%E5%B9%B8"><span class="nav-number">4.</span> <span class="nav-text">小确幸</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8B%E5%91%A8%E5%A4%A7%E4%BA%8B%E4%BB%B6%EF%BC%9A"><span class="nav-number">5.</span> <span class="nav-text">下周大事件：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8A%E5%91%A8%E7%9A%84%E6%AF%8F%E6%97%A5%E6%80%BB%E7%BB%93%E6%95%B4%E7%90%86%EF%BC%88%E4%B8%8B%E5%91%A8%E8%AF%B7%E5%8A%A0%E5%85%A5%E6%98%A8%E5%A4%A9%E7%9A%84%E7%9B%AE%E6%A0%87%E6%89%A7%E8%A1%8C%E6%83%85%E5%86%B5%EF%BC%89"><span class="nav-number">6.</span> <span class="nav-text">上周的每日总结整理（下周请加入昨天的目标执行情况）</span></a></li></ol>
     </div>
 </div>
 
