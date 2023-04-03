@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2023-03-31T09:59:11.397Z</updated>
+  <updated>2023-04-03T13:52:45.583Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>蓝桥杯考前突击</title>
+    <link href="http://example.com/2023/04/03/%E8%93%9D%E6%A1%A5%E6%9D%AF%E8%80%83%E5%89%8D%E7%AA%81%E5%87%BB/"/>
+    <id>http://example.com/2023/04/03/%E8%93%9D%E6%A1%A5%E6%9D%AF%E8%80%83%E5%89%8D%E7%AA%81%E5%87%BB/</id>
+    <published>2023-04-03T12:44:58.000Z</published>
+    <updated>2023-04-03T13:52:45.583Z</updated>
+    
+    <content type="html"><![CDATA[<p>一些关于蓝桥杯的考前突击和温馨提醒。</p><span id="more"></span><h4 id="蓝桥杯一些提醒："><a href="#蓝桥杯一些提醒：" class="headerlink" title="蓝桥杯一些提醒："></a><strong>蓝桥杯一些提醒：</strong></h4><ul><li>时间：2023年4月8日 9:00-13:00（提前半小时以上）</li><li>询问了一下之前在学校的参赛的同学（小黑）：草稿纸是自己带的，纸质资料不允许携带。</li><li>题量大，往往不会做或者来不及用高效算法编码， <strong>模拟、暴力</strong>过部分的测试样例先拿到30%左右的分数即可；</li><li>填空题：每题5分，程序设计题8题，10，15，20，25分；</li><li>心态放开：5道题左右完全解出就已经很棒了；后面的暴力解决即可；</li></ul><h4 id="常考题型："><a href="#常考题型：" class="headerlink" title="常考题型："></a><strong>常考题型：</strong></h4><ul><li>杂题：考察思维能力和编码能力；（10分以上）</li><li>BFS搜索和<strong>DFS搜索</strong>：也就是暴力搜索–基础中的基础，虽然可能会超时；</li><li>动态规划：<strong>线性DP</strong>，状态压缩DP、树形DP；</li><li>简单数学和简单数论，比如<strong>杨辉三角、GCD、LCD</strong>；</li><li>简单的字符串处理、输入输出、简单图论（<strong>最短路径，BFS</strong>）。</li><li>基本算法：例如排序（sort、自定义排序函数）、排列、二分、倍增、差分、贪心。</li><li>基本数据结构：队列、栈、链表、二叉树。</li></ul><h4 id="填空题："><a href="#填空题：" class="headerlink" title="填空题："></a><strong>填空题：</strong></h4><ul><li>可以手算，或者用软件（<strong>EXCEL</strong>）帮助计算，运行时间比较长的计算题，测评机不好判题，就搞成了填空题的形式；</li><li>我遇到的，比如第5题，一般要编码实现，可以跳过，先做后面的简单的编程题；</li></ul><p><img                       lazyload                     alt="image"                     data-src="https://znl9ai9z2z.feishu.cn/space/api/box/stream/download/asynccode/?code=N2YzOTUzMzVlYzAwMmIyZGRiZGIxZjU4MzUwMWI3NTVfalBJelRuU0p4cXNlTjNFTVJZZmYwVU9SOTZrbW9WdVJfVG9rZW46SDhTUmJJQzYyb2h2RkF4Y0JKaGNkb2FWbjVnXzE2ODA1MjkyNjQ6MTY4MDUzMjg2NF9WNA"                      alt="img"                ></p><ul><li><p>OJ642题（DFS题）</p></li><li><p>填空题：字符、大数字、日期问题、Python首选（减少编码时间，Python代码相对来说更短一些）</p><ul><li><p>如下图，Python处理日期：</p></li><li><p><img                       lazyload                     alt="image"                     data-src="https://znl9ai9z2z.feishu.cn/space/api/box/stream/download/asynccode/?code=OTM1NjQ3NTgwMzQzMzc3MTcyZDVhODA0YTZlZTMxMDJfcElLOFpDRzZ4TzdaWE9DcmViOUhRaXZhVUQ0S2JMTmZfVG9rZW46SUNHQmJTRGl5b0tKWUd4TW4zTWNWcllRbkRjXzE2ODA1MjkyNjQ6MTY4MDUzMjg2NF9WNA"                      alt="img"                ></p></li><li><p>Python处理大数：</p><ul><li><img                       lazyload                     alt="image"                     data-src="https://znl9ai9z2z.feishu.cn/space/api/box/stream/download/asynccode/?code=ZWZiNzVkOTczODM5N2EzNjcwYTQ1YTRjZDViMDQ2NjRfa1oxNWM4dnVYWFB3YzVwOWFGTktVWHcwU3U3bUp1RVdfVG9rZW46Q1dPUGJYZGdKb1VoNm94ZHNSTGNyMDdGbnFkXzE2ODA1MjkyNjQ6MTY4MDUzMjg2NF9WNA"                      alt="img"                ></li></ul></li><li><p>Python处理字符： </p><ul><li><img                       lazyload                     alt="image"                     data-src="https://znl9ai9z2z.feishu.cn/space/api/box/stream/download/asynccode/?code=MDY2MmEzZTg1YzZiM2QyNGRjM2Y0NGNiZGQ1Y2I1ZmRfQVVSN0dpWWlnVzVqZEZhVTY2YW9ESk5oaHZZY0tJU09fVG9rZW46RTYwc2JVcFE0b1ZRdVB4b3Y4Z2NydVFqbmxnXzE2ODA1MjkyNjQ6MTY4MDUzMjg2NF9WNA"                      alt="img"                ></li></ul></li><li><p><img                       lazyload                     alt="image"                     data-src="https://znl9ai9z2z.feishu.cn/space/api/box/stream/download/asynccode/?code=MGQ5NmEyZGI4OTFhYjBlNThmOWY0NDQwZWQyOTEzNzdfc2wxNXpweE1HYjdpa2lEUGhkaVR5QlJtWDZHTHFSTTBfVG9rZW46WlR1NWIySlRTb3ZWeWd4WEVVb2M1OFdQblZlXzE2ODA1MjkyNjQ6MTY4MDUzMjg2NF9WNA"                      alt="img"                ></p></li></ul></li></ul><h4 id="题目练习：（蓝桥OJ）"><a href="#题目练习：（蓝桥OJ）" class="headerlink" title="题目练习：（蓝桥OJ）"></a><strong>题目练习：（蓝桥OJ）</strong></h4><p><img                       lazyload                     alt="image"                     data-src="https://znl9ai9z2z.feishu.cn/space/api/box/stream/download/asynccode/?code=OTExMzQ5ZWZlZGUyZThlZGI3YmYzZTkzNzJlNTg4MjJfY3NWN1JPd2dUTDB3SmwwQ1lWRnB6eEZiUU9yN0tod3pfVG9rZW46RHFjYWI4aWJ6b1Z6eVB4MzhCOGNLYWwwbnloXzE2ODA1MjkyNjQ6MTY4MDUzMjg2NF9WNA"                      alt="img"                ></p><h4 id="参考链接以及个人总结："><a href="#参考链接以及个人总结：" class="headerlink" title="参考链接以及个人总结："></a><strong>参考链接以及个人总结：</strong></h4><ul><li>以上内容大部分参考该视频：<a class="link"   href="https://www.bilibili.com/video/BV1MD4y1G7Pn/?spm_id_from=pageDriver&vd_source=c37d10e56c2ac111cf8224cb240a8724" >距省赛仅1个多月！蓝桥杯的比赛流程和必考点，你还不清楚？哔哩哔哩bilibili<i class="fas fa-external-link-alt"></i></a></li><li>蓝桥云课知识点：<a class="link"   href="https://qej4kkvli6.feishu.cn/docx/O9MLdS0DxoIXSMxaUf7cndwun5f" >⁢⁣⁡⁤⁣⁡⁢⁤⁣⁢⁤⁤⁢⁣⁤⁡⁢⁤⁡⁣⁣⁡⁡⁤蓝桥杯省赛知识点 &amp; 精炼（上+下） - 飞书云文档 (feishu.cn)<i class="fas fa-external-link-alt"></i></a></li><li>个人链接和总结：<a class="link"   href="https://znl9ai9z2z.feishu.cn/docx/Cenodwh6go2EpWxWPm6c3KPanDc" >⁣⁢⁤⁤⁢⁡⁡⁢⁡⁡⁤⁤⁣⁣⁤⁢算法学习 - 飞书云文档 (feishu.cn)<i class="fas fa-external-link-alt"></i></a></li><li>本文CSDN同步上传：<a class="link"   href="https://blog.csdn.net/qq_50079897/article/details/129940352?spm=1001.2014.3001.5501" >(22条消息) 蓝桥杯的考前突击（基础）_qq_50079897的博客-CSDN博客<i class="fas fa-external-link-alt"></i></a></li></ul>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;一些关于蓝桥杯的考前突击和温馨提醒。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="竞赛类" scheme="http://example.com/categories/%E7%AB%9E%E8%B5%9B%E7%B1%BB/"/>
+    
+    
+    <category term="蓝桥杯" scheme="http://example.com/tags/%E8%93%9D%E6%A1%A5%E6%9D%AF/"/>
+    
+  </entry>
   
   <entry>
     <title>第6周总结</title>
@@ -101,9 +122,9 @@
     <category term="考试复习" scheme="http://example.com/categories/%E8%80%83%E8%AF%95%E5%A4%8D%E4%B9%A0/"/>
     
     
-    <category term="考试复习" scheme="http://example.com/tags/%E8%80%83%E8%AF%95%E5%A4%8D%E4%B9%A0/"/>
-    
     <category term="计算机网络" scheme="http://example.com/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"/>
+    
+    <category term="考试复习" scheme="http://example.com/tags/%E8%80%83%E8%AF%95%E5%A4%8D%E4%B9%A0/"/>
     
   </entry>
   
