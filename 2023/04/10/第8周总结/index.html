@@ -9,7 +9,7 @@
     
     <title>
         
-            ChatGPT API初探 |
+            第8周总结 |
         
         William&#39;s Blog
     </title>
@@ -191,7 +191,7 @@
         <div class="article-content-container">
 
             <div class="article-title">
-                <span class="title-hover-animation">ChatGPT API初探</span>
+                <span class="title-hover-animation">第8周总结</span>
             </div>
 
             
@@ -213,13 +213,13 @@
         
             <i class="fa-regular fa-calendar-plus"></i>&nbsp;
         
-        <span class="pc">2023-03-29 21:44:58</span>
-        <span class="mobile">2023-03-29 21:44</span>
+        <span class="pc">2023-04-10 19:00:00</span>
+        <span class="mobile">2023-04-10 19:00</span>
     </span>
     
         <span class="article-update-date article-meta-item">
         <i class="fas fa-file-pen"></i>&nbsp;
-        <span class="pc">2023-03-30 19:14:53</span>
+        <span class="pc">2023-04-10 22:53:51</span>
     </span>
     
     
@@ -228,7 +228,7 @@
             <ul>
                 
                     <li>
-                        <a href="/categories/%E6%8A%80%E6%9C%AF%E7%B1%BB/">技术类</a>&nbsp;
+                        <a href="/categories/%E6%80%BB%E7%BB%93%E4%B8%8E%E8%A7%84%E5%88%92/">总结与规划</a>&nbsp;
                     </li>
                 
             </ul>
@@ -240,7 +240,7 @@
             <ul>
                 
                     <li>
-                        <a href="/tags/ChatGPT/">ChatGPT</a>&nbsp;
+                        <a href="/tags/%E5%91%A8%E6%80%BB%E7%BB%93/">周总结</a>&nbsp;
                     </li>
                 
             </ul>
@@ -250,7 +250,7 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fas fa-file-word"></i>&nbsp;<span>517 字</span>
+            <i class="fas fa-file-word"></i>&nbsp;<span>10 字</span>
         </span>
     
     
@@ -273,117 +273,18 @@
             <div class="article-content keep-markdown-body">
                 
 
-                <ul>
-<li>提示：本文图片比较多，记录了调用openai api的遇到的问题，以及几种ChatGPT几种模型的比较（GPT3.0、GPT3.5以及前不久刚出的GPT4.0都有测试到。欢迎共同学习交流！）</li>
-</ul>
-<span id="more"></span>
-
-<h2 id="1-尝试跑一下预训练模型"><a href="#1-尝试跑一下预训练模型" class="headerlink" title="1.尝试跑一下预训练模型"></a>1.尝试跑一下预训练模型</h2><ul>
-<li>先是注册API key在PyCharm IDE运行调用openai api，在挂了daili的情况下依然没有反应：（再后来，C盘红了…）</li>
-</ul>
-<p><img  
-                     lazyload
-                     alt="image"
-                     data-src="https://api2.mubu.com/v3/document_image/5a310cc7-4051-48ad-a11c-77e8d8465ce3-14724662.jpg"
-                      alt="image"
-                ></p>
-<ul>
-<li>换用百度BML CodeLAB云平台，但是模型下载太慢了，也没有找到合适的镜像，所以好像也行不通。</li>
-</ul>
-<p><img  
-                     lazyload
-                     alt="image"
-                     data-src="https://api2.mubu.com/v3/document_image/d990c1da-3022-4b22-beb4-daab49f2e2f9-14724662.jpg"
-                      alt="image"
-                ></p>
-<ul>
-<li>那就向ChatGPT求助吧，它提示我可以换用Google Colaboratory，之后用了果然香！</li>
-</ul>
-<p><img  
-                     lazyload
-                     alt="image"
-                     data-src="https://api2.mubu.com/v3/document_image/15955937-7065-4cf3-82c8-0d8a5ee33f10-14724662.jpg"
-                      alt="image"
-                ></p>
-<p><img  
-                     lazyload
-                     alt="image"
-                     data-src="https://api2.mubu.com/v3/document_image/ffe79866-750a-4fdc-a141-4be55af09808-14724662.jpg"
-                      alt="image"
-                ></p>
-<ul>
-<li><p>比如这nb的下载速度！（可是找的模型参数还是太大了，内存耗尽跑不了。其实也能跑，但是要出钱租算力，寄，就此作罢）</p>
-<p><img  
-                     lazyload
-                     alt="image"
-                     data-src="https://api2.mubu.com/v3/document_image/2b5890fb-62bd-468b-90b2-70b129250f1e-14724662.jpg"
-                      alt="image"
-                ></p>
-</li>
-<li><p>（上面的预训练模型跑通和部署干不了，下面就只能调用openai 的api玩玩，并把几代gpt模型测试比较了。）</p>
-</li>
-</ul>
-<h2 id="2-在Google-Colaboratory上调用open-ai接口"><a href="#2-在Google-Colaboratory上调用open-ai接口" class="headerlink" title="2.在Google Colaboratory上调用open ai接口"></a>2.在Google Colaboratory上调用open ai接口</h2><h3 id="2-1准备Prompt（提示词），这里主要测试英文语料"><a href="#2-1准备Prompt（提示词），这里主要测试英文语料" class="headerlink" title="2.1准备Prompt（提示词），这里主要测试英文语料"></a>2.1准备Prompt（提示词），这里主要测试英文语料</h3><ul>
-<li>Can you recommend some delicious Chinese food?More detailed things is better.</li>
-</ul>
-<h3 id="2-2调用模型【下面截图来自官网】"><a href="#2-2调用模型【下面截图来自官网】" class="headerlink" title="2.2调用模型【下面截图来自官网】"></a>2.2调用模型【下面截图来自官网】</h3><p><img  
-                     lazyload
-                     alt="image"
-                     data-src="https://api2.mubu.com/v3/document_image/0852697e-765c-4dda-9a83-c794bdbbf197-14724662.jpg"
-                      alt="image"
-                ></p>
-<p><img  
-                     lazyload
-                     alt="image"
-                     data-src="https://api2.mubu.com/v3/document_image/551b157a-d21b-492f-bb79-5db6f90b1a17-14724662.jpg"
-                      alt="image"
-                ></p>
-<h3 id="2-3基于text-davinci-002（就较它GPT2-0吧-）"><a href="#2-3基于text-davinci-002（就较它GPT2-0吧-）" class="headerlink" title="2.3基于text-davinci-002（就较它GPT2.0吧~）"></a>2.3基于text-davinci-002（就较它GPT2.0吧~）<img  
-                     lazyload
-                     alt="image"
-                     data-src="https://api2.mubu.com/v3/document_image/a1c0e249-f9d3-40d5-bd22-944cce3c33a1-14724662.jpg"
-                      alt="image"
-                ></h3><h3 id="2-4基于text-davinci-003（GPT3-0）"><a href="#2-4基于text-davinci-003（GPT3-0）" class="headerlink" title="2.4基于text-davinci-003（GPT3.0）"></a>2.4基于text-davinci-003（GPT3.0）</h3><p><img  
-                     lazyload
-                     alt="image"
-                     data-src="https://api2.mubu.com/v3/document_image/b85141fa-7f93-4892-9cf2-a64ceadbe8b3-14724662.jpg"
-                      alt="image"
-                ></p>
-<h3 id="2-5基于gpt-3-5-turbo（GPT3-5，目前能免费在网页端用到的就是这个"><a href="#2-5基于gpt-3-5-turbo（GPT3-5，目前能免费在网页端用到的就是这个" class="headerlink" title="2.5基于gpt-3.5-turbo（GPT3.5，目前能免费在网页端用到的就是这个)"></a>2.5基于gpt-3.5-turbo（GPT3.5，目前能免费在网页端用到的就是这个)</h3><p><img  
-                     lazyload
-                     alt="image"
-                     data-src="https://api2.mubu.com/v3/document_image/b4b72605-f6ae-42d4-8e21-3b424539a577-14724662.jpg"
-                      alt="image"
-                ></p>
-<h3 id="2-6基于gpt-3-5-turbo（GPT3-5，这次用的是中文提示词"><a href="#2-6基于gpt-3-5-turbo（GPT3-5，这次用的是中文提示词" class="headerlink" title="2.6基于gpt-3.5-turbo（GPT3.5，这次用的是中文提示词)"></a>2.6基于gpt-3.5-turbo（GPT3.5，这次用的是中文提示词)</h3><p><img  
-                     lazyload
-                     alt="image"
-                     data-src="https://api2.mubu.com/v3/document_image/38cbf325-1c14-404b-8e9b-c1b76a26d9c7-14724662.jpg"
-                      alt="image"
-                ></p>
-<h3 id="2-7和网页端相同问题作比较（GPT3-5，网页端）"><a href="#2-7和网页端相同问题作比较（GPT3-5，网页端）" class="headerlink" title="2.7和网页端相同问题作比较（GPT3.5，网页端）"></a>2.7和网页端相同问题作比较（GPT3.5，网页端）</h3><p><img  
-                     lazyload
-                     alt="image"
-                     data-src="https://api2.mubu.com/v3/document_image/8a9c15af-637e-46d7-a4ac-2481d2c5fd42-14724662.jpg"
-                      alt="image"
-                ></p>
-<h3 id="2-8和网页端相同问题作比较（GPT4，目前api端使用有限制，网页端充会员可以使用）"><a href="#2-8和网页端相同问题作比较（GPT4，目前api端使用有限制，网页端充会员可以使用）" class="headerlink" title="2.8和网页端相同问题作比较（GPT4，目前api端使用有限制，网页端充会员可以使用）"></a>2.8和网页端相同问题作比较（GPT4，目前api端使用有限制，网页端充会员可以使用）</h3><h3 id=""><a href="#" class="headerlink" title=""></a><img  
-                     lazyload
-                     alt="image"
-                     data-src="https://api2.mubu.com/v3/document_image/dad0d986-eee1-443d-9788-5279203dca6a-14724662.jpg"
-                      alt="image"
-                ></h3><p><img  
-                     lazyload
-                     alt="image"
-                     data-src="https://api2.mubu.com/v3/document_image/275c44fa-c2ef-4b33-ad6e-db2adcfd40b8-14724662.jpg"
-                      alt="image"
-                ></p>
-<p>（可以看到针对此问题，相较于GPT3.5，GPT4的回答不仅文本更长，并且在结构上更美观，内容方面也更加细节了）。</p>
-<h2 id="下一步工作："><a href="#下一步工作：" class="headerlink" title="下一步工作："></a>下一步工作：</h2><ul>
-<li>寻找参数合适的模型在本地跑通；</li>
-<li>尝试训练或者调教（貌似难度有点大，说不定有大佬看到这里就给我推荐相关教程嘿嘿）</li>
-</ul>
-
+                <div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="抱歉, 这个密码看着不太对, 请再试试." data-whm="抱歉, 这个文章不能被校验, 不过您还是能看看解密后的内容.">
+  <script id="hbeData" type="hbeData" data-hmacdigest="65923eb2da0811afea2a158e54482a3fbeca280855d663681fd9f3252fcc299f">50d2ace6d4011a5d64b17fbe64ac8bf288deef5e451cffc1b8f987f652affe36b91430462b3902e5e9c6de49c2f5535c6c93e26cc467552091ace6f5547049e4a1c11d3d95a0c9a851c1df7fccc2bbc4f92028dcb6958154714184939970a03c8daeb66b8c73537fd6c717aec2e1eb9a6eae1c1cd62b527f985a9f2481dd899167077aad8ed94ab5a25e6961f540b6fd9ef735118cb1e14f7b0cf3ba1417e17c128a5b8665dfda7ddce83c25375a198fd0b6a3f0793839fad7b447e7354fd80c4bbc5a955110277808e7231c1128aa750fe27fd10e90c794b10a3d1c7338df84214630e4a69ebc13baec9adffad31f0cec1ace5e184f3ffa16b2295a46ef2c7d19fcad2eff69a52112790da8c982cddd5d49b7538bc350e5e33d003d0cba5e0b8d14a8f473e7751f6a6dc5bc48ba6731f3dd3365a4f14913ebbd23a746b7423e6f626bca21409e09e6e5fb8a66a726f7d284892ebd85d676f8570e6a4de69b2fd5e43f5bef62e3425f67ff4705156335db259b582f39bedf359a648c13dcbafb5262436f49fe0359fbaea46663f73766390a79cfbc8381115aa593140032450d549b0ed0701a2bf6d55dcae550b61b435113da96766b6d7335241849dee2ad59c42009cc5a5d0c1eba290b281c1286491675ae4c72fb3fa3e9fd51ad1aec2adbee1066044aba469bfd47c954e32b4c208f9ff31f8c9fb154c6337ff269d11fd394d8b13f5c0516fd2d6ded92f01093f4de5d1135389728e314f57b2bd99d00e5290bdd53d3be61a5a5543ad9176681a0fba7225d618f6092a5f5848e2824aa39275183000b8f0d157bdc4b4ac54f3cdd5a5c717c9ef8b8ca9e8a2b01ca94fa34fbc4be22edd0e18538ee062c37aefe71e24a73621945bc3145654ff5bdad2b6be8de570d74eb7db94ec7da0aaff078aff7b3d2be2fefa156576e9317ff2df51c5e694186a0acaf47e2955a3b362c7dd1d5f03f21fe863a6d64f73e2e21a6d9b39d9009206b73f3045af52d8ea2630875d1b6478bd71343eee953cec3a2cdad16850ffb1f1b0affc2c7ee1e70aa5e9ccafb383b68aa94a55b071bfb2caacb1aa9c71443fd2e94fd176f09a30e871ce15d4e37372f8b67cc488c2c17a05675998f09e3ca2a52bed95ba9171e6d3f75c80b38b3c03a0e1053f059fd466baca74a627daf429885960ee25a189a623971415a4147a6a31a129ad5f38c37b092f968ebb9d0941313d10fd33a80034c9ba29a1f091007851c46b910abfe01b82ef41ba7080a1e15931dd08944c250be258e69a725fb146b50de53a97f1af621bbb0a05203856ba4c8d7470d703026766fd51be3ae491a9bf12b57c570d51222df13f23e7543da77dbd6833e978071c483aa8fb0319162dc791d9fef909828bbf60d34d0fecd2f973760ca4150e5c55f3c4f07fc6b3ccf8dd7b2fb41993303da5756d5321d869e096d33ddcb8341b18482a0d8012b853fc7a52ccc7afd5ee5b064ff723d5076ecc1c63b66f5973acf3fbc32f950830b1c2111867974c3050607a1490ecd65c220907ba4d21ccadd566c3892ec6975c181c66c7a51d1979aaa7b41db3c90b9a0deab8b2413cc8271dd4f02c32dcea795008ef4c0ca5d09c02ddf4c5adf0ead53769c30da87ebb23247cce62797d8051fdb3d26410fd87c6485b7517bf89b14ddb48ed8ab24dd1aa8f06742942fed59a3c9e7195aaa3d692ff05cbc3d7ee137155fde7d7a5c284c6082511958374d22e299d8a765f634880b4034e6767d9a69e62186e6960f435de09ccd2f6737989098ecc31137a9e38f4b6eb0e3612bfdcb9b4270720673267b208967cf309d52c94abae4d6f10f84de8847acf98863de7d8f949a6923fbad51388ec2ab242db4413dfd46e88612bf58031e2f4a6c1f0a6e464a41fafdf3171f21188ecc39c10a95c1609e2141fcbee2f4de33257b371b5a81ba622edeaf52496d41ec336da610913b9f65af48b1660d5875ed32407909236020dfc4ee0207dd926eb29554470e9c8a488c8f7eb129b581ac6ce9a2ddd0cf08e7004311687e32237f3c50a107a111ccf6a8b0fd7f2430aa3f78946d7728d3e5ae1baadfd06ca762f6505c1c8b2568d46e07fdc622b4d975b742c62e93192fc4530ebbd420a23745dc1b815ca37666324c520e437e9a894495e812c611041939caed8db807b192cd2538e9e222f084489f75a4f2f932c312c14cf739ba0c0659b42c90461153faa89b8f6d9d419adaaca756ebb8025fbeacfee95ad7f6378d15896a7dfc787ee31533cbb0b8ee63e46affa56099cb41d8cb9c783bee70783070975b7ecc12a9a8b46f09a39a8d5b10dc42135a98b5c463992b245133ccb9f7e81db37ac76352e1768610651e2b10a10fe19aa374b97b83d6ae8f4a28e2e4fe31bd74030e1a852f1118c2de75b9edffad0a1aca91145f9ad2ebc4b9b019545636d066fd2a9267022c9a4f77b7383761efdd4a29b676c8f02b3b00a507824ea454ae67e3682a999c374b946a12673099105c441dd34184723de5acdf4a204ca426f5d61f8f5de551f02f8a04a9914a0c93dbcce051c200df8e0fe107c55e709e9d3bbb04ec8ba08236e63405dbfdc7557d2c22640a97ada9ec3532eda58c92d73dce316eeb5862bd6827005d88d46c7170271dd7835422f1d71354c43a7318cfeb03a8670d86c37202a57c8c160e40ee0f0600ce360b07ab28668a6eea55db3d9d49697fdc71086e04171829829cccde947af17a32f5a8e6e5b67278e6fc92daac87abfe0bd5365077918675edb15f27511d457292ec809df3d21cfe9ea093a2e98e08e443c3a565532190af914a893ab6c92307ba75524692855978223ef59612aa8b54faeed78c1eae940426aec8013dfeebf410886a49f9e1b8292b8fc91c9d2aa31ede233afeeff9e68915cf29dc0260d8f018461fa743a717703f47698a3dacc798257030440881f66bd758a42406e71d80013d962d8a127cbe954bc4c4d2409cd2eeaa0b303da21a9615d493a01dc33e7f482df6c378b356f0b593cd2b624b1f50a3cab164e8f60540f1a2afa3bd33cac1f92d8ca38007481aadc27d186d11148122d5cdb8f82bee7b8b79d09a34c2c578f752e6521c4631f8718fac4a1871bba9ebe84c6ce14931ff96746cec4975fc0888b5b7686a7c6e8890bc4a967bb839b8b045ed2821b73f7c978145f309f3c69ebd98d3be8295ab3cc92ee685ed514ce23105af1256375810842aac1f08e6674f6018bb475f2a5cea52832ac78c2ac818ce03fb515f253cd3c6f98d37f6f2f804db51f6c24753fe3e34976b8928447f2ab459288c066f48884286cf601b79cd6941bc616fb964dd0d19900142fd084b57bd81931f61a3dde616a5518aa863b5c50056fe2f27febca2c72c41cf20d5a3a6dd69c8dd66348aa942e148b3b1ae87c30cbaf9f494f75499b4e77562934a24fc78dfa6ca7730424fc6c1b1ebfbdf9e91d0a57bf09227eca89dca9d56b1f4d654f0e80989eecc8e1f0404f8b1797005fc63752082f69f0e10f8f897264a93f2f1dcd2f340e78c9bd08a063a41480c9f08c26f0c6c7306e2e6d7ff6755f59ae3021e84ca5e887bd2ecd3d7ab5e2357b78cba99e9568c1891f27185dcf8c03189fe3efef45378ca2fb71ca72d5cefbedfb2de9c6d0e66c7567efaa8ee573b9cf1e3a71e8dddf062c9f352106e09d01db6a1e55b1a1783373d50a3c98d182e9662b98175b00c2d68500e0d8d68588763db83120eb3d05c831834f3ceac0e62497f5626deb485cd5216e03f489e3eeb3b919271717f4b8018bf7b9be7a4affc9f481e7a06fc3a8e77e6270c2191a04aa65ded21f920b96ef42312de091f54d780e8b5b0bf55ca6bde98b2007a850251a9d6d208686ec8bfe318cecb027cd295b7d205a856ac7673b6c798ecd510eb7e892e8d51cb33dcf0911d63abec873bad742a1c0ebc03329a0128e046cb0c4fb43e02aa480bfda24ecb279b9da449384d3d31bb749279de12f3ad4da924f2f3d602ed7605551568aa274a77c419e5980f364ed802c7f1d3f19348db87e411cd7f97af29dadb56940619e302466058f49c6160b299892b2db6f40302a8c42ef439ea9d8a0a100dc10f97cc371d7d04f8cb50ed33b0f0beb65b26fe5cf07b92d650948ff3c09edcd7d8596b682eb39edbd7b5747e1840697fd292de457bcb320b9b4dec55f913f5f427174ed84434d716cdf225f07900dc7f9909d1e15151df164e3b7c476233704b6ba7cfb177b06c2f2e6b1387c2224989045a110775b5b32d270a454e6428489b2e738011d23e02d4bb478bc546481307d5e12bc04cbcf5cb3e188f0f7aa9232aa5daf80e02c94ec8b9eb0fe5f3f0147991d53a86b911e90ccfb3973293d01807f7c2ccf0c89806d114d2acff09bfa65990951dd4e38b3f1ce433561f41fd366f3a2c110f3a9d776c54505b61836611c36c29ac0fdc3d974346b19c40124c383ea3707d3c32e2733ee360ced68cff731aa75cab4dcf3e125be102c9ecc44b631339d82e5ff37ff02a1cd45032152b5cfd104577f41f1073d77a4973b62bd045dafe6d98c5fed375f250d40598c6a3a1de469c65a95d7bca91ee303f812be934eaac633c0cd6a7a718b49076a4e1b20e05348249105f9fac8193d236cfe73a6c017ca5b991a2522e0b542b62cf12247a9025aeb5efb4b60a1a411fa28795012cba5be18683a327399f02eb40bed5620fb4f8e8261c03ead5c4210b3d0b8920fc59f48eb38b02676823bb1195ed58980965cb4f3c815609cd9644c5a869dcfd0bf480bb2c9c048296e510a0f0ce44c24222a8ad8fa76fc03f554804e59da052f71824f22e3c269ab36bb7260d16188b648afb053f8c0ab31189bf06ba4a8607df0edac17bda2c969ecfdea95e4452a9bd40af3b4c41ac800a20154e9c26b11a798263e5a11d993aa5243e6c71d87f327750db29d3e0d061cd91375383690f69382075ad86bd4f9a4cf4da828f67207837bc0afb676db3dec5a45f8e0ed13533a2247e588bdc8b936d41ff69e038192a18bf3d206a6f41b2ae5cf622c4ac113466eff9eeaab6105a0f4d04c93fe082dac1a0404d012dc7afe25494cabaae85350b4661339afc45ba6ca8dbca1cc89b89549709cfe8023aef7219b53d04e1ec183b296484190c19b742be98e464cc9b063f40c357a696453c55d9c093cb59fb1d319c93945094e43c225a66bbc47ed50df37449aa331c4d3cd04332a2c3ce9e365d2619a4b3da3418a0b66c5ab6d2d590d0a837c24f9f35912775031b14de29c19ba28da761dbc93bbd15732cefcd38042a41067fbb5a4eb9f23327d706cce471275fa6f9f607b9ee0f90c0fb223f4c464fb52a75ab96e88046c5d4f553eae2b10e7ed566dd6977e7366c7b1bec35658758d02fdf1e68fe5fca5cd9d819c781976dbbf639ace64dfe7daa8dbc5c6ed0be694728710942269c87ecae09586d217654373504606cfeae4ff96ff906f91af65898f9d40699cf86b57f766513fbf2c3c5b290167f88485d42302cb79e324643a66c0a7274fc5fb0958b3a83c0fadcec960a05281a902f3acc2c31b36bab5a7b5a37eb54d8b83374d4094992b44bb56aa6eff691104b36c113413c0fbb14bcde153a48c8bcdc03f8c36c07e1fd4cf8f52bd6a3dbcf7bdd495c923faadde8affb4c2a42094cf31a53668fa37b40633f03fb616a1340b97dab8c37c47245476d852a8628569cd4fd71774788c5fa7a481fed69ce0ef9c8312d106d7c834dd57f0c3fe8f5ce0c86f3f746db70e5774201ba56b10b9f316c73100aa0827c47b32d53a1ea7f29af126d28b23b694c3a28c91eed35bd888ccb570f48c71f75b3cc0429ee729eb017d70ba7719e4083edb90ff3eb069fb47b0c250c9b345f6cbc5ba696a50a572bdce1e812c5c9f04187559905ec40421a98921054e0c663b54973022a599d6b54e164f4fe0b42b921664a92c34e04871181818f96afa32dc785eaaab8616d559b07d96c253d1cab2e1d68d5c51319cbdfc0423d62482816bc477b56073d63d9010a8a47db79bc43d5049297b8dd759d7c69109775ed0a7780773d4b07adb30ebb63dacc8fb69c1348ee4231d754f4ad77dabfd61ee489b8a0f90450cef07734d056ef7e55e03b52d0c6266d15a705b3a54c2d32783b79187e3db281091a0895b745683ba5655674f965650d5873cc9e2f05ef451d7cfcb67d5636f46f09884b0c57ce00aca9760cdd76a76211a6be241461af2892dd366a9763cedaf96e6711f9a7f47d179ef4a474e2b8c48fb49bd682b4adf06f5d8ce23d9e7124b90a8c174caf7ac33a89691742684eabe5a28506cc0e3a07c42f64dc47cd3d14fc8397d41e9b80d40609cb819fba20e8c914898c2cde69cc4fa11b7bb97bdb12580e2ac8f5ccb6ceaa438e104e6b389d5262ca53558171831e087d8e233b3d97d55a2343f35e211791a2ca476bfacea4d05565431b2f0d9be5a751ce2a882e2f87bb8dd981d716b208c0c3bce93bf4188e4bb6c5071cccaeb0df6fe9748750e8bd847a0fd84dba7dd0a2fe97e55b125cc9f6c937073a7e931f6fcef0c861f3c96fdc36cb25cdb2d4ca8ee80cec7c58970c595c1ea8b3362ef4496db3793aed03fa212f5e62f720fc91653a1843ed8f2f6ffd6580dc740b2524758ae6ab78355faa8e53a9c0ccc19f7583f8a7941fc843369f15b71d1ffb05ca1d5ca90c712ce3375bd138cc0c547f5c7b0222037dd1b5cbd3d44735fa4cebbaf2ef8f9fe9aba80fe9cb99abc7d9720235fed0c250c07869cd41925f81ca3f58cee495c3c5b64fd274df2a6ed4311b1db849f07dbae3f9214f513394ea3afc370759c1c1c4ab49d0d2428a1ef46504eaac33e051f7a5f9a02b2da8769f60d9d30c4513b05a517158a7790cab82176dab4e13e4f8e473b8e8ff58c518241f9aff80dec52d4803a48736468daefd6c01902b3d02036be4e98b380233714c4cad02972c720effe85daefb9d6ebecf628f50a1f0b21bd301cb32f6d018cc7f5097c1544088f6c1268f91a0ff8d25eeea660e05ec0cd68172d2ac7d20ccaa9f7254144e505d686e494127ccc65d658a1f9c8de93cd07be3cf39f4a300e130a4550e6ee3d88e5939fd67084d9fda766b0647ccf950c7689f811e5195ea4e77e66f9bcfd842c93543e5c36776058138720d55f6075d9ee6147ad497f7cc67a75db827f9f01cdeb75d8e4dafb31c04660cf09d8c8f4cc2f35bd58b5eb816598fadb7d9564560dd4ecbd04dc9df3b667c2fc00d4524511cba683ad8fbda2bbb6be5b1a72aec1451e4fa887e83b6450c59f712f6bb9ba5f8e35ccc3b6d6d9faaeae610e5d55da7f37ebad705afe84263dad97471b8975a53867c455fff41ea0a60b9bb3a7a40a5a34b166321ac3428e840ea7a326c0b99e2184a525344738c61e8ca28edf44d008df87e9f1e3b6f04df13f427a3e7b304211a6c649c61787561d8c8781872ddbda1809fe67f9098ad2073ffb718df8359547b6384f128452d151447214df7dd7de46e2d50bb01521d192d2bdfc07f75c6b24f0aa3349a14105181f003edc28183c805cd286fc018817745cfacd8d272566babfb01e8bbf1d19f3388a0fc9c93fa260b4980c0d2e8b1003f0891170a2c062baabc82bbc9705b3ed1fb168550062dd5b19ca346055d2323fdf453cacde267c4688cc1953994fbd6bcc2f0ec5f7ff36937c5a97a56ef8ea6a36165a9c63facf0f002761164137935494c3887a0abf7905f26b907a5426798bb72cabd8d4ea4fd542ceecadd63fb0b638b00bc52cbcf57ebf9ef0313e3b164899d4450cb5b57e3025d38b74f30b7a21f5010b3a871e09058ab8cf276e89b052cd795509ff05c81c4e07f4a3acedac5214c3f774a866b14644cca14cef172b64048b4cde908094f19fbafe60220436144319fefa7d0da86f2c0a729b9dd73e9be206e1787123c896fcec7b95a7dcdb7dd09388a92b09367ac3963adfe717b12fe92604c7c27dd6225a7b4406e02eb099203972b1308a99e488e58238fcecf5feee4c077523827aba723689f78e274d328c8a32afae08b93a2c5f40ebfb7513ac4b3438e4c5286ccc12224f149652958ae2024f35f2966372887e68d7fb4a47441debd6c66b21a8abe456807c30ad6d55caf15394989923fd8f539692ce95c2f29e9d52b592c06082b34227df0938b80b318632f2410229402dca469b8a14fb350873211a75c7331b67695b7c151d267059eceabb4ebd1606ac485ffb98ef42b0909d3f879a076cbd4985392264b3eacd4868a68acb0d4991bd303675bf0dd0e170bdf853c300bb387af3901155d448cfaced21c671e123959bfcc72b54b5bba0b2b39e08b23b8f99384a0b17ca81b3f32abf68c1fb1932d90ddd679419a50961c19c9cce611cd30624a68087b6c4c32db0ed970aba0b2d5585a97a1ddb434e9bb545a3db5fcc94836fab9bc8d713df4badfb6d885384f3669ab762857337211231d866eb049e828a70f02c25066022d5bd768e716248e6099f277539bd3f4d70a3ae1a57813ebe27f8566324368f84a9c8d3cf743e285bee101a64b30abf8e0850c73de9f5368a726068790f9750b1237a86a419c0b806fec8c00b2b44b774614342709af1ba32e665126ad03d74d819b251b7d8702de2ff3c4104ffcade35460bb123a9fa58a482f91f9c9b1ea46e674b9d075a616486c3e0a59d9ea1273bb5ab6648fa6194825e7cc42413ac5897ec921e176cce8c7bc8223c8ca096c23f7c97a1c5afcd07dfe844b199e448f11c6938d84089100be683323275ac0e42fd2214405587ac0e8b008f656c1b2e63e3c8da48ed75b67f0a9181431c162e10b5f853774aa824c0a9d593b057074924d1cdb5d99d484be94033d1e1a6977e83da572490887c1a5</script>
+  <div class="hbe hbe-content">
+    <div class="hbe hbe-input hbe-input-shrink">
+      <input class="hbe hbe-input-field hbe-input-field-shrink" type="password" id="hbePass">
+      <label class="hbe hbe-input-label hbe-input-label-shrink" for="hbePass">
+        <span class="hbe hbe-input-label-content hbe-input-label-content-shrink">请输入密码，查看文章。</span>
+      </label>
+    </div>
+  </div>
+</div>
+<script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">
             </div>
 
             
@@ -392,16 +293,16 @@
 <div class="article-copyright-info-container">
     <ul class="copyright-info-content">
         <li class="post-title">
-            <span class="type">本文标题</span>：<span class="content">ChatGPT API初探</span>
+            <span class="type">本文标题</span>：<span class="content">第8周总结</span>
         </li>
         <li class="post-author">
             <span class="type">本文作者</span>：<span class="content">Weiliang Huang</span>
         </li>
         <li class="post-time">
-            <span class="type">创建时间</span>：<span class="content">2023-03-29 21:44:58</span>
+            <span class="type">创建时间</span>：<span class="content">2023-04-10 19:00:00</span>
         </li>
         <li class="post-link">
-            <span class="type">本文链接</span>：<span class="content">2023/03/29/ChatGPT API初探/</span>
+            <span class="type">本文链接</span>：<span class="content">2023/04/10/第8周总结/</span>
         </li>
         <li class="post-license">
             <span class="type">版权声明</span>：<span class="content">本博客所有文章除特别声明外，均采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> 许可协议。转载请注明出处！</span>
@@ -419,7 +320,7 @@
                 <ul class="post-tags-box">
                     
                         <li class="tag-item">
-                            <a href="/tags/ChatGPT/">#ChatGPT</a>&nbsp;
+                            <a href="/tags/%E5%91%A8%E6%80%BB%E7%BB%93/">#周总结</a>&nbsp;
                         </li>
                     
                 </ul>
@@ -428,29 +329,14 @@
             
                 <div class="article-nav">
                     
-                        <div class="article-prev">
-                            <a class="prev"
-                               rel="prev"
-                               href="/2023/03/31/%E7%AC%AC6%E5%91%A8%E6%80%BB%E7%BB%93/"
-                            >
-                            <span class="left arrow-icon flex-center">
-                              <i class="fas fa-chevron-left"></i>
-                            </span>
-                                <span class="title flex-center">
-                                <span class="post-nav-title-item">第6周总结</span>
-                                <span class="post-nav-item">上一篇</span>
-                            </span>
-                            </a>
-                        </div>
-                    
                     
                         <div class="article-next">
                             <a class="next"
                                rel="next"
-                               href="/2023/02/14/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B%E5%A4%8D%E4%B9%A0%E6%8F%90%E7%BA%B2/"
+                               href="/2023/04/03/%E8%93%9D%E6%A1%A5%E6%9D%AF%E8%80%83%E5%89%8D%E7%AA%81%E5%87%BB/"
                             >
                             <span class="title flex-center">
-                                <span class="post-nav-title-item">软件工程复习提纲</span>
+                                <span class="post-nav-title-item">蓝桥杯考前突击</span>
                                 <span class="post-nav-item">下一篇</span>
                             </span>
                                 <span class="right arrow-icon flex-center">
@@ -469,7 +355,7 @@
             <div class="toc-content-container">
                 <div class="post-toc-wrap">
     <div class="post-toc">
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%B0%9D%E8%AF%95%E8%B7%91%E4%B8%80%E4%B8%8B%E9%A2%84%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.</span> <span class="nav-text">1.尝试跑一下预训练模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%9C%A8Google-Colaboratory%E4%B8%8A%E8%B0%83%E7%94%A8open-ai%E6%8E%A5%E5%8F%A3"><span class="nav-number">2.</span> <span class="nav-text">2.在Google Colaboratory上调用open ai接口</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1%E5%87%86%E5%A4%87Prompt%EF%BC%88%E6%8F%90%E7%A4%BA%E8%AF%8D%EF%BC%89%EF%BC%8C%E8%BF%99%E9%87%8C%E4%B8%BB%E8%A6%81%E6%B5%8B%E8%AF%95%E8%8B%B1%E6%96%87%E8%AF%AD%E6%96%99"><span class="nav-number">2.1.</span> <span class="nav-text">2.1准备Prompt（提示词），这里主要测试英文语料</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2%E8%B0%83%E7%94%A8%E6%A8%A1%E5%9E%8B%E3%80%90%E4%B8%8B%E9%9D%A2%E6%88%AA%E5%9B%BE%E6%9D%A5%E8%87%AA%E5%AE%98%E7%BD%91%E3%80%91"><span class="nav-number">2.2.</span> <span class="nav-text">2.2调用模型【下面截图来自官网】</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3%E5%9F%BA%E4%BA%8Etext-davinci-002%EF%BC%88%E5%B0%B1%E8%BE%83%E5%AE%83GPT2-0%E5%90%A7-%EF%BC%89"><span class="nav-number">2.3.</span> <span class="nav-text">2.3基于text-davinci-002（就较它GPT2.0吧~）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4%E5%9F%BA%E4%BA%8Etext-davinci-003%EF%BC%88GPT3-0%EF%BC%89"><span class="nav-number">2.4.</span> <span class="nav-text">2.4基于text-davinci-003（GPT3.0）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5%E5%9F%BA%E4%BA%8Egpt-3-5-turbo%EF%BC%88GPT3-5%EF%BC%8C%E7%9B%AE%E5%89%8D%E8%83%BD%E5%85%8D%E8%B4%B9%E5%9C%A8%E7%BD%91%E9%A1%B5%E7%AB%AF%E7%94%A8%E5%88%B0%E7%9A%84%E5%B0%B1%E6%98%AF%E8%BF%99%E4%B8%AA"><span class="nav-number">2.5.</span> <span class="nav-text">2.5基于gpt-3.5-turbo（GPT3.5，目前能免费在网页端用到的就是这个)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-6%E5%9F%BA%E4%BA%8Egpt-3-5-turbo%EF%BC%88GPT3-5%EF%BC%8C%E8%BF%99%E6%AC%A1%E7%94%A8%E7%9A%84%E6%98%AF%E4%B8%AD%E6%96%87%E6%8F%90%E7%A4%BA%E8%AF%8D"><span class="nav-number">2.6.</span> <span class="nav-text">2.6基于gpt-3.5-turbo（GPT3.5，这次用的是中文提示词)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-7%E5%92%8C%E7%BD%91%E9%A1%B5%E7%AB%AF%E7%9B%B8%E5%90%8C%E9%97%AE%E9%A2%98%E4%BD%9C%E6%AF%94%E8%BE%83%EF%BC%88GPT3-5%EF%BC%8C%E7%BD%91%E9%A1%B5%E7%AB%AF%EF%BC%89"><span class="nav-number">2.7.</span> <span class="nav-text">2.7和网页端相同问题作比较（GPT3.5，网页端）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-8%E5%92%8C%E7%BD%91%E9%A1%B5%E7%AB%AF%E7%9B%B8%E5%90%8C%E9%97%AE%E9%A2%98%E4%BD%9C%E6%AF%94%E8%BE%83%EF%BC%88GPT4%EF%BC%8C%E7%9B%AE%E5%89%8Dapi%E7%AB%AF%E4%BD%BF%E7%94%A8%E6%9C%89%E9%99%90%E5%88%B6%EF%BC%8C%E7%BD%91%E9%A1%B5%E7%AB%AF%E5%85%85%E4%BC%9A%E5%91%98%E5%8F%AF%E4%BB%A5%E4%BD%BF%E7%94%A8%EF%BC%89"><span class="nav-number">2.8.</span> <span class="nav-text">2.8和网页端相同问题作比较（GPT4，目前api端使用有限制，网页端充会员可以使用）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">2.9.</span> <span class="nav-text"></span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8B%E4%B8%80%E6%AD%A5%E5%B7%A5%E4%BD%9C%EF%BC%9A"><span class="nav-number">3.</span> <span class="nav-text">下一步工作：</span></a></li></ol>
+        
     </div>
 </div>
 
