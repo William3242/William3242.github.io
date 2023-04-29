@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="Weiliang Huang">
+    
+    <title>
+        
+            人工智能导论复习指南 |
+        
+        William&#39;s Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <link rel="shortcut icon" href="/images/logo.svg">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.6.1/source/font/css/fontawesome.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.6.1/source/font/css/regular.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.6.1/source/font/css/solid.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.6.1/source/font/css/brands.min.css">
+    <script id="hexo-configurations">
+    let KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"zh-CN","path":"search.json"}
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":false},"style":{"primary_color":"#6699CC","logo":"/images/logo.svg","favicon":"/images/logo.svg","avatar":"/images/avatar.svg","font_size":null,"font_family":null,"hover":{"shadow":true,"scale":true},"first_screen":{"enable":true,"header_transparent":true,"background_img":"/images/bg.svg","description":"其实我动心了，但是赶路要紧，我没有说。","font_color":null,"hitokoto":false},"scroll":{"progress_bar":true,"percent":false}},"local_search":{"enable":true,"preload":true},"code_copy":{},"code_block":{"tools":{"enable":true,"style":"default"},"highlight_theme":"default"},"side_tools":{},"pjax":{"enable":true},"lazyload":{"enable":true},"comment":{"enable":false,"use":"gitalk","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":"William3242","github_admins":null,"repository":"myblog_comments","client_id":"499dfa2be988e751725d","client_secret":"eee002e7559c7a16e632b069ac4ba7e772c05bf0","proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},"twikoo":{"env_id":null,"region":null,"version":"1.6.8"},"waline":{"server_url":null,"reaction":false,"version":2}},"post":{"author_label":{"enable":true,"auto":true,"custom_label_list":["Trainee","Engineer","Architect"]},"word_count":{"enable":true,"wordcount":true,"min2read":true},"img_align":"center","copyright_info":true},"version":"3.6.1"}
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"}
+    KEEP.language_code_block = {"copy":"复制代码","copied":"已复制","fold":"折叠代码块","folded":"已折叠"}
+    KEEP.language_copy_copyright = {"copy":"复制版权信息","copied":"已复制","title":"原文标题","author":"原文作者","link":"原文链接"}
+  </script>
+<meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+        <span class="scroll-progress-bar"></span>
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <i class="pjax-progress-icon fas fa-circle-notch fa-spin"></i>
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="page-main-content">
+
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="header-content">
+        <div class="left">
+            
+                <a class="logo-image" href="/">
+                    <img src="/images/logo.svg">
+                </a>
+            
+            <a class="logo-title" href="/">
+               William&#39;s Blog
+            </a>
+        </div>
+
+        <div class="right">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                首页
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/book"
+                            >
+                                资源
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                归档
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/links"
+                            >
+                                友链
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/about"
+                            >
+                                关于
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/changelog"
+                            >
+                                更新日志
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">首页</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/book">资源</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">归档</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/links">友链</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/about">关于</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/changelog">更新日志</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle">
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container">
+        <div class="article-content-container">
+
+            <div class="article-title">
+                <span class="title-hover-animation">人工智能导论复习指南</span>
+            </div>
+
+            
+                <div class="article-header">
+                    <div class="avatar">
+                        <img src="/images/avatar.svg">
+                    </div>
+                    <div class="info">
+                        <div class="author">
+                            <span class="name">Weiliang Huang</span>
+                            
+                                <span class="author-label">Lv2</span>
+                            
+                        </div>
+                        <div class="meta-info">
+                            
+<div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        
+            <i class="fa-regular fa-calendar-plus"></i>&nbsp;
+        
+        <span class="pc">2023-04-29 18:00:00</span>
+        <span class="mobile">2023-04-29 18:00</span>
+    </span>
+    
+        <span class="article-update-date article-meta-item">
+        <i class="fas fa-file-pen"></i>&nbsp;
+        <span class="pc">2023-04-29 17:47:15</span>
+    </span>
+    
+    
+        <span class="article-categories article-meta-item">
+            <i class="fas fa-folder"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/categories/%E8%80%83%E8%AF%95%E5%A4%8D%E4%B9%A0/">考试复习</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fas fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%AF%BC%E8%AE%BA/">人工智能导论</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/%E8%80%83%E8%AF%95%E5%A4%8D%E4%B9%A0/">考试复习</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fas fa-file-word"></i>&nbsp;<span>2k 字</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fas fa-clock"></i>&nbsp;<span>7 分钟</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                        </div>
+                    </div>
+                </div>
+            
+
+            <div class="article-content keep-markdown-body">
+                
+
+                <p>内容包括分值分布、参考资料、必考题、次重点，作者水平有限，仅供参考，参考资料放在作者github仓库，需要的话自取，欢迎Star~，博客界面左边可以点击目录图标查看内容。</p>
+<span id="more"></span>
+
+<p>复习建议：有时间的话多看看作业题和PPT上的例题（出题来源），没时间的话可以多参考必考题一节。必考题罗列了概率会考的题目，参考价值较大，但由于制作时间有限，部分内容未能详述，请自行查找资料，还请见谅。如有错误，请联系作者，预祝各位取得好成绩。</p>
+<h3 id="分值分布："><a href="#分值分布：" class="headerlink" title="分值分布："></a>分值分布：</h3><ul>
+<li>简答题（50分）</li>
+<li>设计题（25分）</li>
+<li>综合题（15分）</li>
+<li>论述题（10分）</li>
+</ul>
+<h3 id="参考资料："><a href="#参考资料：" class="headerlink" title="参考资料："></a>参考资料：</h3><ul>
+<li>人工智能导论PPT</li>
+<li>docx文档：人工智能课后作业答案.docx</li>
+<li>pdf文档：人工智能导论复习.dpf（老师提供）</li>
+<li>pdf文档：人工智能考点笔记_WilliamHuang.pdf(老师最后一节课划的重点)</li>
+<li>以上资料均可在作者Github仓库中下载得到:<a class="link"   target="_blank" rel="noopener" href="https://github.com/William3242" >William3242<i class="fas fa-external-link-alt"></i></a>/<strong><a class="link"   target="_blank" rel="noopener" href="https://github.com/William3242/Artifiacial_Inteligence_Introduction" >Artifiacial_Inteligence_Introduction<i class="fas fa-external-link-alt"></i></a></strong></li>
+<li>获取本博客pdf版本，请点击链接：<a class="link"   target="_blank" rel="noopener" href="https://william3242.github.io/file/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%AF%BC%E8%AE%BA%E5%A4%8D%E4%B9%A0%E6%8C%87%E5%8D%97_WilliamHuang.pdf" >人工智能导论复习指南_WilliamHuang.pdf<i class="fas fa-external-link-alt"></i></a></li>
+</ul>
+<h3 id="必考题（务必重视）："><a href="#必考题（务必重视）：" class="headerlink" title="必考题（务必重视）："></a>必考题（务必重视）：</h3><h5 id="1-野人-传教士问题"><a href="#1-野人-传教士问题" class="headerlink" title="1. 野人-传教士问题"></a>1. 野人-传教士问题</h5><p>​    P78 2-2 设有 3 个传教士和 3 个野人来到河边，打算乘一只船从右岸渡到左岸去。该船的负载能力为两人。在任何时候，如果野人人数超过传教士人数，那么野人就会把传教士吃掉。如何用状态空间来表示该问题？给出具体的状态表示和算符。</p>
+<ul>
+<li><p>表示方法：(左岸传教士数, 左岸野人数, 船的位置)</p>
+</li>
+<li><p>初始状态：(0, 0, 0) </p>
+</li>
+<li><p>目标状态：(3, 3, 1)</p>
+</li>
+<li><p>算子：将传教士或野人运到河对岸</p>
+<p>如其中Move-1m1c-lr：将一个传教士(m)和一个野人(c)从左岸(L)运到右岸(R)</p>
+</li>
+<li><p>所有可能操作</p>
+<p>Move-1m1c-lr   Move-1m1c-rl   Move-2c-lr  Move-2c-rl         Move-2m-lr    </p>
+<p>Move-2m-rl  Move-1c-lr         Move-1c-rl      Move-1m-lr       Move-1m-rl</p>
+</li>
+<li><p>状态空间为：省略如下图（注意去掉不满足的状态即可）</p>
+</li>
+<li><p>状态空间图为：</p>
+<ul>
+<li><img  
+                     lazyload
+                     alt="image"
+                     data-src="https://api2.mubu.com/v3/document_image/d5bea4b9-00f2-4f50-ad77-6a7afcd0924e-14724662.jpg"
+                      alt="img"
+                ></li>
+</ul>
+</li>
+</ul>
+<h5 id="2-二元语义网络表示"><a href="#2-二元语义网络表示" class="headerlink" title="2.二元语义网络表示"></a>2.二元语义网络表示</h5><p>3选1考</p>
+<ul>
+<li><p>2.1 小燕从春天到秋天占有一个巢</p>
+<ul>
+<li><img  
+                     lazyload
+                     alt="image"
+                     data-src="https://api2.mubu.com/v3/document_image/114cae71-0303-4780-b02c-bd48d2c8d096-14724662.jpg"
+                      alt="img"
+                ></li>
+<li><img  
+                     lazyload
+                     alt="image"
+                     data-src="https://api2.mubu.com/v3/document_image/380f9d16-7991-4d07-927c-a172d4e8b37f-14724662.jpg"
+                      alt="img"
+                ></li>
+</ul>
+</li>
+<li><p>2.2 John给Mary一个礼物</p>
+<ul>
+<li><img  
+                     lazyload
+                     alt="image"
+                     data-src="https://api2.mubu.com/v3/document_image/21ae2918-beda-42d6-9c1a-13f966097814-14724662.jpg"
+                      alt="img"
+                ></li>
+<li><img  
+                     lazyload
+                     alt="image"
+                     data-src="https://api2.mubu.com/v3/document_image/62b3f11d-3408-47a8-b28c-34c1bcaf5985-14724662.jpg"
+                      alt="img"
+                ></li>
+</ul>
+</li>
+<li><p>2.3 Use semantic networks to represent the followings:</p>
+<p>– Nellie is an elephant,</p>
+<p>– he likes apples. </p>
+<p>– Elephants are a kind of mammals,</p>
+<p>– they live in Africa, </p>
+<p>– and they are big animals. </p>
+<p>– Mammals and reptiles are both animals, </p>
+<p>– all animals have head</p>
+<ul>
+<li><img  
+                     lazyload
+                     alt="image"
+                     data-src="https://api2.mubu.com/v3/document_image/0ec4d7ec-435e-47d8-a650-19f3847ca90f-14724662.jpg"
+                      alt="img"
+                ></li>
+</ul>
+</li>
+</ul>
+<h5 id="3-搜索算法"><a href="#3-搜索算法" class="headerlink" title="3.搜索算法"></a>3.搜索算法</h5><p>4种搜索算法（无信息：DFS、BFS；有信息（启发式）：A、A*）选1种考，注意下面这张PPT提的注意的要点</p>
+<p><img  
+                     lazyload
+                     alt="image"
+                     data-src="C:\Users\William\AppData\Roaming\Typora\typora-user-images\image-20230429170753140.png"
+                      alt="image-20230429170753140"
+                ></p>
+<ul>
+<li>有道课后习题涉及到这一点，答案见参考资料1：<img  
+                     lazyload
+                     alt="image"
+                     data-src="https://api2.mubu.com/v3/document_image/56f1bd34-d7e7-444c-bdfe-7a2ea59889c1-14724662.jpg"
+                      alt="img"
+                ></li>
+</ul>
+<h5 id="4-8数码难题"><a href="#4-8数码难题" class="headerlink" title="4.8数码难题"></a>4.8数码难题</h5><ul>
+<li><p>(下面两种算法2选1考，大概率A*算法)</p>
+</li>
+<li><p><img  
+                     lazyload
+                     alt="image"
+                     data-src="https://api2.mubu.com/v3/document_image/79ac2708-5dc6-4230-b4f5-3843bf08b26f-14724662.jpg"
+                      alt="img"
+                ></p>
+</li>
+<li><p>DFS算法（顺时针-上下左右试探，假定深度为8，按照此方式确定搜索树）</p>
+<ul>
+<li><img  
+                     lazyload
+                     alt="image"
+                     data-src="https://api2.mubu.com/v3/document_image/1d28b027-187d-45d6-9211-612c8c76e0b7-14724662.jpg"
+                      alt="img"
+                ></li>
+</ul>
+</li>
+<li><p>A*算法</p>
+<ul>
+<li><img  
+                     lazyload
+                     alt="image"
+                     data-src="https://api2.mubu.com/v3/document_image/652e613f-d224-4fd4-8ec6-2f9122967ce0-14724662.jpg"
+                      alt="img"
+                ></li>
+</ul>
+</li>
+</ul>
+<h5 id="5-消解反演"><a href="#5-消解反演" class="headerlink" title="5.消解反演"></a>5.消解反演</h5><ul>
+<li><p>三个例子选一个<img  
+                     lazyload
+                     alt="image"
+                     data-src="https://api2.mubu.com/v3/document_image/1dab842c-cd64-4962-80b6-0aab6893f95a-14724662.jpg"
+                      alt="img"
+                ></p>
+</li>
+<li><p><img  
+                     lazyload
+                     alt="image"
+                     data-src="https://api2.mubu.com/v3/document_image/238b7242-3990-4973-a948-621ee9d2c5ec-14724662.jpg"
+                      alt="img"
+                ></p>
+<p>例子1：省略了部分过程<img  
+                     lazyload
+                     alt="image"
+                     data-src="https://api2.mubu.com/v3/document_image/c1f82bde-45fc-4891-9c45-550ffcac2f73-14724662.jpg"
+                      alt="img"
+                ></p>
+</li>
+<li><p><img  
+                     lazyload
+                     alt="image"
+                     data-src="https://api2.mubu.com/v3/document_image/645a70a3-5636-4eb8-91db-966ccdb061e3-14724662.jpg"
+                      alt="img"
+                ></p>
+</li>
+<li><p><img  
+                     lazyload
+                     alt="image"
+                     data-src="https://api2.mubu.com/v3/document_image/8775549d-5e64-4071-bf0c-09241fbc1524-14724662.jpg"
+                      alt="img"
+                ></p>
+</li>
+<li><p><img  
+                     lazyload
+                     alt="image"
+                     data-src="https://api2.mubu.com/v3/document_image/55e1159c-d716-482c-bfd4-82267daaf22c-14724662.jpg"
+                      alt="img"
+                ></p>
+</li>
+<li><p>详见P101例子3.9 省略了过程<img  
+                     lazyload
+                     alt="image"
+                     data-src="https://api2.mubu.com/v3/document_image/5dddd531-a265-4da9-820d-0f9cfba007f0-14724662.jpg"
+                      alt="img"
+                ></p>
+</li>
+</ul>
+<h5 id="6-设计一个神经网络来实现XOR异或操作"><a href="#6-设计一个神经网络来实现XOR异或操作" class="headerlink" title="6.设计一个神经网络来实现XOR异或操作"></a>6.设计一个神经网络来实现XOR异或操作</h5><ul>
+<li>​    来自于课后习题P180 4-5 <img  
+                     lazyload
+                     alt="image"
+                     data-src="https://api2.mubu.com/v3/document_image/1cf3cef6-366a-4dce-ac45-e0c0ff61f3d5-14724662.jpg"
+                      alt="img"
+                ></li>
+</ul>
+<h5 id="7-遗传算法（EA）"><a href="#7-遗传算法（EA）" class="headerlink" title="7.遗传算法（EA）"></a>7.遗传算法（EA）</h5><ul>
+<li><p>以教材P155式（4.23）具体来展示遗传算法的过程和步骤（参见教材，在此不作总结） </p>
+</li>
+<li><p>P181 4-14例题</p>
+</li>
+<li><p><img  
+                     lazyload
+                     alt="image"
+                     data-src="https://api2.mubu.com/v3/document_image/efd781e2-94f9-43d8-8e0d-5714a451b87a-14724662.jpg"
+                      alt="img"
+                ></p>
+</li>
+</ul>
+<h5 id="8-决策树的构造算法和学习算法的构造过程"><a href="#8-决策树的构造算法和学习算法的构造过程" class="headerlink" title="8.决策树的构造算法和学习算法的构造过程"></a>8.决策树的构造算法和学习算法的构造过程</h5><ul>
+<li><img  
+                     lazyload
+                     alt="image"
+                     data-src="https://api2.mubu.com/v3/document_image/452dee17-d38c-4aaa-965c-54632c3de42c-14724662.jpg"
+                      alt="img"
+                ></li>
+<li>具体参见参见教材P257算法6.1；以及教材P259算法6.2。</li>
+</ul>
+<h3 id="次重点："><a href="#次重点：" class="headerlink" title="次重点："></a>次重点：</h3><p><img  
+                     lazyload
+                     alt="image"
+                     data-src="https://api2.mubu.com/v3/document_image/f613c2c4-f7d7-4031-b1e9-05c08e9b463e-14724662.jpg"
+                      alt="img"
+                ></p>
+<ul>
+<li><p>对AI发展的看法以及研究热点（论述题大概率考）</p>
+<p>此题为开放题，下面是GPT-4的回答，仅供打开思路，另可参考教材第一章。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">作为一个基于GPT-4架构的人工智能，我可以分享一些关于AI发展的看法以及当前的研究热点。</span><br><span class="line"></span><br><span class="line">AI发展的看法：</span><br><span class="line">人工智能在过去的几十年里取得了巨大的进步。随着计算能力的提高和大量数据的积累，深度学习和机器学习技术得到了广泛的应用。AI已经渗透到了诸如自动驾驶、医疗诊断、语言翻译、虚拟助手等许多行业。在未来，我们预期AI将在各个领域产生更多的影响，提高生产效率，改变人们的生活方式。</span><br><span class="line">然而，AI发展也引发了一些关切。例如，隐私、数据安全、失业、道德伦理等问题需要解决。因此，政策制定者、研究人员和产业界需要共同努力，确保AI技术的安全、可靠、公平和透明。</span><br><span class="line"></span><br><span class="line">研究热点：</span><br><span class="line">当前，AI领域的研究热点包括但不限于以下几个方面：</span><br><span class="line">a. 强化学习：通过让机器学习在特定环境中进行试错，以获取最佳策略的方法。在游戏、机器人控制和自动驾驶等领域有广泛应用。</span><br><span class="line"></span><br><span class="line">b. 生成对抗网络（GAN）：一种用于生成数据的深度学习方法，通过让两个神经网络相互竞争来提高生成数据的质量。广泛应用于图像合成、风格迁移等任务。</span><br><span class="line"></span><br><span class="line">c. 自然语言处理（NLP）：关注让计算机理解、生成和处理自然语言的技术。目前研究热点包括预训练语言模型、机器翻译、情感分析等。</span><br><span class="line"></span><br><span class="line">d. 计算机视觉：关注让计算机理解和处理图像或视频的技术。研究热点包括目标检测、人脸识别、图像分割等。</span><br><span class="line"></span><br><span class="line">e. 无监督学习和半监督学习：在训练数据缺乏标签的情况下，让机器学习模型自我学习的方法。这些方法在处理大量未标注数据时具有巨大潜力。</span><br><span class="line"></span><br><span class="line">f. 人工智能伦理和政策：关注AI技术带来的道德、法律和社会影响，以及如何制定相应的政策和规范。</span><br><span class="line">AI领域的发展前景广阔，研究热点不断涌现。除了上述提到的研究方向，以下还有一些值得关注的领域：</span><br><span class="line"></span><br><span class="line">g. 机器学习的可解释性：让机器学习模型更加透明和可解释的研究。这有助于提高人们对AI系统的信任，增加模型的可靠性和安全性。</span><br><span class="line"></span><br><span class="line">h. 神经符号整合：探索将深度学习和传统符号逻辑相结合的方法，以解决AI系统在推理、抽象和知识表示方面的局限性。</span><br><span class="line"></span><br><span class="line">i. 多模态学习：让AI系统能够处理和理解来自多种感官（如视觉、听觉、触觉等）的信息。这有助于开发更加智能和自适应的AI系统。</span><br><span class="line"></span><br><span class="line">j. 元学习（Meta-learning）：通过让AI系统自我学习如何学习，以提高模型在新任务和领域的泛化能力。</span><br><span class="line"></span><br><span class="line">k. 小样本学习：研究如何在少量标注数据的情况下，让机器学习模型实现高效的学习。这有助于降低AI系统对大量标注数据的依赖。</span><br><span class="line"></span><br><span class="line">l. 安全AI：研究如何确保AI系统在各种条件下的安全性、稳定性和可控性，包括抵御对抗性攻击、防止模型崩溃等。</span><br><span class="line"></span><br><span class="line">m. 人工智能与心理学、神经科学的交叉研究：通过模仿人类大脑和认知过程来发展AI系统，以提高其智能和适应能力。</span><br><span class="line"></span><br><span class="line">这些研究热点不仅反映了AI领域的技术进步，还揭示了人们对于人工智能在未来发展中所需解决的挑战和问题的关注。AI研究人员、产业界和政策制定者需共同努力，以推动AI技术的创新和应用，同时确保其对人类社会的积极影响。</span><br></pre></td></tr></table></figure></li>
+</ul>
+
+            </div>
+
+            
+                <div class="post-copyright-info">
+                    
+<div class="article-copyright-info-container">
+    <ul class="copyright-info-content">
+        <li class="post-title">
+            <span class="type">本文标题</span>：<span class="content">人工智能导论复习指南</span>
+        </li>
+        <li class="post-author">
+            <span class="type">本文作者</span>：<span class="content">Weiliang Huang</span>
+        </li>
+        <li class="post-time">
+            <span class="type">创建时间</span>：<span class="content">2023-04-29 18:00:00</span>
+        </li>
+        <li class="post-link">
+            <span class="type">本文链接</span>：<span class="content">2023/04/29/人工智能导论复习指南/</span>
+        </li>
+        <li class="post-license">
+            <span class="type">版权声明</span>：<span class="content">本博客所有文章除特别声明外，均采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> 许可协议。转载请注明出处！</span>
+        </li>
+    </ul>
+    <div class="copy-copyright-info flex-center tooltip" data-content="复制版权信息" data-offset-y="-2px">
+        <i class="fa-solid fa-copy"></i>
+    </div>
+</div>
+
+                </div>
+            
+
+            
+                <ul class="post-tags-box">
+                    
+                        <li class="tag-item">
+                            <a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%AF%BC%E8%AE%BA/">#人工智能导论</a>&nbsp;
+                        </li>
+                    
+                        <li class="tag-item">
+                            <a href="/tags/%E8%80%83%E8%AF%95%E5%A4%8D%E4%B9%A0/">#考试复习</a>&nbsp;
+                        </li>
+                    
+                </ul>
+            
+
+            
+                <div class="article-nav">
+                    
+                    
+                        <div class="article-next">
+                            <a class="next"
+                               rel="next"
+                               href="/2023/04/10/%E7%AC%AC8%E5%91%A8%E6%80%BB%E7%BB%93/"
+                            >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">第8周总结</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                                <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                            </a>
+                        </div>
+                    
+                </div>
+            
+
+            
+        </div>
+
+        
+            <div class="toc-content-container">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E5%80%BC%E5%88%86%E5%B8%83%EF%BC%9A"><span class="nav-number">1.</span> <span class="nav-text">分值分布：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%9A"><span class="nav-number">2.</span> <span class="nav-text">参考资料：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BF%85%E8%80%83%E9%A2%98%EF%BC%88%E5%8A%A1%E5%BF%85%E9%87%8D%E8%A7%86%EF%BC%89%EF%BC%9A"><span class="nav-number">3.</span> <span class="nav-text">必考题（务必重视）：</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-%E9%87%8E%E4%BA%BA-%E4%BC%A0%E6%95%99%E5%A3%AB%E9%97%AE%E9%A2%98"><span class="nav-number">3.0.1.</span> <span class="nav-text">1. 野人-传教士问题</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-%E4%BA%8C%E5%85%83%E8%AF%AD%E4%B9%89%E7%BD%91%E7%BB%9C%E8%A1%A8%E7%A4%BA"><span class="nav-number">3.0.2.</span> <span class="nav-text">2.二元语义网络表示</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-%E6%90%9C%E7%B4%A2%E7%AE%97%E6%B3%95"><span class="nav-number">3.0.3.</span> <span class="nav-text">3.搜索算法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4-8%E6%95%B0%E7%A0%81%E9%9A%BE%E9%A2%98"><span class="nav-number">3.0.4.</span> <span class="nav-text">4.8数码难题</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#5-%E6%B6%88%E8%A7%A3%E5%8F%8D%E6%BC%94"><span class="nav-number">3.0.5.</span> <span class="nav-text">5.消解反演</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#6-%E8%AE%BE%E8%AE%A1%E4%B8%80%E4%B8%AA%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E6%9D%A5%E5%AE%9E%E7%8E%B0XOR%E5%BC%82%E6%88%96%E6%93%8D%E4%BD%9C"><span class="nav-number">3.0.6.</span> <span class="nav-text">6.设计一个神经网络来实现XOR异或操作</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#7-%E9%81%97%E4%BC%A0%E7%AE%97%E6%B3%95%EF%BC%88EA%EF%BC%89"><span class="nav-number">3.0.7.</span> <span class="nav-text">7.遗传算法（EA）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#8-%E5%86%B3%E7%AD%96%E6%A0%91%E7%9A%84%E6%9E%84%E9%80%A0%E7%AE%97%E6%B3%95%E5%92%8C%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95%E7%9A%84%E6%9E%84%E9%80%A0%E8%BF%87%E7%A8%8B"><span class="nav-number">3.0.8.</span> <span class="nav-text">8.决策树的构造算法和学习算法的构造过程</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AC%A1%E9%87%8D%E7%82%B9%EF%BC%9A"><span class="nav-number">4.</span> <span class="nav-text">次重点：</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom">
+            
+<footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info info-item">
+            &copy;
+            
+                <span>2023</span> -
+            
+            2023
+            
+                &nbsp;<i class="fas fa-heart icon-animate"></i>
+                &nbsp;<a href="/">Weiliang Huang</a>
+            
+        </div>
+        
+            <script async data-pjax
+                    src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    访问人数&nbsp;<span id="busuanzi_value_site_uv"></span>&ensp;
+                
+                
+                    总访问量&nbsp;<span id="busuanzi_value_site_pv"></span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            由 Hexo 驱动&nbsp;|&nbsp;主题&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.6.1</a>
+        </div>
+        
+        
+            <div class="deploy-info info-item">
+                
+                    本站由 <span class="tooltip" data-content="GitHub Pages"><img src="/images/deploy-provider/github.png"></span> 提供部署服务
+                
+            </div>
+        
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-bottom-side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+            <li class="tools-item rss flex-center">
+                <a class="flex-center"
+                   href="/atom.xml"
+                   target="_blank"
+                >
+                    <i class="fas fa-rss"></i>
+                </a>
+            </li>
+        
+
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="fas fa-arrow-up"></i>
+            </li>
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+</main>
+
+
+
+<script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.6.1/source/js/utils.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.6.1/source/js/main.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.6.1/source/js/header-shrink.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.6.1/source/js/back2top.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.6.1/source/js/dark-light-toggle.js"></script>
+
+
+
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.6.1/source/js/local-search.js"></script>
+
+
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.6.1/source/js/code-block.js"></script>
+
+
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.6.1/source/js/lazyload.js"></script>
+
+
+<div class="post-scripts pjax">
+    
+        <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.6.1/source/js/post-helper.js"></script>
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.6.1/source/js/libs/anime.min.js"></script>
+        
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.6.1/source/js/toc.js"></script>
+        
+    
+</div>
+
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.6.1/source/js/libs/pjax.min.js"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+            // scrollTo: true,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            KEEP.utils.pjaxProgressBarStart();
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            KEEP.utils.pjaxProgressBarEnd();
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'));
+            KEEP.refresh();
+        });
+    });
+</script>
+
+
+
+</body>
+</html>
