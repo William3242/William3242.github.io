@@ -1,0 +1,10 @@
+---
+import { AUTHOR, GITHUB_URL } from '../consts';
+import { url } from '../utils';
+---
+<footer class="muted">
+  © {new Date().getFullYear()} {AUTHOR} · <a href={GITHUB_URL}>GitHub</a> · <a href={url('/rss.xml')}>RSS</a>
+</footer>
+<style>
+  footer { font-size: .85rem; padding: 4rem 0 2rem; }
+</style>
