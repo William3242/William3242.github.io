@@ -22,6 +22,28 @@ tags: [Agent, LLM, 上下文工程]
 
 一个粗略的直觉：如果每一步平均新增 3,000 token，跑 50 步之后，单次请求的输入就有 15 万 token，整个任务累计处理的输入 token 是这个数字的几十倍。**上下文管理首先是一个成本和延迟问题。**
 
+<figure class="diagram">
+<svg viewBox="0 0 640 250" role="img" aria-label="随着步数增加，上下文中各部分的 token 构成">
+<text class="t" x="70" y="40" text-anchor="end">第 1 步</text>
+<rect class="c-gray" x="80" y="20" width="10" height="30"/><rect class="c-purple" x="90" y="20" width="42" height="30"/><rect class="c-blue" x="132" y="20" width="4" height="30"/>
+<text class="ts" x="144" y="40">约 1.6 万</text>
+<text class="t" x="70" y="90" text-anchor="end">第 10 步</text>
+<rect class="c-gray" x="80" y="70" width="10" height="30"/><rect class="c-purple" x="90" y="70" width="42" height="30"/><rect class="c-blue" x="132" y="70" width="28" height="30"/><rect class="c-amber" x="160" y="70" width="69" height="30"/>
+<text class="ts" x="237" y="90">约 4 万</text>
+<text class="t" x="70" y="140" text-anchor="end">第 30 步</text>
+<rect class="c-gray" x="80" y="120" width="10" height="30"/><rect class="c-purple" x="90" y="120" width="42" height="30"/><rect class="c-blue" x="132" y="120" width="87" height="30"/><rect class="c-amber" x="219" y="120" width="243" height="30"/>
+<text class="ts" x="470" y="140">约 11 万</text>
+<text class="t" x="70" y="190" text-anchor="end">第 50 步</text>
+<rect class="c-gray" x="80" y="170" width="10" height="30"/><rect class="c-purple" x="90" y="170" width="42" height="30"/><rect class="c-blue" x="132" y="170" width="121" height="30"/><rect class="c-amber" x="253" y="170" width="347" height="30"/>
+<text class="ts" x="604" y="190">15 万</text>
+<rect class="c-gray" x="80" y="226" width="14" height="14"/><text class="ts" x="100" y="238">系统提示词</text>
+<rect class="c-purple" x="185" y="226" width="14" height="14"/><text class="ts" x="205" y="238">工具定义</text>
+<rect class="c-blue" x="280" y="226" width="14" height="14"/><text class="ts" x="300" y="238">对话与思考</text>
+<rect class="c-amber" x="385" y="226" width="14" height="14"/><text class="ts" x="405" y="238">工具结果</text>
+</svg>
+<figcaption>图 1：一个示意性的例子。固定成本几乎不变，工具结果随步数快速膨胀，而且每一轮都要整段重发。</figcaption>
+</figure>
+
 ## 为什么"装得下"不等于"用得好"
 
 现在主流模型的窗口动辄几十万甚至上百万 token，很容易让人觉得"窗口够大就不用管了"。但实践中有两个现象值得警惕：
@@ -45,6 +67,30 @@ tags: [Agent, LLM, 上下文工程]
 - **尽量只追加，不改写**。如果你在第 10 轮回头修改了第 3 轮的内容，第 3 轮之后的缓存全部失效；
 - **别在前缀里放会变的东西**。比如在系统提示词开头写当前时间精确到秒，每一轮都会让整个缓存作废；
 - **工具集保持稳定**。动态增删工具定义，同样会破坏前缀。
+
+<figure class="diagram">
+<svg viewBox="0 0 640 240" role="img" aria-label="提示词缓存按前缀匹配：只追加与改写中间的对比">
+<text class="t" x="20" y="22">只追加：前缀不变，只有新内容需要计算</text>
+<rect class="c-gray" x="20" y="34" width="110" height="36" rx="4"/><text class="t" x="75" y="57" text-anchor="middle">系统提示词</text>
+<rect class="c-purple" x="136" y="34" width="100" height="36" rx="4"/><text class="t" x="186" y="57" text-anchor="middle">工具定义</text>
+<rect class="c-blue" x="242" y="34" width="80" height="36" rx="4"/><text class="t" x="282" y="57" text-anchor="middle">第 1 轮</text>
+<rect class="c-blue" x="328" y="34" width="80" height="36" rx="4"/><text class="t" x="368" y="57" text-anchor="middle">第 2 轮</text>
+<rect class="c-blue" x="414" y="34" width="80" height="36" rx="4"/><text class="t" x="454" y="57" text-anchor="middle">第 3 轮</text>
+<rect class="c-blue dash" x="500" y="34" width="80" height="36" rx="4"/><text class="t" x="540" y="57" text-anchor="middle">新一轮</text>
+<path class="sg" d="M20 80 v6 h474 v-6"/><text class="ts" x="257" y="102" text-anchor="middle">命中缓存，便宜且快</text>
+<path class="ln" d="M500 80 v6 h80 v-6"/><text class="ts" x="540" y="102" text-anchor="middle">新计算</text>
+<text class="t" x="20" y="142">改写中间：改动点之后的缓存全部失效</text>
+<rect class="c-gray" x="20" y="154" width="110" height="36" rx="4"/><text class="t" x="75" y="177" text-anchor="middle">系统提示词</text>
+<rect class="c-purple" x="136" y="154" width="100" height="36" rx="4"/><text class="t" x="186" y="177" text-anchor="middle">工具定义</text>
+<rect class="c-blue" x="242" y="154" width="80" height="36" rx="4"/><text class="t" x="282" y="177" text-anchor="middle">第 1 轮</text>
+<rect class="c-red" x="328" y="154" width="80" height="36" rx="4"/><text class="t" x="368" y="177" text-anchor="middle">第 2 轮 ✎</text>
+<rect class="c-blue" x="414" y="154" width="80" height="36" rx="4"/><text class="t" x="454" y="177" text-anchor="middle">第 3 轮</text>
+<rect class="c-blue dash" x="500" y="154" width="80" height="36" rx="4"/><text class="t" x="540" y="177" text-anchor="middle">新一轮</text>
+<path class="sg" d="M20 200 v6 h302 v-6"/><text class="ts" x="171" y="222" text-anchor="middle">命中缓存</text>
+<path class="sr" d="M328 200 v6 h252 v-6"/><text class="ts" x="454" y="222" text-anchor="middle">全部重新计算</text>
+</svg>
+<figcaption>图 2：缓存按前缀匹配。稳定的内容放前面，历史尽量只追加。</figcaption>
+</figure>
 
 这意味着很多上下文管理手段之间存在张力：**裁剪和压缩会改写历史，缓存希望历史不变。** 好的做法通常是"批量地、低频地"改写，而不是每一轮都动一点。
 
@@ -100,6 +146,37 @@ def clear_old_tool_results(messages, keep_recent=5):
 ## 手段三：压缩（Compaction）
 
 当历史长到工具结果清理也不够用时，就需要更激进的做法：**把一大段历史交给模型总结成一段摘要，然后用摘要替换掉原始历史**，在新的上下文里继续工作。这就是压缩，很多编码 Agent 在接近窗口上限时会自动触发它。
+
+<figure class="diagram">
+<svg viewBox="0 0 640 240" role="img" aria-label="原始历史、清理旧工具结果、压缩之后三种状态的对比">
+<text class="t" x="20" y="20">原始历史</text>
+<rect class="c-gray" x="20" y="30" width="90" height="34" rx="4"/><text class="ts" x="65" y="52" text-anchor="middle">系统 + 工具</text>
+<rect class="c-blue" x="114" y="30" width="60" height="34" rx="4"/><text class="ts" x="144" y="52" text-anchor="middle">用户目标</text>
+<rect class="c-blue" x="178" y="30" width="34" height="34" rx="4"/><text class="ts" x="195" y="52" text-anchor="middle">调用</text>
+<rect class="c-amber" x="216" y="30" width="90" height="34" rx="4"/><text class="ts" x="261" y="52" text-anchor="middle">结果</text>
+<rect class="c-blue" x="310" y="30" width="34" height="34" rx="4"/><text class="ts" x="327" y="52" text-anchor="middle">调用</text>
+<rect class="c-amber" x="348" y="30" width="70" height="34" rx="4"/><text class="ts" x="383" y="52" text-anchor="middle">结果</text>
+<rect class="c-blue" x="422" y="30" width="34" height="34" rx="4"/><text class="ts" x="439" y="52" text-anchor="middle">调用</text>
+<rect class="c-amber" x="460" y="30" width="80" height="34" rx="4"/><text class="ts" x="500" y="52" text-anchor="middle">结果</text>
+<rect class="c-blue" x="544" y="30" width="76" height="34" rx="4"/><text class="ts" x="582" y="52" text-anchor="middle">最近消息</text>
+<text class="t" x="20" y="100">清理旧工具结果：保留调用记录，旧结果换成占位符</text>
+<rect class="c-gray" x="20" y="110" width="90" height="34" rx="4"/><text class="ts" x="65" y="132" text-anchor="middle">系统 + 工具</text>
+<rect class="c-blue" x="114" y="110" width="60" height="34" rx="4"/><text class="ts" x="144" y="132" text-anchor="middle">用户目标</text>
+<rect class="c-blue" x="178" y="110" width="34" height="34" rx="4"/><text class="ts" x="195" y="132" text-anchor="middle">调用</text>
+<rect class="c-amber dash" x="216" y="110" width="24" height="34" rx="4"/><text class="ts" x="228" y="132" text-anchor="middle">…</text>
+<rect class="c-blue" x="244" y="110" width="34" height="34" rx="4"/><text class="ts" x="261" y="132" text-anchor="middle">调用</text>
+<rect class="c-amber dash" x="282" y="110" width="24" height="34" rx="4"/><text class="ts" x="294" y="132" text-anchor="middle">…</text>
+<rect class="c-blue" x="310" y="110" width="34" height="34" rx="4"/><text class="ts" x="327" y="132" text-anchor="middle">调用</text>
+<rect class="c-amber" x="348" y="110" width="80" height="34" rx="4"/><text class="ts" x="388" y="132" text-anchor="middle">结果</text>
+<rect class="c-blue" x="432" y="110" width="76" height="34" rx="4"/><text class="ts" x="470" y="132" text-anchor="middle">最近消息</text>
+<text class="t" x="20" y="180">压缩之后：一段摘要替换整段历史</text>
+<rect class="c-gray" x="20" y="190" width="90" height="34" rx="4"/><text class="ts" x="65" y="212" text-anchor="middle">系统 + 工具</text>
+<rect class="c-green" x="114" y="190" width="130" height="34" rx="4"/><text class="ts" x="179" y="212" text-anchor="middle">摘要：目标·决策·进度</text>
+<rect class="c-blue" x="248" y="190" width="76" height="34" rx="4"/><text class="ts" x="286" y="212" text-anchor="middle">最近消息</text>
+<rect class="c-amber" x="328" y="190" width="100" height="34" rx="4"/><text class="ts" x="378" y="212" text-anchor="middle">重新读入的文件</text>
+</svg>
+<figcaption>图 3：清理是轻量的"减法"，压缩是彻底的"重写"。</figcaption>
+</figure>
 
 压缩的难点全在"总结什么"。一个好的压缩摘要应该保留：
 
@@ -180,6 +257,32 @@ def clear_old_tool_results(messages, keep_recent=5):
 - 它尽情地搜索、读文件、试错，这些过程都留在它自己的上下文里；
 - 最后只把一份精炼的结论（比如一两千 token）返回给主 Agent。
 
+<figure class="diagram">
+<svg viewBox="0 0 640 270" role="img" aria-label="子 Agent 在独立上下文里探索，只把结论返回主 Agent">
+<defs><marker id="ah4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+<text class="t" x="20" y="22">主 Agent 上下文</text>
+<rect class="c-gray" x="20" y="32" width="90" height="36" rx="4"/><text class="ts" x="65" y="55" text-anchor="middle">系统 + 工具</text>
+<rect class="c-blue" x="114" y="32" width="150" height="36" rx="4"/><text class="ts" x="189" y="55" text-anchor="middle">之前的工作</text>
+<rect class="c-purple" x="268" y="32" width="100" height="36" rx="4"/><text class="ts" x="318" y="55" text-anchor="middle">调用子 Agent</text>
+<rect class="c-green" x="372" y="32" width="60" height="36" rx="4"/><text class="ts" x="402" y="55" text-anchor="middle">结论</text>
+<rect class="c-blue dash" x="436" y="32" width="120" height="36" rx="4"/><text class="ts" x="496" y="55" text-anchor="middle">继续主线工作</text>
+<path class="ln" d="M318 70 V100 H203 V150" marker-end="url(#ah4)"/><text class="ts" x="212" y="94">委派任务</text>
+<path class="ln" d="M585 153 V100 H402 V72" marker-end="url(#ah4)"/><text class="ts" x="500" y="94">只返回结论</text>
+<rect class="frame" x="150" y="120" width="480" height="135" rx="8"/>
+<text class="t" x="165" y="240">子 Agent 独立上下文（用完即弃）</text>
+<rect class="c-purple" x="165" y="155" width="76" height="34" rx="4"/><text class="ts" x="203" y="177" text-anchor="middle">任务描述</text>
+<rect class="c-amber" x="245" y="155" width="44" height="34" rx="4"/><text class="ts" x="267" y="177" text-anchor="middle">搜索</text>
+<rect class="c-amber" x="293" y="155" width="56" height="34" rx="4"/><text class="ts" x="321" y="177" text-anchor="middle">读文件</text>
+<rect class="c-amber" x="353" y="155" width="56" height="34" rx="4"/><text class="ts" x="381" y="177" text-anchor="middle">读文件</text>
+<rect class="c-amber" x="413" y="155" width="44" height="34" rx="4"/><text class="ts" x="435" y="177" text-anchor="middle">试错</text>
+<rect class="c-amber" x="461" y="155" width="56" height="34" rx="4"/><text class="ts" x="489" y="177" text-anchor="middle">读文件</text>
+<rect class="c-amber" x="521" y="155" width="30" height="34" rx="4"/><text class="ts" x="536" y="177" text-anchor="middle">…</text>
+<rect class="c-green" x="555" y="155" width="60" height="34" rx="4"/><text class="ts" x="585" y="177" text-anchor="middle">结论</text>
+<text class="ts" x="390" y="214" text-anchor="middle">几万 token 的探索过程留在这里，不进入主线</text>
+</svg>
+<figcaption>图 4：子 Agent 用一个干净的上下文去探索，主 Agent 只多了一次调用和一份结论。</figcaption>
+</figure>
+
 主 Agent 的上下文里只多了一次"调用子 Agent"和一份结论，而不是几万 token 的探索过程。这也是 [多 Agent](/posts/agent-basics/#多-agent什么时候值得) 最实在的价值之一：**与其说是"多个 Agent 分工协作"，不如说是"用上下文隔离换取主线的清爽"。**
 
 用子 Agent 有几点要注意：
@@ -203,6 +306,34 @@ def clear_old_tool_results(messages, keep_recent=5):
 | 持久 | 笔记文件、长期记忆 | 关键节点主动写入 | 需要好的写入规则 |
 
 一个大致的优先级是：**先在入口把关，再考虑隔离和检索，清理和压缩作为兜底，外部记忆贯穿始终。** 越靠前的手段越便宜、越不会丢信息；越靠后的手段越像是在"抢救"。
+
+<figure class="diagram">
+<svg viewBox="0 0 640 300" role="img" aria-label="上下文管理各手段的分层关系总览">
+<defs><marker id="ah5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+<text class="ts" x="80" y="26" text-anchor="middle">信息来源</text>
+<rect class="c-amber" x="20" y="40" width="120" height="36" rx="4"/><text class="t" x="80" y="63" text-anchor="middle">工具输出</text>
+<rect class="c-gray" x="20" y="95" width="120" height="36" rx="4"/><text class="t" x="80" y="118" text-anchor="middle">代码与文档</text>
+<rect class="c-purple" x="20" y="150" width="120" height="36" rx="4"/><text class="t" x="80" y="173" text-anchor="middle">技能与工具定义</text>
+<path class="ln" d="M142 58 H228" marker-end="url(#ah5)"/>
+<path class="ln" d="M142 113 H228" marker-end="url(#ah5)"/>
+<path class="ln" d="M142 168 H228" marker-end="url(#ah5)"/>
+<text class="ts" x="185" y="210" text-anchor="middle">入口把关：</text>
+<text class="ts" x="185" y="226" text-anchor="middle">截断 · 精简</text>
+<text class="ts" x="185" y="242" text-anchor="middle">按需加载</text>
+<rect class="c-blue" x="230" y="34" width="200" height="158" rx="8"/>
+<text class="t" x="330" y="56" text-anchor="middle">上下文窗口</text>
+<rect class="c-gray" x="245" y="70" width="170" height="28" rx="4"/><text class="ts" x="330" y="89" text-anchor="middle">稳定前缀（利于缓存）</text>
+<rect class="c-amber" x="245" y="105" width="170" height="40" rx="4"/><text class="ts" x="330" y="121" text-anchor="middle">历史</text><text class="ts" x="330" y="138" text-anchor="middle">定期清理旧结果 / 压缩</text>
+<rect class="c-blue" x="245" y="152" width="170" height="28" rx="4"/><text class="ts" x="330" y="171" text-anchor="middle">当前步骤</text>
+<rect class="c-green" x="500" y="60" width="120" height="70" rx="6"/><text class="t" x="560" y="90" text-anchor="middle">外部记忆</text><text class="ts" x="560" y="110" text-anchor="middle">笔记 · 记忆文件</text>
+<path class="ln" d="M432 82 H498" marker-end="url(#ah5)"/><text class="ts" x="465" y="75" text-anchor="middle">写入</text>
+<path class="ln" d="M498 110 H432" marker-end="url(#ah5)"/><text class="ts" x="465" y="127" text-anchor="middle">读回</text>
+<rect class="c-purple" x="255" y="244" width="150" height="40" rx="6"/><text class="t" x="330" y="269" text-anchor="middle">子 Agent</text>
+<path class="ln" d="M300 194 V242" marker-end="url(#ah5)"/><text class="ts" x="292" y="222" text-anchor="end">委派</text>
+<path class="ln" d="M360 242 V194" marker-end="url(#ah5)"/><text class="ts" x="368" y="222">结论</text>
+</svg>
+<figcaption>图 5：入口把关控制什么进来，清理和压缩处理已经进来的，外部记忆和子 Agent 把信息放到窗口之外。</figcaption>
+</figure>
 
 另外别忘了**观测**。给每一步记录上下文的 token 构成（系统提示词、工具定义、历史、工具结果各占多少），你很可能会发现一两个"罪魁祸首"：某个工具总是返回巨量输出，某段系统提示词早就过时了却一直挂着。针对性地修掉它们，往往比引入一套复杂的压缩机制更有效。改动之后，用 [评估](/posts/agent-basics/#评估你怎么知道它变好了) 去验证效果有没有真的变好，而不是只看 token 数降了多少。
 

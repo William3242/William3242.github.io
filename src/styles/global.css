@@ -47,3 +47,22 @@ th, td { border: 1px solid var(--border); padding: .4rem .7rem; }
 .muted { color: var(--muted); }
 .tag { font-size: .85rem; color: var(--muted); margin-right: .6rem; }
 .tag:hover { color: var(--accent); }
+
+/* 文章内的示意图：内联 SVG，颜色跟随明暗主题 */
+.diagram { margin: 1.8rem 0; overflow-x: auto; }
+.diagram svg { display: block; width: 100%; min-width: 520px; height: auto; font-family: inherit; }
+.diagram figcaption { margin-top: .5rem; font-size: .85rem; color: var(--muted); text-align: center; }
+.diagram .t { fill: var(--fg); font-size: 13px; }
+.diagram .ts { fill: var(--muted); font-size: 12px; }
+.diagram .ln { stroke: var(--muted); stroke-width: 1.5; fill: none; }
+.diagram .ah { fill: var(--muted); }
+.diagram .frame { fill: none; stroke: var(--border); stroke-width: 1.5; stroke-dasharray: 5 4; }
+.diagram .c-gray { fill: rgba(110,119,129,.18); stroke: #8b949e; }
+.diagram .c-purple { fill: rgba(130,80,223,.16); stroke: #8250df; }
+.diagram .c-blue { fill: rgba(9,105,218,.14); stroke: #4493f8; }
+.diagram .c-amber { fill: rgba(191,135,0,.18); stroke: #d29922; }
+.diagram .c-green { fill: rgba(26,127,55,.16); stroke: #3fb950; }
+.diagram .c-red { fill: rgba(207,34,46,.15); stroke: #f85149; }
+.diagram .dash { stroke-dasharray: 4 3; }
+.diagram .sg { stroke: #3fb950; stroke-width: 2; fill: none; }
+.diagram .sr { stroke: #f85149; stroke-width: 2; fill: none; }
