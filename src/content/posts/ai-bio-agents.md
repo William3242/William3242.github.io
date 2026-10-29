@@ -1,6 +1,6 @@
 ---
 title: AI for 生物信息学：Agent 怎么参与药物发现和科学发现
-description: AlphaFold 证明了模型能解决生物学里的具体问题，而 Agent 想做的是更进一步：读文献、提假设、写分析代码、调用计算工具，甚至操控实验室。这篇梳理 Agent 在药物发现和科学发现里的位置、几个有代表性的系统，以及它们真正难在哪里。
+description: AlphaFold 证明了模型能解决生物学里的具体问题，而 Agent 想做的是更进一步：读文献、提假设、写分析代码、调用计算工具，甚至操控实验室。这篇梳理 Agent 在药物发现和科学发现里的位置、几个有代表性的系统，并专门聊聊单细胞与空间多组学方向的 Agent，文末附参考文献和值得一试的项目。
 pubDate: 2026-10-29
 tags: [Agent, LLM, AI for Science, 生物信息学]
 ---
@@ -9,7 +9,7 @@ tags: [Agent, LLM, AI for Science, 生物信息学]
 
 但 AlphaFold 做的是一件边界非常清楚的事：给它一条氨基酸序列，它给你一个三维结构。问题是人提的，结果是人解读的，下一步做什么也是人决定的。它是一个极其强大的**工具**，而不是一个会自己做研究的东西。
 
-过去两三年，另一条路线越来越热闹：让大语言模型以 Agent 的形式参与研究本身。它读文献、提出假设、查数据库、写分析代码、调用 AlphaFold 这样的专用模型，有的还能把实验方案发给自动化实验室去执行，再根据结果决定下一步。这篇就来聊聊这件事：Agent 在药物发现和科学发现里到底在做什么，有哪些值得一看的系统，以及它们离"AI 科学家"还有多远。
+过去两三年，另一条路线越来越热闹：让大语言模型以 Agent 的形式参与研究本身。它读文献、提出假设、查数据库、写分析代码、调用 AlphaFold 这样的专用模型，有的还能把实验方案发给自动化实验室去执行，再根据结果决定下一步。这篇就来聊聊这件事：Agent 在药物发现和科学发现里到底在做什么，有哪些值得一看的系统，以及它们离"AI 科学家"还有多远。后半部分会专门用一章讲单细胞和空间多组学里的 Agent。
 
 这个系列前面几篇讲的都是通用的 Agent 构造，比如 [循环](/posts/agent-basics/)、[工具](/posts/agent-tools/)、[上下文](/posts/agent-context-management/)、[子 Agent](/posts/agent-subagents/) 和 [评测](/posts/agent-evaluation/)。这篇换个角度，看看这些部件放进一个具体领域之后会变成什么样子。
 
@@ -155,7 +155,7 @@ AI 参与生命科学研究，大致可以分成三个层次。
 
 **临床前和临床阶段**，Agent 更多是一个效率工具：读毒理文献、设计实验方案、匹配临床试验的入组条件、起草申报文档。这些环节结果的代价很高，监管要求很严，所以通常是人主导、Agent 辅助。
 
-值得一提的是，"AI 发现的药"已经不只是概念。Insilico Medicine 用生成式 AI 发现靶点并设计分子的 rentosertib（一个 TNIK 抑制剂），2025 年在 *Nature Medicine* 上发表了针对特发性肺纤维化的 2a 期临床结果。它用的主要是专用的生成模型和打分模型，而不是今天说的 LLM Agent，但它说明了一件事：计算方法产出的分子，是可以一路走进临床的。
+值得一提的是，"AI 发现的药"已经不只是概念。Insilico Medicine 用生成式 AI 发现靶点并设计分子的 [rentosertib](https://pubmed.ncbi.nlm.nih.gov/40461817/)（一个 TNIK 抑制剂），2025 年在 *Nature Medicine* 上发表了针对特发性肺纤维化的 2a 期临床结果。它用的主要是专用的生成模型和打分模型，而不是今天说的 LLM Agent，但它说明了一件事：计算方法产出的分子，是可以一路走进临床的。
 
 ## 几个有代表性的系统
 
@@ -163,7 +163,7 @@ AI 参与生命科学研究，大致可以分成三个层次。
 
 ### ChemCrow：给模型配上化学家的工具箱
 
-ChemCrow 是 2023 年 EPFL 和 Rochester 的团队做的化学 Agent，后来发表在 *Nature Machine Intelligence* 上。它的结构很朴素：GPT-4 加上 18 个化学专家设计的工具，用 ReAct 的方式在"思考、调用工具、观察结果"之间循环。工具包括分子量计算、SMILES 和名称的互转、文献检索、反应预测、逆合成规划、安全性检查，以及连接 IBM 的云端自动化化学平台 RoboRXN 的接口。
+[ChemCrow](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11116106/) 是 2023 年 EPFL 和 Rochester 的团队做的化学 Agent，后来发表在 *Nature Machine Intelligence* 上。它的结构很朴素：GPT-4 加上 18 个化学专家设计的工具，用 ReAct 的方式在"思考、调用工具、观察结果"之间循环。工具包括分子量计算、SMILES 和名称的互转、文献检索、反应预测、逆合成规划、安全性检查，以及连接 IBM 的云端自动化化学平台 RoboRXN 的接口。
 
 它最有意思的地方不是做出了什么，而是它清楚地展示了 **为什么化学需要工具**。大模型对化学有很多"知识"，但让它直接算一个分子的分子量、判断一个 SMILES 字符串是否合法，它很容易出错，而且错得很自信。把这些事交给 RDKit 这样的确定性工具，模型只负责决定"该算什么"，可靠性就上来了。这正是 [工具](/posts/agent-tools/) 那篇里说的：工具不是给模型添功能，而是把模型不擅长的事交出去。
 
@@ -171,7 +171,7 @@ ChemCrow 还留下了一个关于评测的教训。作者让化学家和 GPT-4 �
 
 ### Coscientist：从屏幕走进实验室
 
-同一年，卡内基梅隆大学 Gomes 组的 Coscientist 发表在 *Nature* 上。它的结构是一个规划者（Planner）加上几个模块：网页搜索、文档检索、代码执行，以及实验自动化接口。
+同一年，卡内基梅隆大学 Gomes 组的 [Coscientist](https://pmc.ncbi.nlm.nih.gov/articles/PMC10733136) 发表在 *Nature* 上。它的结构是一个规划者（Planner）加上几个模块：网页搜索、文档检索、代码执行，以及实验自动化接口。
 
 它做的事情比 ChemCrow 更进一步：给一个目标，比如"做一个 Suzuki 偶联反应"，它会自己上网查反应条件，读液体处理机器人的 API 文档，写出控制机器人的代码，在真实的实验室硬件上执行，然后读回实验数据。论文里它成功完成了钯催化的 Suzuki 和 Sonogashira 偶联反应，还在一个反应条件优化任务上表现出了根据结果调整下一轮实验的能力。
 
@@ -179,7 +179,7 @@ Coscientist 的意义在于它把 [Agent 循环](/posts/agent-basics/#最小的-
 
 ### AI co-scientist：用多 Agent 生成和打磨假设
 
-2025 年初，Google 发布了 AI co-scientist。它的目标不是执行实验，而是做研究中最"像科学家"的那部分：**提出新的、可检验的假设**。
+2025 年初，Google 发布了 [AI co-scientist](https://arxiv.org/abs/2502.18864)。它的目标不是执行实验，而是做研究中最"像科学家"的那部分：**提出新的、可检验的假设**。
 
 它是一个典型的多 Agent 系统，基于 Gemini 2.0。一个监督者（Supervisor）分配任务，下面有几个角色各司其职：
 
@@ -226,7 +226,7 @@ Coscientist 的意义在于它把 [Agent 循环](/posts/agent-basics/#最小的-
 
 ### Virtual Lab：一个由 Agent 组成的课题组
 
-斯坦福 James Zou 组的 Virtual Lab（2025 年发表在 *Nature*）走得更"拟人"一些。它模仿的是一个真实课题组的工作方式：一个扮演 PI（课题组长）的 Agent，带着几个不同专业背景的"科学家" Agent，比如免疫学家、计算生物学家、机器学习专家，外加一个专门挑毛病的批评者 Agent。
+斯坦福 James Zou 组的 [Virtual Lab](https://www.biorxiv.org/content/10.1101/2024.11.11.623004)（2025 年发表在 *Nature*）走得更"拟人"一些。它模仿的是一个真实课题组的工作方式：一个扮演 PI（课题组长）的 Agent，带着几个不同专业背景的"科学家" Agent，比如免疫学家、计算生物学家、机器学习专家，外加一个专门挑毛病的批评者 Agent。
 
 它们通过"组会"推进研究。在团队会议上，PI 提出议题，各个专家轮流发言，批评者指出问题，PI 汇总并做决定；在单独会议上，某个专家 Agent 负责把决定落实成代码。人类研究者只在关键节点给出很少的指导。
 
@@ -239,9 +239,9 @@ Coscientist 的意义在于它把 [Agent 循环](/posts/agent-basics/#最小的-
 <rect class="frame" x="10" y="14" width="300" height="176" rx="8"/>
 <text class="t" x="160" y="34" text-anchor="middle">团队会议：讨论与决策</text>
 <rect class="c-purple" x="110" y="46" width="100" height="34" rx="4"/><text class="ts" x="160" y="68" text-anchor="middle">PI Agent</text>
-<rect class="c-blue" x="20" y="100" width="90" height="34" rx="4"/><text class="ts" x="65" y="122" text-anchor="middle">免疫学家</text>
-<rect class="c-blue" x="115" y="100" width="90" height="34" rx="4"/><text class="ts" x="160" y="122" text-anchor="middle">计算生物学家</text>
-<rect class="c-blue" x="210" y="100" width="90" height="34" rx="4"/><text class="ts" x="255" y="122" text-anchor="middle">机器学习专家</text>
+<rect class="c-blue" x="16" y="100" width="88" height="34" rx="4"/><text class="ts" x="60" y="122" text-anchor="middle">免疫学家</text>
+<rect class="c-blue" x="116" y="100" width="88" height="34" rx="4"/><text class="ts" x="160" y="122" text-anchor="middle">计算生物学家</text>
+<rect class="c-blue" x="216" y="100" width="88" height="34" rx="4"/><text class="ts" x="260" y="122" text-anchor="middle">机器学习专家</text>
 <rect class="c-red" x="110" y="146" width="100" height="34" rx="4"/><text class="ts" x="160" y="168" text-anchor="middle">批评者</text>
 <path class="ln" d="M140 80 L70 98"/><path class="ln" d="M160 80 V98"/><path class="ln" d="M180 80 L250 98"/>
 <path class="ln dash" d="M130 146 L80 136"/><path class="ln dash" d="M160 146 V136"/><path class="ln dash" d="M190 146 L240 136"/>
@@ -267,7 +267,7 @@ Virtual Lab 有两点值得注意。一是它说明"角色扮演"式的多 Agent
 
 ### Biomni：一个通用的生物医学 Agent
 
-前面几个系统都是为某一类任务量身定做的。斯坦福 Leskovec 组等团队在 2025 年推出的 Biomni，想做的是一个**通用**的生物医学 Agent。
+前面几个系统都是为某一类任务量身定做的。斯坦福 Leskovec 组等团队在 2025 年推出的 [Biomni](https://www.biorxiv.org/content/10.1101/2025.05.30.656746v1)，想做的是一个**通用**的生物医学 Agent。
 
 它的做法很有意思。为了确定 Agent 需要什么工具，作者先让模型从大量生物医学论文里挖掘"研究者实际做了哪些操作、用了哪些工具和数据库"，再据此构建了一个统一的环境：一百多个专门工具、几十个数据库、上百个常用软件包。Agent 的行动方式不是一次调用一个固定的函数，而是**直接写代码**，在这个环境里自由组合工具，这和 [工具](/posts/agent-tools/) 那篇里讲的"代码即行动"是同一个思路。
 
@@ -277,9 +277,11 @@ Virtual Lab 有两点值得注意。一是它说明"角色扮演"式的多 Agent
 
 再往前一步，就是试图把整个研究循环自动化的系统。
 
-FutureHouse 在 2025 年展示的 Robin 是一个多 Agent 系统，它把文献 Agent 和数据分析 Agent 串起来，目标是干性年龄相关性黄斑变性（干性 AMD）的治疗。它先从文献里提出机制假设和候选药物，人类在实验室做完实验后，它再分析实验数据、提出下一轮假设。最后它提出了 ripasudil，一个已经在日本获批用于青光眼的 ROCK 抑制剂，作为干性 AMD 的候选药物，并通过后续的 RNA 测序分析提出了可能的作用机制。论文里几乎所有的假设、实验设计和数据分析都出自 Agent，人类负责的是动手做实验。
+FutureHouse 在 2025 年展示的 [Robin](https://arxiv.org/abs/2505.13400) 是一个多 Agent 系统，它把文献 Agent 和数据分析 Agent 串起来，目标是干性年龄相关性黄斑变性（干性 AMD）的治疗。它先从文献里提出机制假设和候选药物，人类在实验室做完实验后，它再分析实验数据、提出下一轮假设。最后它提出了 ripasudil，一个已经在日本获批用于青光眼的 ROCK 抑制剂，作为干性 AMD 的候选药物，并通过后续的 RNA 测序分析提出了可能的作用机制。论文里几乎所有的假设、实验设计和数据分析都出自 Agent，人类负责的是动手做实验。
 
-同一类工作还有很多：做 CRISPR 基因编辑实验设计的 CRISPR-GPT，设计基因扰动实验的 BioDiscoveryAgent，把两百多个生物医学工具整合进来做治疗推理的 TxAgent，以及在机器学习领域尝试从选题到写论文全流程自动化的 Sakana AI Scientist。它们的共同趋势是：**Agent 负责的环节越来越多，人越来越像一个审批者和实验执行者。**
+同一类工作还有很多：做 CRISPR 基因编辑实验设计的 [CRISPR-GPT](https://pmc.ncbi.nlm.nih.gov/articles/PMC12920143)，设计基因扰动实验的 [BioDiscoveryAgent](https://arxiv.org/abs/2405.17631)，把两百多个生物医学工具整合进来做治疗推理的 [TxAgent](https://arxiv.org/abs/2503.10970)，以及在机器学习领域尝试从选题到写论文全流程自动化的 [Sakana AI Scientist](https://arxiv.org/abs/2408.06292)。FutureHouse 后来分拆出的 Edison Scientific 在 2025 年底推出的 [Kosmos](https://arxiv.org/abs/2511.02824) 则把时间尺度拉得更长：一次运行最长 12 小时，并行跑文献 Agent 和数据分析 Agent，用一个共享的"世界模型"串起几百轮工作，平均每次读约 1500 篇论文、执行约四万行代码，报告里的每个论断都链接到代码或原始文献。独立评估中，大约八成的论断被判断为准确，但"综合推断"类的论断准确率只有不到六成，这个落差本身就很说明问题。
+
+它们的共同趋势是：**Agent 负责的环节越来越多，人越来越像一个审批者和实验执行者。**
 
 把这几个系统放在一起看：
 
@@ -350,6 +352,111 @@ FutureHouse 在 2025 年展示的 Robin 是一个多 Agent 系统，它把文献
 
 **人在回路**是最后、也是最关键的一个部件。几乎所有走到湿实验验证的系统，都有人在某个环节把关：选哪些假设去验证，实验方案是否安全可行，结果是否可信。这不只是因为技术还不够成熟，也是因为实验的成本和风险决定了，"执行"这一步不能完全交给模型。
 
+## 专题：单细胞与空间多组学里的 Agent
+
+前面讲的系统大多面向"药物"或"通用科研"。这一节换一个更具体的方向：单细胞和空间多组学。它可能是目前 Agent 在生物信息学里落地最密集的地方，也最能说明 Agent 到底在帮什么忙。
+
+### 为什么偏偏是这里
+
+单细胞测序把"一块组织的平均表达"拆成了"每个细胞的表达"，空间组学又把细胞放回它在组织里的位置。数据维度一下子多了好几层：几万个基因、几十万到上百万个细胞、空间坐标，往往还有一张高分辨率的组织图像。
+
+分析流程本身已经相当标准化，Scanpy、Seurat、Squidpy 这些工具把常用步骤都封装好了。但"标准化"不等于"自动化"，每一步都有很多需要判断的地方：
+
+<figure class="diagram">
+<svg viewBox="0 0 640 262" role="img" aria-label="单细胞和空间组学的标准分析流程，按步骤区分规则明确的部分和需要生物学知识的部分">
+<defs><marker id="bio8" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+<rect class="c-purple" x="20" y="30" width="135" height="56" rx="6"/><text class="t" x="87" y="53" text-anchor="middle">面板设计</text><text class="ts" x="87" y="73" text-anchor="middle">靶向空间平台选基因</text>
+<rect class="c-amber" x="175" y="30" width="135" height="56" rx="6"/><text class="t" x="242" y="53" text-anchor="middle">质控与过滤</text><text class="ts" x="242" y="73" text-anchor="middle">去双细胞、低质量</text>
+<rect class="c-amber" x="330" y="30" width="135" height="56" rx="6"/><text class="t" x="397" y="53" text-anchor="middle">归一化与整合</text><text class="ts" x="397" y="73" text-anchor="middle">批次校正、scVI</text>
+<rect class="c-amber" x="485" y="30" width="135" height="56" rx="6"/><text class="t" x="552" y="53" text-anchor="middle">降维与聚类</text><text class="ts" x="552" y="73" text-anchor="middle">PCA、Leiden、分辨率</text>
+<path class="ln" d="M155 58 H173" marker-end="url(#bio8)"/><path class="ln" d="M310 58 H328" marker-end="url(#bio8)"/><path class="ln" d="M465 58 H483" marker-end="url(#bio8)"/>
+<path class="ln" d="M552 86 V112 H87 V138" marker-end="url(#bio8)"/>
+<rect class="c-purple" x="20" y="140" width="135" height="56" rx="6"/><text class="t" x="87" y="163" text-anchor="middle">细胞类型注释</text><text class="ts" x="87" y="183" text-anchor="middle">marker 基因 + 文献</text>
+<rect class="c-amber" x="175" y="140" width="135" height="56" rx="6"/><text class="t" x="242" y="163" text-anchor="middle">差异与通路</text><text class="ts" x="242" y="183" text-anchor="middle">DE、富集分析</text>
+<rect class="c-purple" x="330" y="140" width="135" height="56" rx="6"/><text class="t" x="397" y="163" text-anchor="middle">通讯与生态位</text><text class="ts" x="397" y="183" text-anchor="middle">配体受体、空间邻域</text>
+<rect class="c-green" x="485" y="140" width="135" height="56" rx="6"/><text class="t" x="552" y="163" text-anchor="middle">假设与报告</text><text class="ts" x="552" y="183" text-anchor="middle">新发现 + 证据</text>
+<path class="ln" d="M155 168 H173" marker-end="url(#bio8)"/><path class="ln" d="M310 168 H328" marker-end="url(#bio8)"/><path class="ln" d="M465 168 H483" marker-end="url(#bio8)"/>
+<rect class="c-amber" x="120" y="222" width="14" height="14" rx="2"/><text class="ts" x="140" y="234">规则明确：Agent 选参数、写代码</text>
+<rect class="c-purple" x="350" y="222" width="14" height="14" rx="2"/><text class="ts" x="370" y="234">需要知识：Agent 查文献、做判断</text>
+</svg>
+<figcaption>图 7：单细胞与空间组学的典型分析流程。紫色的步骤最依赖生物学知识，也是大模型最能帮上忙的地方。</figcaption>
+</figure>
+
+琥珀色的步骤有成熟的工具和惯例，难点在于选参数：过滤阈值定多少，用哪种批次校正，聚类分辨率调到多大。这些选择没有唯一正确答案，但会实实在在地改变下游结果，正适合让 Agent 去尝试、比较、记录。
+
+紫色的步骤则依赖生物学知识。给一个聚类的前几个 marker 基因，判断它是什么细胞，靠的是对文献和数据库的熟悉；看两群细胞之间的配体受体信号，判断哪个在生物学上说得通，同样如此。这恰恰是大模型"读过的东西多"能派上用场的地方。
+
+空间组学还多了两件事。一是**实验前的面板设计**：Xenium、MERFISH、CosMx 这类靶向平台一次只能测几百到几千个基因，选哪些基因直接决定了能看到什么，这是一个典型的实验设计问题。二是**图像**：组织切片的 H&E 或免疫荧光图像里有大量形态学信息，需要多模态模型才能读懂。
+
+### 从一个注释工具到一个完整的分析者
+
+这个方向的演进路线很清楚，正好是从"模型"走向"Agent"的缩影。
+
+**第一步是证明大模型懂细胞。** [GPTCelltype](https://www.biorxiv.org/content/10.1101/2023.04.16.537094) 的工作（Hou 和 Ji，2024 年发表在 *Nature Methods*）做了一件很简单的事：把每个聚类的差异基因列表交给 GPT-4，让它说出细胞类型。结果在大量组织和细胞类型上，它的注释和人工注释高度一致。这还不是 Agent，只是一次调用，但它说明了紫色那一步可以交给模型。
+
+**第二步是把整条流程交出去。** [CellAgent](https://arxiv.org/abs/2407.09811)（后发表于 ICLR 2026）用了一个规划者、执行者、评估者的三角色结构：规划者把"分析这份数据"拆成质控、整合、聚类、注释等步骤；执行者为每一步选工具、写代码；评估者检查结果，不满意就让执行者换个工具或参数重来。这个"自我迭代"正对应琥珀色步骤里那些选参数的问题：与其让人一遍遍试，不如让 Agent 试，并用一个评估标准来选。
+
+**第三步是走进空间。** 2025 年出现了好几个专门面向空间组学的 Agent，各有侧重：
+
+- [SpatialAgent](https://www.biorxiv.org/content/10.1101/2025.04.03.646459v1) 来自 Genentech 的团队，结构是记忆、规划、行动三个模块，配有十几个专门工具和预先写好的分析模板。它覆盖了从实验设计到假设生成的完整流程：在人类前额叶皮层的面板设计任务上，它设计的基因面板在细胞类型预测上超过了大约九成人类专家的设计，而且人和 Agent 合作设计的面板通常比任何一方单独设计的更好；在发育中的人类心脏数据上，它的细胞和生态位注释超过了 GPTCelltype 和 CellTypist，接近最好的人类专家；在小鼠结肠炎数据上，它给出的细胞通讯分析既复现了原论文的结论，也补充了原文没有强调的信号通路。它还同时支持全自动和"共驾"两种模式，后者允许研究者中途追问和修改目标。
+- [STAgent](https://www.biorxiv.org/content/10.1101/2025.04.01.646731) 来自哈佛的 Liu 组，强调多模态：它用多模态大模型直接"看"分析生成的图和组织图像，再结合检索到的文献写出带引用的研究报告。论文里它被用来分析人多能干细胞分化的胰岛移植物在小鼠体内不同时间点的空间转录组数据，刻画了胰岛样结构逐步成熟的过程。
+- [OmicsNavigator](https://www.biorxiv.org/content/10.1101/2025.07.21.665821) 面向的是 CODEX、成像质谱这类空间蛋白组数据。它把图像形态和分子表达分给两个 Agent 分别解读，再由第三个 Agent 融合，实验表明融合比只看任何一种模态都好。它最值得一提的设计是**预注册的假设验证**：研究者先写下假设，Agent 再去数据里检验，并如实报告"不支持"。论文里确实有一个假设被它否定了。
+- [PhenoGraph](https://www.biorxiv.org/content/10.1101/2025.06.06.658341) 换了个角度：从 TCGA 的大规模临床和表达数据出发，找出空间切片上和某个表型（比如生存期）相关的区域，再用生物医学知识图谱解释这些区域里的关键基因和疾病、通路、药物之间的联系。
+
+<figure class="diagram">
+<svg viewBox="0 0 640 300" role="img" aria-label="多模态空间组学 Agent：输入表达矩阵、空间坐标、组织图像和文献，经过规划、代码执行、读图和文献检索，输出注释、细胞通讯、面板设计和报告">
+<defs><marker id="bio9" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+<text class="t" x="95" y="24" text-anchor="middle">输入</text>
+<text class="t" x="320" y="24" text-anchor="middle">Agent</text>
+<text class="t" x="545" y="24" text-anchor="middle">输出</text>
+<rect class="c-blue" x="20" y="40" width="150" height="44" rx="6"/><text class="ts" x="95" y="67" text-anchor="middle">表达矩阵（细胞 × 基因）</text>
+<rect class="c-blue" x="20" y="100" width="150" height="44" rx="6"/><text class="ts" x="95" y="127" text-anchor="middle">空间坐标</text>
+<rect class="c-blue" x="20" y="160" width="150" height="44" rx="6"/><text class="ts" x="95" y="187" text-anchor="middle">组织图像（H&amp;E / 荧光）</text>
+<rect class="c-blue" x="20" y="220" width="150" height="44" rx="6"/><text class="ts" x="95" y="247" text-anchor="middle">论文、数据库、图谱</text>
+<rect class="c-purple" x="220" y="40" width="200" height="224" rx="8"/>
+<rect class="c-gray" x="240" y="56" width="160" height="38" rx="4"/><text class="ts" x="320" y="80" text-anchor="middle">按模板规划、记忆上下文</text>
+<rect class="c-gray" x="240" y="106" width="160" height="38" rx="4"/><text class="ts" x="320" y="130" text-anchor="middle">写代码：Scanpy、Squidpy</text>
+<rect class="c-gray" x="240" y="156" width="160" height="38" rx="4"/><text class="ts" x="320" y="180" text-anchor="middle">多模态模型读图</text>
+<rect class="c-gray" x="240" y="206" width="160" height="38" rx="4"/><text class="ts" x="320" y="230" text-anchor="middle">检索文献、核对知识</text>
+<rect class="c-green" x="470" y="40" width="150" height="44" rx="6"/><text class="ts" x="545" y="67" text-anchor="middle">细胞与生态位注释</text>
+<rect class="c-green" x="470" y="100" width="150" height="44" rx="6"/><text class="ts" x="545" y="127" text-anchor="middle">细胞通讯与空间模式</text>
+<rect class="c-green" x="470" y="160" width="150" height="44" rx="6"/><text class="ts" x="545" y="187" text-anchor="middle">下一轮实验的面板设计</text>
+<rect class="c-green" x="470" y="220" width="150" height="44" rx="6"/><text class="ts" x="545" y="247" text-anchor="middle">带引用的报告与假设</text>
+<path class="ln" d="M170 62 H218" marker-end="url(#bio9)"/><path class="ln" d="M170 122 H218" marker-end="url(#bio9)"/><path class="ln" d="M170 182 H218" marker-end="url(#bio9)"/><path class="ln" d="M170 242 H218" marker-end="url(#bio9)"/>
+<path class="ln" d="M420 62 H468" marker-end="url(#bio9)"/><path class="ln" d="M420 122 H468" marker-end="url(#bio9)"/><path class="ln" d="M420 182 H468" marker-end="url(#bio9)"/><path class="ln" d="M420 242 H468" marker-end="url(#bio9)"/>
+<text class="ts" x="320" y="290" text-anchor="middle">共驾模式：研究者随时追问、修改目标，Agent 更新记忆后重新规划</text>
+</svg>
+<figcaption>图 8：一个多模态空间组学 Agent 的大致形状，综合了 SpatialAgent、STAgent 和 OmicsNavigator 的共同设计。</figcaption>
+</figure>
+
+**第四步是让 Agent 自己提问题。** 斯坦福 Zou 组的 [CellVoyager](https://www.biorxiv.org/content/10.1101/2025.06.03.657517) 做的不是"按要求分析"，而是**重新分析已发表的数据**：它读一篇单细胞论文和对应的数据，弄清原作者做了哪些分析，然后提出原文没做过的假设，在一个类似 Jupyter 的环境里写代码检验，遇到报错自己修，用视觉模型看图来决定下一步，最后写出报告。作者用它重新分析了几个已发表的数据集，得到了一些新的观察，比如新冠患者的 CD8 T 细胞可能更容易发生细胞焦亡，原论文作者评估后认为其中不少假设是合理且有意思的。
+
+这条路线和 Biomni 这样的通用 Agent 也在汇合：单细胞分析本来就是 Biomni 测试的任务之一。可以预见，以后"专用 Agent"和"通用 Agent 加专用工具"的界线会越来越模糊。
+
+### 这个方向特有的坑
+
+单细胞和空间组学有自己的一套陷阱，Agent 不但不会自动避开，有时还会放大它们。
+
+**注释没有标准答案。** 细胞类型注释依赖聚类分辨率，而分辨率本身就是主观选择；同一群细胞，不同的参考图谱可能给出不同的名字。大模型还有一个特别的倾向：它更容易把细胞归到"教科书里有的"类型上，对于罕见细胞、过渡状态或者真正的新细胞类型，反而不如一个保持怀疑的人类专家敏感。SpatialAgent 在心脏数据上也是在心外膜细胞亚型这类细分类型上表现最弱。所以让 Agent 注释时，最好要求它同时给出支持每个判断的 marker 基因和置信度，人再对照 dotplot 去核对。
+
+**"先聚类再找差异基因"的统计陷阱。** 用同一份数据先聚类、再在聚类之间做差异表达检验，p 值会被系统性地低估，这个问题在单细胞领域讨论了很多年，常被称为 double dipping。人类研究者常常忽略它，Agent 更不会主动想到。如果你的评测只看"找到了多少显著基因"，Agent 会很乐意给你一长串。
+
+**批次效应和整合选择。** 多个样本、多个批次的数据合在一起时，整合方法和参数的选择会直接影响生物学结论：校正不够，批次差异被当成生物学差异；校正过度，真实的生物学信号被抹掉。这类问题很难用一个自动指标判断好坏，需要在 Agent 的流程里留出人工检查的节点。
+
+**规模和成本。** 一个空间组学数据集动辄上百万个细胞、几十 GB 的图像，必须严格遵守"数据留在文件里，Agent 通过代码看数据"的原则。即便如此，多模态 Agent 的 token 开销也不小：OmicsNavigator 的作者提到，分析一个肾病队列的约一千个感兴趣区域，就用了大约三百万个输出 token。
+
+**真正的"多组学"联合分析还很少。** 现在的 Agent 大多处理单一模态，或者在转录组加图像这样的组合上做文章。同时测 RNA 和染色质可及性的 multiome、同时测 RNA 和表面蛋白的 CITE-seq、以及越来越多的空间多组学平台，要求 Agent 理解不同模态之间的对应关系和各自的噪声特点。OmicsNavigator 的作者也把"跨组学层的联合分析"列为尚未支持的方向。这是一个很明显的空白，也是一个很好的研究机会。
+
+### 如果你在做这个方向
+
+结合上面的系统，有几点比较实际的经验：
+
+1. **从注释和报告这类"知识密集"的步骤开始**，让 Agent 先当一个会查文献的助手，再逐步把参数选择也交给它；
+2. **把你实验室的标准流程写成模板**，SpatialAgent 的经验说明，有模板的规划比让模型从零发挥稳定得多；
+3. **要求 Agent 的每一步都落在 notebook 里**，包括它尝试过又放弃的分析，方便复现和审查；
+4. **预先写下假设再让 Agent 检验**，像 OmicsNavigator 那样允许它说"不支持"，而不是让它在数据里一直找到显著为止；
+5. **把面板设计当成人和 Agent 合作的任务**，SpatialAgent 的结果显示，人机合作设计的面板通常比任何一方单独设计的更好。
+
 ## 真正难的地方
 
 演示视频里的科研 Agent 都很惊艳，但真正用起来，会遇到一批在通用 Agent 里不那么突出、在科学研究里却很致命的问题。
@@ -358,7 +465,7 @@ FutureHouse 在 2025 年展示的 Robin 是一个多 Agent 系统，它把文献
 
 大模型编造一个不存在的函数名，代码一跑就报错；但它编造一篇不存在的论文、一个错误的基因功能、一条不存在的通路联系，往往没有任何东西会立即报错。更糟的是，这些错误读起来和正确的结论一样专业。
 
-缓解的办法是 **让每一个事实性的论断都有出处**。像 FutureHouse 的 PaperQA 系列那样，回答必须基于检索到的原文段落，并附上引用；数据库查询的结果原样保存，不让模型"凭记忆"填空。原则是：模型负责推理，事实来自工具。
+缓解的办法是 **让每一个事实性的论断都有出处**。像 FutureHouse 的 [PaperQA](https://arxiv.org/abs/2409.13740) 系列那样，回答必须基于检索到的原文段落，并附上引用；数据库查询的结果原样保存，不让模型"凭记忆"填空。原则是：模型负责推理，事实来自工具。
 
 ### 验证是真正的瓶颈
 
@@ -380,7 +487,7 @@ Agent 可以在一个小时里提出一百个假设，但验证一个假设的�
 <path class="ln" d="M515 30 V250" marker-end="url(#bio7)"/>
 <text class="ts" x="260" y="280" text-anchor="middle">瓶颈在漏斗底部：决定哪些假设值得往下走，比生成假设更重要</text>
 </svg>
-<figcaption>图 7：越往下越慢、越贵，也越可信。计算指标只能当过滤器。</figcaption>
+<figcaption>图 9：越往下越慢、越贵，也越可信。计算指标只能当过滤器。</figcaption>
 </figure>
 
 一个自然的想法是用计算指标代替实验，比如用对接打分代替结合实验，用预测的毒性代替毒理测试。这在早期筛选时很有用，但要小心：**Agent 会优化你给它的任何指标**，包括指标的漏洞。一个分子可能对接分数极高，但根本无法合成，或者在体内完全没有活性。这和强化学习里的"奖励投机"是同一个问题。计算指标只能是过滤器，不能是终点。
@@ -401,7 +508,7 @@ AI co-scientist 那个耐药机制的例子之所以引人注目，正是因为�
 
 [评测](/posts/agent-evaluation/) 那篇说过，Agent 评测要评结果、要跑多次、要读轨迹。在科研场景里，这些原则都还成立，但有一个额外的麻烦：**真正的目标，也就是做出新发现，几乎无法直接评测。**
 
-现有的做法大多是退而求其次。LAB-Bench 测文献检索、序列操作、实验方案理解这些研究中的具体技能；BixBench 测 Agent 能否完成真实的生物信息学分析任务；ScienceAgentBench 测能否根据论文复现数据分析。这些基准都有用，但它们测的是"研究助理"的能力，而不是"科学家"的能力。至于后者，目前最可信的评测仍然是湿实验，加上领域专家的判断。
+现有的做法大多是退而求其次。[LAB-Bench](https://arxiv.org/abs/2407.10362) 测文献检索、序列操作、实验方案理解这些研究中的具体技能；[BixBench](https://arxiv.org/abs/2503.00096) 测 Agent 能否完成真实的生物信息学分析任务；[ScienceAgentBench](https://arxiv.org/abs/2410.05080) 测能否根据论文复现数据分析。这些基准都有用，但它们测的是"研究助理"的能力，而不是"科学家"的能力。至于后者，目前最可信的评测仍然是湿实验，加上领域专家的判断。
 
 ChemCrow 的教训在这里值得再提一次：在专业领域里，**用模型评审模型，很可能会奖励流畅而不是正确。** 评测集里一定要有专家参与。
 
@@ -424,6 +531,31 @@ ChemCrow 的教训在这里值得再提一次：在专业领域里，**用模型
 7. **在花钱和动手之前设置人工审批**，任何要提交到实验室、调用付费服务或者处理患者数据的操作，都应该先停下来问人；
 8. **把 Agent 当作一个很能干但没有经验的研究生**，它干活快、读得多，但需要你检查它的推理，尤其是它最兴奋的那些结论。
 
+## 值得一看的项目和工具
+
+如果你想亲手试一试，或者想看看这些系统的代码，下面这些是我觉得比较值得关注的：
+
+**可以直接用的平台**
+
+- [Biomni](https://github.com/snap-stanford/Biomni)：斯坦福的通用生物医学 Agent，开源，可以本地部署，适合拿来跑自己的分析任务；
+- [FutureHouse](https://www.futurehouse.org/) 和 [Edison Scientific](https://arxiv.org/abs/2511.02824)：前者做了 PaperQA、Robin 等一系列科研 Agent，后者是它分拆出来的公司，推出了可以连续运行十几个小时、每次读上千篇论文的 AI 科学家 Kosmos；
+- [Google AI co-scientist](https://arxiv.org/abs/2502.18864)：目前主要通过合作项目开放给研究机构；
+- [Claude for Life Sciences](https://www.maginative.com/article/anthropic-launches-claude-for-life-sciences-with-benchling-pubmed-integration/)：Anthropic 推出的生命科学方案，通过连接器接入 Benchling、PubMed 等科研工具。
+
+**开源代码，适合学习和改造**
+
+- [PaperQA](https://github.com/Future-House/paper-qa)：基于检索、带引用的文献问答，"每个论断都要有出处"的好范例；
+- [ToolUniverse](https://github.com/mims-harvard/ToolUniverse)：TxAgent 背后的生物医学工具集，可以直接作为其他 Agent 的工具来源；
+- [Virtual Lab](https://github.com/zou-group/virtual-lab)：多 Agent "组会"的实现，代码量不大，很适合读；
+- [CellVoyager](https://github.com/zou-group/CellVoyager)：自主重新分析单细胞数据的 Agent；
+- [BioDiscoveryAgent](https://github.com/snap-stanford/BioDiscoveryAgent)：设计基因扰动实验的 Agent。
+
+**评测基准**
+
+- [LAB-Bench](https://arxiv.org/abs/2407.10362)：生物学研究中的实用技能，包括文献、序列操作和实验方案；
+- [BixBench](https://arxiv.org/abs/2503.00096)：真实的生物信息学分析任务；
+- [ScienceAgentBench](https://arxiv.org/abs/2410.05080)：根据论文复现数据驱动的科学分析。
+
 ## 小结
 
 1. **AI 参与生命科学有三层**：专用模型解决具体问题，大模型助手回答问题，Agent 把它们串起来做一段研究；Agent 不是替代 AlphaFold，而是把它当工具用；
@@ -432,6 +564,47 @@ ChemCrow 的教训在这里值得再提一次：在专业领域里，**用模型
 4. **在药物发现里，Agent 目前最活跃的是靶点发现、老药新用和计算设计**，越往临床走，越是人主导、Agent 辅助；
 5. **代表性系统展示了不同的设计**：ChemCrow 的工具增强，Coscientist 的实验室接口，AI co-scientist 的假设锦标赛，Virtual Lab 的角色分工，Biomni 的通用环境，Robin 的端到端流程；
 6. **科研 Agent 的部件和通用 Agent 一样**，但每个部件都更重：工具链更长，环境更大，数据不能进上下文，记录要包括负面结果；
-7. **真正的难点在科学本身**：幻觉更危险，验证是瓶颈，计算指标会被投机，"新发现"可能不新，统计容易被滥用，评测离真正的目标很远，生物安全必须在 Harness 层面设防。
+7. **单细胞与空间多组学是 Agent 落地最密集的方向之一**：从 GPTCelltype 的注释，到 CellAgent 的全流程，再到 SpatialAgent、STAgent、OmicsNavigator 的多模态空间分析和 CellVoyager 的自主再分析，但注释没有标准答案、double dipping、批次整合和真正的跨组学联合分析，仍然需要人来把关；
+8. **真正的难点在科学本身**：幻觉更危险，验证是瓶颈，计算指标会被投机，"新发现"可能不新，统计容易被滥用，评测离真正的目标很远，生物安全必须在 Harness 层面设防。
 
 AlphaFold 告诉我们，模型可以在一个定义清楚的问题上超过人类。科研 Agent 想回答的是一个更难的问题：在一个定义不清楚的问题上，模型能不能像科学家一样，知道该问什么、该做什么、什么时候该怀疑自己。现在的答案是"在人的看护下，部分可以"。这个"部分"正在变大，但"看护"这两个字，短期内大概还拿不掉。
+
+## 参考文献
+
+**综合与背景**
+
+1. Xu Z. et al. [A generative AI-discovered TNIK inhibitor for idiopathic pulmonary fibrosis: a randomized phase 2a trial](https://pubmed.ncbi.nlm.nih.gov/40461817/). *Nature Medicine*, 2025.
+
+**化学与药物发现 Agent**
+
+2. Bran A. M. et al. [Augmenting large language models with chemistry tools](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11116106/)（ChemCrow）. *Nature Machine Intelligence*, 2024.
+3. Boiko D. A. et al. [Autonomous chemical research with large language models](https://pmc.ncbi.nlm.nih.gov/articles/PMC10733136)（Coscientist）. *Nature*, 2023.
+4. Gao S. et al. [TxAgent: An AI Agent for Therapeutic Reasoning Across a Universe of Tools](https://arxiv.org/abs/2503.10970). arXiv, 2025.
+
+**科学发现与 AI 科学家**
+
+5. Gottweis J. et al. [Towards an AI co-scientist](https://arxiv.org/abs/2502.18864). arXiv, 2025.
+6. Swanson K. et al. [The Virtual Lab of AI agents designs new SARS-CoV-2 nanobodies](https://www.nature.com/nature-index/article/10.1038/s41586-025-09442-9). *Nature*, 2025.（[预印本](https://www.biorxiv.org/content/10.1101/2024.11.11.623004)）
+7. Huang K. et al. [Biomni: A General-Purpose Biomedical AI Agent](https://www.biorxiv.org/content/10.1101/2025.05.30.656746v1). bioRxiv, 2025.
+8. Ghareeb A. E. et al. [Robin: A multi-agent system for automating scientific discovery](https://arxiv.org/abs/2505.13400). arXiv, 2025.
+9. Mitchener L. et al. [Kosmos: An AI Scientist for Autonomous Discovery](https://arxiv.org/abs/2511.02824). arXiv, 2025.
+10. Lu C. et al. [The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery](https://arxiv.org/abs/2408.06292). arXiv, 2024.
+11. Qu Y. et al. [CRISPR-GPT for agentic automation of gene-editing experiments](https://pmc.ncbi.nlm.nih.gov/articles/PMC12920143). *Nature Biomedical Engineering*, 2025.（[预印本](https://arxiv.org/abs/2404.18021)）
+12. Roohani Y. et al. [BioDiscoveryAgent: An AI Agent for Designing Genetic Perturbation Experiments](https://arxiv.org/abs/2405.17631). ICLR, 2025.
+13. Skarlinski M. D. et al. [Language agents achieve superhuman synthesis of scientific knowledge](https://arxiv.org/abs/2409.13740)（PaperQA2）. arXiv, 2024.
+
+**单细胞与空间多组学 Agent**
+
+14. Hou W., Ji Z. [Assessing GPT-4 for cell type annotation in single-cell RNA-seq analysis](https://www.biorxiv.org/content/10.1101/2023.04.16.537094)（GPTCelltype）. *Nature Methods*, 2024.
+15. Xiao Y. et al. [CellAgent: An LLM-driven Multi-Agent Framework for Automated Single-cell Data Analysis](https://arxiv.org/abs/2407.09811). ICLR, 2026.
+16. Wang H. et al. [SpatialAgent: An autonomous AI agent for spatial biology](https://www.biorxiv.org/content/10.1101/2025.04.03.646459v1). bioRxiv, 2025.
+17. [Spatial transcriptomics AI agent charts hPSC-pancreas maturation in vivo](https://www.biorxiv.org/content/10.1101/2025.04.01.646731)（STAgent）. bioRxiv, 2025.
+18. Li Y. et al. [OmicsNavigator: an LLM-driven multi-agent system for autonomous zero-shot biological analysis in spatial omics](https://www.biorxiv.org/content/10.1101/2025.07.21.665821). bioRxiv, 2025.
+19. [PhenoGraph: A Multi-Agent Framework for Phenotype-driven Discovery in Spatial Transcriptomics Data Augmented with Knowledge Graphs](https://www.biorxiv.org/content/10.1101/2025.06.06.658341). bioRxiv, 2025.
+20. Alber S. et al. [CellVoyager: AI CompBio agent generates new insights by autonomously analyzing biological data](https://www.biorxiv.org/content/10.1101/2025.06.03.657517). bioRxiv, 2025.
+
+**评测基准**
+
+21. Laurent J. M. et al. [LAB-Bench: Measuring Capabilities of Language Models for Biology Research](https://arxiv.org/abs/2407.10362). arXiv, 2024.
+22. Mitchener L. et al. [BixBench: a Comprehensive Benchmark for LLM-based Agents in Computational Biology](https://arxiv.org/abs/2503.00096). arXiv, 2025.
+23. Chen Z. et al. [ScienceAgentBench: Toward Rigorous Assessment of Language Agents for Data-Driven Scientific Discovery](https://arxiv.org/abs/2410.05080). ICLR, 2025.
