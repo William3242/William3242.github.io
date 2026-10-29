@@ -25,6 +25,39 @@ AI 参与生命科学研究，大致可以分成三个层次。
 
 这三层不是替代关系。Agent 恰恰是把第一层的专用模型当成工具来用的，AlphaFold 在 Agent 眼里就是一个 `predict_structure` 函数。Agent 补上的是专用模型之间那些原本由人完成的部分：决定该用哪个模型、怎么准备输入、怎么解读输出、结果不对的时候换什么思路。
 
+<figure class="diagram">
+<svg viewBox="0 0 640 300" role="img" aria-label="AI 参与生命科学的三个层次：专用模型、对话助手和 Agent，Agent 把专用模型当作工具调用">
+<defs><marker id="bio4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+<rect class="c-purple" x="20" y="16" width="600" height="84" rx="8"/>
+<text class="t" x="100" y="54" text-anchor="middle">第三层：Agent</text>
+<text class="ts" x="100" y="74" text-anchor="middle">多步、有工具、会决策</text>
+<rect class="c-gray" x="190" y="38" width="70" height="40" rx="4"/><text class="ts" x="225" y="63" text-anchor="middle">目标</text>
+<rect class="c-gray" x="300" y="38" width="90" height="40" rx="4"/><text class="ts" x="345" y="63" text-anchor="middle">模型思考</text>
+<rect class="c-gray" x="430" y="38" width="90" height="40" rx="4"/><text class="ts" x="475" y="63" text-anchor="middle">调用工具</text>
+<rect class="c-gray" x="550" y="38" width="60" height="40" rx="4"/><text class="ts" x="580" y="63" text-anchor="middle">结论</text>
+<path class="ln" d="M260 58 H298" marker-end="url(#bio4)"/>
+<path class="ln" d="M390 50 H428" marker-end="url(#bio4)"/>
+<path class="ln" d="M428 66 H392" marker-end="url(#bio4)"/>
+<path class="ln" d="M520 58 H548" marker-end="url(#bio4)"/>
+<rect class="c-blue" x="20" y="116" width="600" height="64" rx="8"/>
+<text class="t" x="100" y="144" text-anchor="middle">第二层：对话助手</text>
+<text class="ts" x="100" y="164" text-anchor="middle">一问一答，只靠"知道"</text>
+<rect class="c-gray" x="190" y="130" width="90" height="36" rx="4"/><text class="ts" x="235" y="153" text-anchor="middle">问题</text>
+<rect class="c-gray" x="340" y="130" width="90" height="36" rx="4"/><text class="ts" x="385" y="153" text-anchor="middle">回答</text>
+<path class="ln" d="M280 148 H338" marker-end="url(#bio4)"/>
+<rect class="c-amber" x="20" y="196" width="600" height="88" rx="8"/>
+<text class="t" x="100" y="236" text-anchor="middle">第一层：专用模型</text>
+<text class="ts" x="100" y="256" text-anchor="middle">一个模型，一种问题</text>
+<rect class="c-gray" x="190" y="222" width="95" height="36" rx="4"/><text class="ts" x="237" y="245" text-anchor="middle">AlphaFold</text>
+<rect class="c-gray" x="295" y="222" width="95" height="36" rx="4"/><text class="ts" x="342" y="245" text-anchor="middle">ESM</text>
+<rect class="c-gray" x="400" y="222" width="95" height="36" rx="4"/><text class="ts" x="447" y="245" text-anchor="middle">分子生成</text>
+<rect class="c-gray" x="505" y="222" width="105" height="36" rx="4"/><text class="ts" x="557" y="245" text-anchor="middle">ADMET 预测</text>
+<path class="ln dash" d="M475 80 V140 H500 V220" marker-end="url(#bio4)"/>
+<text class="ts" x="510" y="153">当成工具调用</text>
+</svg>
+<figcaption>图 1：三个层次不是替代关系，Agent 把下面一层的专用模型当成自己的工具。</figcaption>
+</figure>
+
 为什么这件事在科学研究里特别自然？因为科学研究本身就是一个循环。
 
 <figure class="diagram">
@@ -49,7 +82,7 @@ AI 参与生命科学研究，大致可以分成三个层次。
 <text class="ts" x="320" y="146" text-anchor="middle">科学方法</text>
 <text class="ts" x="320" y="166" text-anchor="middle">≈ 一个很慢的 Agent 循环</text>
 </svg>
-<figcaption>图 1：假设、实验、分析、更新，科学方法和 Agent 循环的形状几乎一样，区别在于"执行"这一步可能要花几周。</figcaption>
+<figcaption>图 2：假设、实验、分析、更新，科学方法和 Agent 循环的形状几乎一样，区别在于"执行"这一步可能要花几周。</figcaption>
 </figure>
 
 把这张图和 [最小的 Agent 循环](/posts/agent-basics/#最小的-agent-循环) 放在一起看会很有意思。模型思考对应提出假设，工具调用对应做实验，工具结果对应实验数据。唯一的、也是最要命的区别是：Agent 循环里的一次工具调用通常只要几秒钟，而一次湿实验可能要几天到几个月，花的钱也不是一个数量级。后面讲到的很多设计，都是在围绕这个差别做文章。
@@ -70,10 +103,10 @@ AI 参与生命科学研究，大致可以分成三个层次。
 
 ## Agent 在药物发现流程里的位置
 
-药物发现是一条很长的流水线。一个新药从立项到上市通常要十年以上，花费以十亿美元计，而进入临床的候选药物绝大多数最后都会失败。AI 能参与的环节很多，图 2 是一个粗略的地图。
+药物发现是一条很长的流水线。一个新药从立项到上市通常要十年以上，花费以十亿美元计，而进入临床的候选药物绝大多数最后都会失败。AI 能参与的环节很多，图 3 是一个粗略的地图。
 
 <figure class="diagram">
-<svg viewBox="0 0 640 250" role="img" aria-label="药物发现的五个阶段以及每个阶段中 Agent 可以承担的任务">
+<svg viewBox="0 0 640 220" role="img" aria-label="药物发现的五个阶段以及每个阶段中 Agent 可以承担的任务">
 <defs><marker id="bio2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0 0 L10 5 L0 10 z"/></marker></defs>
 <rect class="c-purple" x="10" y="20" width="112" height="44" rx="6"/><text class="t" x="66" y="47" text-anchor="middle">靶点发现</text>
 <rect class="c-blue" x="138" y="20" width="112" height="44" rx="6"/><text class="t" x="194" y="47" text-anchor="middle">苗头化合物</text>
@@ -84,34 +117,34 @@ AI 参与生命科学研究，大致可以分成三个层次。
 <path class="ln" d="M250 42 H264" marker-end="url(#bio2)"/>
 <path class="ln" d="M378 42 H392" marker-end="url(#bio2)"/>
 <path class="ln" d="M506 42 H520" marker-end="url(#bio2)"/>
-<rect class="frame" x="10" y="80" width="112" height="150" rx="6"/>
+<rect class="frame" x="10" y="80" width="112" height="106" rx="6"/>
 <text class="ts" x="66" y="104" text-anchor="middle">文献与知识图谱</text>
 <text class="ts" x="66" y="126" text-anchor="middle">组学数据分析</text>
 <text class="ts" x="66" y="148" text-anchor="middle">提出靶点假设</text>
 <text class="ts" x="66" y="170" text-anchor="middle">老药新用</text>
-<rect class="frame" x="138" y="80" width="112" height="150" rx="6"/>
+<rect class="frame" x="138" y="80" width="112" height="106" rx="6"/>
 <text class="ts" x="194" y="104" text-anchor="middle">虚拟筛选</text>
 <text class="ts" x="194" y="126" text-anchor="middle">分子对接</text>
 <text class="ts" x="194" y="148" text-anchor="middle">结构预测</text>
 <text class="ts" x="194" y="170" text-anchor="middle">抗体/蛋白设计</text>
-<rect class="frame" x="266" y="80" width="112" height="150" rx="6"/>
+<rect class="frame" x="266" y="80" width="112" height="106" rx="6"/>
 <text class="ts" x="322" y="104" text-anchor="middle">分子生成与打分</text>
 <text class="ts" x="322" y="126" text-anchor="middle">构效关系分析</text>
 <text class="ts" x="322" y="148" text-anchor="middle">合成路线规划</text>
 <text class="ts" x="322" y="170" text-anchor="middle">自动化合成</text>
-<rect class="frame" x="394" y="80" width="112" height="150" rx="6"/>
+<rect class="frame" x="394" y="80" width="112" height="106" rx="6"/>
 <text class="ts" x="450" y="104" text-anchor="middle">ADMET 预测</text>
 <text class="ts" x="450" y="126" text-anchor="middle">毒性文献检索</text>
 <text class="ts" x="450" y="148" text-anchor="middle">实验方案设计</text>
 <text class="ts" x="450" y="170" text-anchor="middle">实验数据分析</text>
-<rect class="frame" x="522" y="80" width="108" height="150" rx="6"/>
+<rect class="frame" x="522" y="80" width="108" height="106" rx="6"/>
 <text class="ts" x="576" y="104" text-anchor="middle">试验方案设计</text>
 <text class="ts" x="576" y="126" text-anchor="middle">患者招募匹配</text>
 <text class="ts" x="576" y="148" text-anchor="middle">文档与申报</text>
 <text class="ts" x="576" y="170" text-anchor="middle">安全信号监测</text>
-<text class="ts" x="320" y="246" text-anchor="middle">越往左，越适合让 Agent 自主探索；越往右，越需要人和监管把关</text>
+<text class="ts" x="320" y="210" text-anchor="middle">越往左，越适合让 Agent 自主探索；越往右，越需要人和监管把关</text>
 </svg>
-<figcaption>图 2：药物发现的主要阶段，以及 Agent 在每个阶段里可以承担的工作。</figcaption>
+<figcaption>图 3：药物发现的主要阶段，以及 Agent 在每个阶段里可以承担的工作。</figcaption>
 </figure>
 
 几个阶段分开说一下。
@@ -157,6 +190,36 @@ Coscientist 的意义在于它把 [Agent 循环](/posts/agent-basics/#最小的-
 - **近似度**（Proximity）Agent 给假设聚类，避免重复；
 - **元评审**（Meta-review）Agent 总结整轮评审中反复出现的问题，反馈给其他 Agent。
 
+
+<figure class="diagram">
+<svg viewBox="0 0 640 300" role="img" aria-label="AI co-scientist 的多 Agent 结构：生成、反思、排名、进化形成循环，元评审和近似度 Agent 提供反馈">
+<defs><marker id="bio5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+<rect class="c-green" x="20" y="14" width="170" height="44" rx="6"/><text class="t" x="105" y="41" text-anchor="middle">研究目标 + 科学家反馈</text>
+<rect class="c-purple" x="240" y="14" width="160" height="44" rx="6"/><text class="t" x="320" y="41" text-anchor="middle">监督者：分配任务与算力</text>
+<path class="ln" d="M190 36 H238" marker-end="url(#bio5)"/>
+<path class="ln" d="M320 58 V84" marker-end="url(#bio5)"/>
+<rect class="frame" x="10" y="86" width="620" height="206" rx="8"/>
+<rect class="c-blue" x="20" y="130" width="120" height="50" rx="6"/><text class="t" x="80" y="152" text-anchor="middle">生成</text><text class="ts" x="80" y="170" text-anchor="middle">读文献、提假设</text>
+<rect class="c-blue" x="180" y="130" width="120" height="50" rx="6"/><text class="t" x="240" y="152" text-anchor="middle">反思</text><text class="ts" x="240" y="170" text-anchor="middle">像同行评审一样挑错</text>
+<rect class="c-blue" x="340" y="130" width="120" height="50" rx="6"/><text class="t" x="400" y="152" text-anchor="middle">排名</text><text class="ts" x="400" y="170" text-anchor="middle">两两辩论，Elo 排序</text>
+<rect class="c-blue" x="500" y="130" width="120" height="50" rx="6"/><text class="t" x="560" y="152" text-anchor="middle">进化</text><text class="ts" x="560" y="170" text-anchor="middle">组合、改进、简化</text>
+<path class="ln" d="M140 155 H178" marker-end="url(#bio5)"/>
+<path class="ln" d="M300 155 H338" marker-end="url(#bio5)"/>
+<path class="ln" d="M460 155 H498" marker-end="url(#bio5)"/>
+<path class="ln" d="M560 128 V106 H240 V128" marker-end="url(#bio5)"/>
+<text class="ts" x="400" y="101" text-anchor="middle">新一代假设，再评审、再比赛</text>
+<rect class="c-amber" x="20" y="226" width="200" height="50" rx="6"/><text class="t" x="120" y="248" text-anchor="middle">元评审</text><text class="ts" x="120" y="266" text-anchor="middle">总结反复出现的问题</text>
+<rect class="c-gray" x="340" y="226" width="120" height="50" rx="6"/><text class="t" x="400" y="248" text-anchor="middle">近似度</text><text class="ts" x="400" y="266" text-anchor="middle">聚类、去重</text>
+<rect class="c-green" x="500" y="226" width="120" height="50" rx="6"/><text class="t" x="560" y="248" text-anchor="middle">输出</text><text class="ts" x="560" y="266" text-anchor="middle">排名靠前的假设</text>
+<path class="ln dash" d="M80 224 V182" marker-end="url(#bio5)"/>
+<path class="ln dash" d="M200 224 L235 182" marker-end="url(#bio5)"/>
+<path class="ln dash" d="M370 182 L222 236" marker-end="url(#bio5)"/>
+<path class="ln dash" d="M400 224 V182" marker-end="url(#bio5)"/>
+<path class="ln" d="M440 182 L520 224" marker-end="url(#bio5)"/>
+</svg>
+<figcaption>图 4：AI co-scientist 的结构。实线是假设的流向，虚线是评审意见和辅助信息的流向。</figcaption>
+</figure>
+
 这个设计本质上是把 [评测](/posts/agent-evaluation/) 和 [子 Agent](/posts/agent-subagents/) 的思路搬进了生成过程本身：不是生成一个答案就交差，而是生成很多个，让它们互相竞争，再把评审意见喂回去。论文里一个重要观察是，给系统更多的计算时间，假设的质量（用 Elo 衡量）会持续上升，这就是所谓的"测试时计算扩展"。
 
 更重要的是，它的几个假设经过了湿实验验证：在急性髓系白血病上提出的老药新用候选，有几个在细胞实验中显示出抑制效果；在肝纤维化上提出的新靶点，在人类肝脏类器官里得到了支持；最引人注目的是，在一个关于细菌耐药基因如何跨物种传播的问题上，它独立提出的机制假设，和伦敦帝国理工学院的团队花了多年实验得到、但当时尚未发表的结论一致。
@@ -168,6 +231,37 @@ Coscientist 的意义在于它把 [Agent 循环](/posts/agent-basics/#最小的-
 它们通过"组会"推进研究。在团队会议上，PI 提出议题，各个专家轮流发言，批评者指出问题，PI 汇总并做决定；在单独会议上，某个专家 Agent 负责把决定落实成代码。人类研究者只在关键节点给出很少的指导。
 
 论文里的任务是为新出现的新冠病毒变体设计纳米抗体。Virtual Lab 自己决定了技术路线：从已有的、针对早期毒株的纳米抗体出发做突变，而不是从头设计；然后把 ESM 蛋白质语言模型、AlphaFold-Multimer 和 Rosetta 串成一条计算流水线来打分筛选。最后设计出的 92 个纳米抗体经过实验验证，其中有两个对新变体的结合能力明显提升，同时保留了对原始毒株的结合。
+
+
+<figure class="diagram">
+<svg viewBox="0 0 640 290" role="img" aria-label="Virtual Lab 的工作方式：团队会议做决定，个人会议写代码，最终得到一条计算流水线和一批候选纳米抗体">
+<defs><marker id="bio6" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+<rect class="frame" x="10" y="14" width="300" height="176" rx="8"/>
+<text class="t" x="160" y="34" text-anchor="middle">团队会议：讨论与决策</text>
+<rect class="c-purple" x="110" y="46" width="100" height="34" rx="4"/><text class="ts" x="160" y="68" text-anchor="middle">PI Agent</text>
+<rect class="c-blue" x="20" y="100" width="90" height="34" rx="4"/><text class="ts" x="65" y="122" text-anchor="middle">免疫学家</text>
+<rect class="c-blue" x="115" y="100" width="90" height="34" rx="4"/><text class="ts" x="160" y="122" text-anchor="middle">计算生物学家</text>
+<rect class="c-blue" x="210" y="100" width="90" height="34" rx="4"/><text class="ts" x="255" y="122" text-anchor="middle">机器学习专家</text>
+<rect class="c-red" x="110" y="146" width="100" height="34" rx="4"/><text class="ts" x="160" y="168" text-anchor="middle">批评者</text>
+<path class="ln" d="M140 80 L70 98"/><path class="ln" d="M160 80 V98"/><path class="ln" d="M180 80 L250 98"/>
+<path class="ln dash" d="M130 146 L80 136"/><path class="ln dash" d="M160 146 V136"/><path class="ln dash" d="M190 146 L240 136"/>
+<path class="ln" d="M312 102 H338" marker-end="url(#bio6)"/>
+<rect class="frame" x="340" y="14" width="290" height="176" rx="8"/>
+<text class="t" x="485" y="34" text-anchor="middle">个人会议：把决定落实成代码</text>
+<rect class="c-blue" x="360" y="48" width="250" height="34" rx="4"/><text class="ts" x="485" y="70" text-anchor="middle">专家 Agent 编写代码</text>
+<rect class="c-red" x="360" y="96" width="250" height="34" rx="4"/><text class="ts" x="485" y="118" text-anchor="middle">批评者审查</text>
+<rect class="c-gray" x="360" y="144" width="250" height="34" rx="4"/><text class="ts" x="485" y="166" text-anchor="middle">修改后执行</text>
+<path class="ln" d="M485 82 V94" marker-end="url(#bio6)"/><path class="ln" d="M485 130 V142" marker-end="url(#bio6)"/>
+<rect class="c-amber" x="20" y="214" width="100" height="40" rx="4"/><text class="ts" x="70" y="238" text-anchor="middle">ESM 打分</text>
+<rect class="c-amber" x="140" y="214" width="150" height="40" rx="4"/><text class="ts" x="215" y="238" text-anchor="middle">AlphaFold-Multimer</text>
+<rect class="c-amber" x="310" y="214" width="90" height="40" rx="4"/><text class="ts" x="355" y="238" text-anchor="middle">Rosetta</text>
+<rect class="c-green" x="420" y="214" width="100" height="40" rx="4"/><text class="ts" x="470" y="238" text-anchor="middle">92 个候选</text>
+<rect class="c-green" x="540" y="214" width="90" height="40" rx="4"/><text class="ts" x="585" y="238" text-anchor="middle">湿实验验证</text>
+<path class="ln" d="M120 234 H138" marker-end="url(#bio6)"/><path class="ln" d="M290 234 H308" marker-end="url(#bio6)"/><path class="ln" d="M400 234 H418" marker-end="url(#bio6)"/><path class="ln" d="M520 234 H538" marker-end="url(#bio6)"/>
+<text class="ts" x="320" y="278" text-anchor="middle">最终产出：一条由 Agent 自己选定工具、自己编写的计算流水线</text>
+</svg>
+<figcaption>图 5：Virtual Lab 用"组会"推进研究。批评者既参加讨论，也审查代码。</figcaption>
+</figure>
 
 Virtual Lab 有两点值得注意。一是它说明"角色扮演"式的多 Agent 不只是噱头：不同角色带来的视角差异，加上一个专职的批评者，确实能让方案更周全。二是它的产出是一条**可执行的计算流水线**加一批**可以拿去做实验的序列**，而不是一段文字结论，这让它的结果可以被检验。
 
@@ -241,7 +335,7 @@ FutureHouse 在 2025 年展示的 Robin 是一个多 Agent 系统，它把文献
 <path class="ln" d="M172 160 H218" marker-end="url(#bio3)" marker-start="url(#bio3)"/>
 <path class="ln" d="M468 160 H422" marker-end="url(#bio3)" marker-start="url(#bio3)"/>
 </svg>
-<figcaption>图 3：科研 Agent 的典型组成。虚线表示通往物理世界的那条路，通常要经过人类审批。</figcaption>
+<figcaption>图 6：科研 Agent 的典型组成。虚线表示通往物理世界的那条路，通常要经过人类审批。</figcaption>
 </figure>
 
 **工具**是最重的一部分。生物医学的工具链又长又杂，把它们包装成 Agent 好用的接口，本身就是一项大工程。Biomni 和 TxAgent 背后的 ToolUniverse 都在做这件事，越来越多的生物数据库和软件也开始提供 MCP 接口。[工具](/posts/agent-tools/) 那篇里说的原则在这里同样成立，甚至更重要：返回值要精简，错误信息要可操作，ID 体系要说清楚，否则模型会在"Ensembl ID 和基因符号怎么对应"这种事上反复绊倒。
@@ -269,6 +363,25 @@ FutureHouse 在 2025 年展示的 Robin 是一个多 Agent 系统，它把文献
 ### 验证是真正的瓶颈
 
 Agent 可以在一个小时里提出一百个假设，但验证一个假设的湿实验可能要几个月。于是瓶颈从"想出好点子"转移到了"判断哪些点子值得验证"。
+
+
+<figure class="diagram">
+<svg viewBox="0 0 640 290" role="img" aria-label="假设验证漏斗：从上百个假设经过计算筛选和人工挑选，只有少数进入湿实验，越往下越慢越贵">
+<defs><marker id="bio7" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+<rect class="c-purple" x="20" y="16" width="480" height="48" rx="6"/><text class="t" x="260" y="37" text-anchor="middle">Agent 提出上百个假设</text><text class="ts" x="260" y="55" text-anchor="middle">文献、数据、推理</text>
+<rect class="c-blue" x="80" y="80" width="360" height="48" rx="6"/><text class="t" x="260" y="101" text-anchor="middle">计算筛选</text><text class="ts" x="260" y="119" text-anchor="middle">对接打分、ADMET 预测、文献核对</text>
+<rect class="c-amber" x="140" y="144" width="240" height="48" rx="6"/><text class="t" x="260" y="165" text-anchor="middle">专家挑选</text><text class="ts" x="260" y="183" text-anchor="middle">可行性、成本、安全</text>
+<rect class="c-green" x="195" y="208" width="130" height="48" rx="6"/><text class="t" x="260" y="229" text-anchor="middle">湿实验</text><text class="ts" x="260" y="247" text-anchor="middle">少数几个</text>
+<path class="ln" d="M260 64 V78" marker-end="url(#bio7)"/><path class="ln" d="M260 128 V142" marker-end="url(#bio7)"/><path class="ln" d="M260 192 V206" marker-end="url(#bio7)"/>
+<text class="ts" x="530" y="44">分钟级</text>
+<text class="ts" x="530" y="108">小时级</text>
+<text class="ts" x="530" y="172">天级</text>
+<text class="ts" x="530" y="236">周到月，最贵</text>
+<path class="ln" d="M515 30 V250" marker-end="url(#bio7)"/>
+<text class="ts" x="260" y="280" text-anchor="middle">瓶颈在漏斗底部：决定哪些假设值得往下走，比生成假设更重要</text>
+</svg>
+<figcaption>图 7：越往下越慢、越贵，也越可信。计算指标只能当过滤器。</figcaption>
+</figure>
 
 一个自然的想法是用计算指标代替实验，比如用对接打分代替结合实验，用预测的毒性代替毒理测试。这在早期筛选时很有用，但要小心：**Agent 会优化你给它的任何指标**，包括指标的漏洞。一个分子可能对接分数极高，但根本无法合成，或者在体内完全没有活性。这和强化学习里的"奖励投机"是同一个问题。计算指标只能是过滤器，不能是终点。
 
