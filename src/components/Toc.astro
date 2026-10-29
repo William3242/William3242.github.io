@@ -1,20 +1,29 @@
 ---
 import type { MarkdownHeading } from 'astro';
+import TocList, { type TocNode } from './TocList.astro';
 
 interface Props {
   headings: MarkdownHeading[];
 }
-const items = Astro.props.headings.filter((h) => h.depth === 2 || h.depth === 3);
+const items = Astro.props.headings.filter((h) => h.depth >= 2 && h.depth <= 4);
+
+// 把扁平的标题列表组装成树：二级标题下挂三级，三级下挂四级
+const tree: TocNode[] = [];
+const stack: TocNode[] = [];
+for (const h of items) {
+  const node: TocNode = { depth: h.depth, slug: h.slug, text: h.text, children: [] };
+  while (stack.length && stack[stack.length - 1].depth >= h.depth) stack.pop();
+  (stack.length ? stack[stack.length - 1].children : tree).push(node);
+  stack.push(node);
+}
+const nested = tree.some((n) => n.children.length > 0);
 ---
 {items.length >= 3 && (
   <aside class="toc">
     <details open>
       <summary>目录</summary>
-      <ol>
-        {items.map((h) => (
-          <li class={`d${h.depth}`}><a href={`#${h.slug}`}>{h.text}</a></li>
-        ))}
-      </ol>
+      {nested && <button class="all" type="button">全部展开</button>}
+      <TocList nodes={tree} />
     </details>
   </aside>
 )}
@@ -25,6 +34,38 @@ const items = Astro.props.headings.filter((h) => h.depth === 2 || h.depth === 3)
     const details = toc.querySelector('details')!;
     const links = [...toc.querySelectorAll<HTMLAnchorElement>('a')];
     const targets = links.map((a) => document.getElementById(decodeURIComponent(a.hash.slice(1))));
+    const parents = [...toc.querySelectorAll<HTMLLIElement>('li:has(> ol)')];
+    const allBtn = toc.querySelector<HTMLButtonElement>('.all');
+
+    // 折叠逻辑参考 tocbot / Material for MkDocs：默认只展开当前阅读位置所在的分支，
+    // 其余分支收起；手动点过箭头的分支以手动状态为准，“全部展开”会覆盖所有分支。
+    const manual = new Map<HTMLLIElement, boolean>();
+    let expandAll = false;
+    const setOpen = (li: HTMLLIElement, open: boolean) => {
+      li.classList.toggle('collapsed', !open);
+      li.querySelector(':scope > .row > .tw')!.setAttribute('aria-expanded', String(open));
+    };
+    let activeLi: HTMLLIElement | null = null;
+    const applyCollapse = () => {
+      parents.forEach((li) => {
+        const auto = expandAll || (activeLi !== null && li.contains(activeLi));
+        setOpen(li, manual.get(li) ?? auto);
+      });
+      if (allBtn) allBtn.textContent = expandAll ? '全部收起' : '全部展开';
+    };
+
+    toc.addEventListener('click', (e) => {
+      const tw = (e.target as Element).closest('.tw');
+      if (!tw) return;
+      const li = tw.closest('li')!;
+      manual.set(li, li.classList.contains('collapsed'));
+      applyCollapse();
+    });
+    allBtn?.addEventListener('click', () => {
+      expandAll = !expandAll;
+      manual.clear();
+      applyCollapse();
+    });
 
     // 宽屏时目录在侧栏常驻展开；窄屏默认收起，点开后选中条目会自动收起
     const wide = matchMedia('(min-width: 76rem)');
@@ -39,37 +80,51 @@ const items = Astro.props.headings.filter((h) => h.depth === 2 || h.depth === 3)
       let current = -1;
       targets.forEach((el, i) => { if (el && el.getBoundingClientRect().top < 120) current = i; });
       links.forEach((a, i) => a.classList.toggle('active', i === current));
+      const li = current >= 0 ? links[current].closest('li') : null;
+      if (li !== activeLi) { activeLi = li; applyCollapse(); }
     };
     addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+    applyCollapse();
     update();
   }
 </script>
 
 <style>
   .toc { font-size: .88rem; line-height: 1.5; margin: 0 0 2rem; }
-  details { border: 1px solid var(--border); border-radius: 6px; padding: .55rem .9rem; }
+  details { position: relative; border: 1px solid var(--border); border-radius: 6px; padding: .55rem .9rem; }
   summary { cursor: pointer; color: var(--muted); font-weight: 600; list-style: none; user-select: none; }
   summary::-webkit-details-marker { display: none; }
   summary::after { content: '+'; float: right; font-weight: 400; }
   details[open] summary::after { content: '−'; }
-  ol { list-style: none; margin: .5rem 0 .2rem; padding: 0; }
-  li { margin: .3rem 0; }
-  li.d3 { padding-left: 1rem; }
-  a { color: var(--muted); display: block; }
-  a:hover { color: var(--fg); text-decoration: none; }
-  a.active { color: var(--accent); }
+  .all { position: absolute; top: .6rem; right: 2.2rem; padding: 0; border: 0; background: none; font: inherit; font-size: .78rem; color: var(--muted); cursor: pointer; }
+  .all:hover { color: var(--accent); }
+  details:not([open]) .all { display: none; }
+
+  .toc :global(ol) { list-style: none; margin: 0; padding: 0; }
+  .toc > details > :global(ol) { margin: .5rem 0 .2rem; }
+  .toc :global(li) { margin: .15rem 0; }
+  .toc :global(li ol) { padding-left: 1.1rem; }
+  .toc :global(li.collapsed > ol) { display: none; }
+  .toc :global(.row) { display: flex; align-items: flex-start; }
+  .toc :global(.tw), .toc :global(.tw-gap) { flex: none; width: 1.1rem; height: 1.32rem; }
+  .toc :global(.tw) { display: grid; place-items: center; padding: 0; border: 0; background: none; color: var(--muted); cursor: pointer; border-radius: 3px; }
+  .toc :global(.tw:hover) { color: var(--fg); background: var(--code-bg); }
+  .toc :global(.tw svg) { width: .75rem; height: .75rem; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; transform: rotate(90deg); transition: transform .15s; }
+  .toc :global(li.collapsed > .row .tw svg) { transform: none; }
+  .toc :global(a) { color: var(--muted); display: block; flex: 1; min-width: 0; padding: .05rem 0; }
+  .toc :global(a:hover) { color: var(--fg); text-decoration: none; }
+  .toc :global(a.active) { color: var(--accent); }
+  .toc :global(li.d2 > .row > a) { color: var(--fg); }
+  .toc :global(li.d2 > .row > a.active) { color: var(--accent); }
 
   /* 宽屏：正文右侧的粘性侧栏 */
   @media (min-width: 76rem) {
-    .toc { position: absolute; top: 0; bottom: 0; left: calc(100% + 3rem); width: 14rem; margin: 0; }
+    .toc { position: absolute; top: 0; bottom: 0; left: calc(100% + 3rem); width: 15rem; margin: 0; }
     details { position: sticky; top: 2rem; max-height: calc(100vh - 4rem); overflow-y: auto; border: 0; padding: 0; }
     summary { pointer-events: none; font-size: .8rem; letter-spacing: .04em; }
     details[open] summary::after { content: none; }
-    ol { border-left: 1px solid var(--border); }
-    li { margin: 0; }
-    a { padding: .22rem 0 .22rem .9rem; margin-left: -1px; border-left: 2px solid transparent; }
-    li.d3 { padding-left: 0; }
-    li.d3 a { padding-left: 1.8rem; font-size: .84rem; }
-    a.active { border-left-color: var(--accent); }
+    .all { top: .05rem; right: 0; }
+    .toc > details > :global(ol) { border-left: 1px solid var(--border); padding-left: .3rem; }
+    .toc :global(a.active) { font-weight: 500; }
   }
 </style>

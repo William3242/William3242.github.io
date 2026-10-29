@@ -16,8 +16,27 @@ const links = [
       const active = i === 0 ? path === l.href || path.startsWith(url('/posts/')) : path.startsWith(l.href);
       return <a href={l.href} class:list={{ active }} aria-current={active ? 'page' : undefined}>{l.label}</a>;
     })}
+    <button class="theme" type="button" aria-label="切换夜间模式" title="切换夜间模式">
+      <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5" /><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8" /></svg>
+      <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z" /></svg>
+    </button>
   </nav>
 </header>
+<script>
+  const btn = document.querySelector<HTMLButtonElement>('header .theme')!;
+  const root = document.documentElement;
+  const system = matchMedia('(prefers-color-scheme: dark)');
+  const isDark = () => (root.dataset.theme ?? (system.matches ? 'dark' : 'light')) === 'dark';
+  const sync = () => btn.setAttribute('aria-pressed', String(isDark()));
+  sync();
+  system.addEventListener('change', sync);
+  btn.addEventListener('click', () => {
+    const next = isDark() ? 'light' : 'dark';
+    root.dataset.theme = next;
+    try { localStorage.setItem('theme', next); } catch {}
+    sync();
+  });
+</script>
 <style>
   header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: .5rem; padding: 2rem 0 2.5rem; }
   .brand { font-weight: 600; color: var(--fg); }
@@ -26,4 +45,11 @@ const links = [
   nav a { padding-bottom: .15rem; border-bottom: 1.5px solid transparent; transition: color .15s, border-color .15s; }
   nav a:hover { color: var(--fg); text-decoration: none; }
   nav a.active { color: var(--fg); border-bottom-color: var(--accent); }
+  nav { display: flex; align-items: center; }
+  .theme { margin-left: 1.1rem; padding: .2rem; border: 0; background: none; color: var(--muted); cursor: pointer; line-height: 0; border-radius: 4px; }
+  .theme:hover { color: var(--fg); }
+  .theme svg { width: 1.05rem; height: 1.05rem; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .theme .moon { display: none; }
+  .theme[aria-pressed="true"] .sun { display: none; }
+  .theme[aria-pressed="true"] .moon { display: block; }
 </style>
