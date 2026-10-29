@@ -155,7 +155,7 @@ AI 参与生命科学研究，大致可以分成三个层次。
 
 **临床前和临床阶段**，Agent 更多是一个效率工具：读毒理文献、设计实验方案、匹配临床试验的入组条件、起草申报文档。这些环节结果的代价很高，监管要求很严，所以通常是人主导、Agent 辅助。
 
-值得一提的是，"AI 发现的药"已经不只是概念。Insilico Medicine 用生成式 AI 发现靶点并设计分子的 [rentosertib](https://pubmed.ncbi.nlm.nih.gov/40461817/)（一个 TNIK 抑制剂），2025 年在 *Nature Medicine* 上发表了针对特发性肺纤维化的 2a 期临床结果。它用的主要是专用的生成模型和打分模型，而不是今天说的 LLM Agent，但它说明了一件事：计算方法产出的分子，是可以一路走进临床的。
+值得一提的是，"AI 发现的药"已经不只是概念。Insilico Medicine 用生成式 AI 发现靶点并设计分子的 [rentosertib](https://pubmed.ncbi.nlm.nih.gov/40461817/)<sup class="cite" id="cite-1"><a href="#ref-1" title="rentosertib">1</a></sup>（一个 TNIK 抑制剂），2025 年在 *Nature Medicine* 上发表了针对特发性肺纤维化的 2a 期临床结果。它用的主要是专用的生成模型和打分模型，而不是今天说的 LLM Agent，但它说明了一件事：计算方法产出的分子，是可以一路走进临床的。
 
 ## 几个有代表性的系统
 
@@ -163,7 +163,7 @@ AI 参与生命科学研究，大致可以分成三个层次。
 
 ### ChemCrow：给模型配上化学家的工具箱
 
-[ChemCrow](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11116106/) 是 2023 年 EPFL 和 Rochester 的团队做的化学 Agent，后来发表在 *Nature Machine Intelligence* 上。它的结构很朴素：GPT-4 加上 18 个化学专家设计的工具，用 ReAct 的方式在"思考、调用工具、观察结果"之间循环。工具包括分子量计算、SMILES 和名称的互转、文献检索、反应预测、逆合成规划、安全性检查，以及连接 IBM 的云端自动化化学平台 RoboRXN 的接口。
+[ChemCrow](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11116106/)<sup class="cite" id="cite-2"><a href="#ref-2" title="ChemCrow">2</a></sup> 是 2023 年 EPFL 和 Rochester 的团队做的化学 Agent，后来发表在 *Nature Machine Intelligence* 上。它的结构很朴素：GPT-4 加上 18 个化学专家设计的工具，用 ReAct 的方式在"思考、调用工具、观察结果"之间循环。工具包括分子量计算、SMILES 和名称的互转、文献检索、反应预测、逆合成规划、安全性检查，以及连接 IBM 的云端自动化化学平台 RoboRXN 的接口。
 
 它最有意思的地方不是做出了什么，而是它清楚地展示了 **为什么化学需要工具**。大模型对化学有很多"知识"，但让它直接算一个分子的分子量、判断一个 SMILES 字符串是否合法，它很容易出错，而且错得很自信。把这些事交给 RDKit 这样的确定性工具，模型只负责决定"该算什么"，可靠性就上来了。这正是 [工具](/posts/agent-tools/) 那篇里说的：工具不是给模型添功能，而是把模型不擅长的事交出去。
 
@@ -171,7 +171,7 @@ ChemCrow 还留下了一个关于评测的教训。作者让化学家和 GPT-4 �
 
 ### Coscientist：从屏幕走进实验室
 
-同一年，卡内基梅隆大学 Gomes 组的 [Coscientist](https://pmc.ncbi.nlm.nih.gov/articles/PMC10733136) 发表在 *Nature* 上。它的结构是一个规划者（Planner）加上几个模块：网页搜索、文档检索、代码执行，以及实验自动化接口。
+同一年，卡内基梅隆大学 Gomes 组的 [Coscientist](https://pmc.ncbi.nlm.nih.gov/articles/PMC10733136)<sup class="cite" id="cite-3"><a href="#ref-3" title="Coscientist">3</a></sup> 发表在 *Nature* 上。它的结构是一个规划者（Planner）加上几个模块：网页搜索、文档检索、代码执行，以及实验自动化接口。
 
 它做的事情比 ChemCrow 更进一步：给一个目标，比如"做一个 Suzuki 偶联反应"，它会自己上网查反应条件，读液体处理机器人的 API 文档，写出控制机器人的代码，在真实的实验室硬件上执行，然后读回实验数据。论文里它成功完成了钯催化的 Suzuki 和 Sonogashira 偶联反应，还在一个反应条件优化任务上表现出了根据结果调整下一轮实验的能力。
 
@@ -179,7 +179,7 @@ Coscientist 的意义在于它把 [Agent 循环](/posts/agent-basics/#最小的-
 
 ### AI co-scientist：用多 Agent 生成和打磨假设
 
-2025 年初，Google 发布了 [AI co-scientist](https://arxiv.org/abs/2502.18864)。它的目标不是执行实验，而是做研究中最"像科学家"的那部分：**提出新的、可检验的假设**。
+2025 年初，Google 发布了 [AI co-scientist](https://arxiv.org/abs/2502.18864)<sup class="cite" id="cite-4"><a href="#ref-4" title="AI co-scientist">4</a></sup>。它的目标不是执行实验，而是做研究中最"像科学家"的那部分：**提出新的、可检验的假设**。
 
 它是一个典型的多 Agent 系统，基于 Gemini 2.0。一个监督者（Supervisor）分配任务，下面有几个角色各司其职：
 
@@ -226,7 +226,7 @@ Coscientist 的意义在于它把 [Agent 循环](/posts/agent-basics/#最小的-
 
 ### Virtual Lab：一个由 Agent 组成的课题组
 
-斯坦福 James Zou 组的 [Virtual Lab](https://www.biorxiv.org/content/10.1101/2024.11.11.623004)（2025 年发表在 *Nature*）走得更"拟人"一些。它模仿的是一个真实课题组的工作方式：一个扮演 PI（课题组长）的 Agent，带着几个不同专业背景的"科学家" Agent，比如免疫学家、计算生物学家、机器学习专家，外加一个专门挑毛病的批评者 Agent。
+斯坦福 James Zou 组的 [Virtual Lab](https://www.biorxiv.org/content/10.1101/2024.11.11.623004)<sup class="cite" id="cite-5"><a href="#ref-5" title="Virtual Lab">5</a></sup>（2025 年发表在 *Nature*）走得更"拟人"一些。它模仿的是一个真实课题组的工作方式：一个扮演 PI（课题组长）的 Agent，带着几个不同专业背景的"科学家" Agent，比如免疫学家、计算生物学家、机器学习专家，外加一个专门挑毛病的批评者 Agent。
 
 它们通过"组会"推进研究。在团队会议上，PI 提出议题，各个专家轮流发言，批评者指出问题，PI 汇总并做决定；在单独会议上，某个专家 Agent 负责把决定落实成代码。人类研究者只在关键节点给出很少的指导。
 
@@ -267,7 +267,7 @@ Virtual Lab 有两点值得注意。一是它说明"角色扮演"式的多 Agent
 
 ### Biomni：一个通用的生物医学 Agent
 
-前面几个系统都是为某一类任务量身定做的。斯坦福 Leskovec 组等团队在 2025 年推出的 [Biomni](https://www.biorxiv.org/content/10.1101/2025.05.30.656746v1)，想做的是一个**通用**的生物医学 Agent。
+前面几个系统都是为某一类任务量身定做的。斯坦福 Leskovec 组等团队在 2025 年推出的 [Biomni](https://www.biorxiv.org/content/10.1101/2025.05.30.656746v1)<sup class="cite" id="cite-6"><a href="#ref-6" title="Biomni">6</a></sup>，想做的是一个**通用**的生物医学 Agent。
 
 它的做法很有意思。为了确定 Agent 需要什么工具，作者先让模型从大量生物医学论文里挖掘"研究者实际做了哪些操作、用了哪些工具和数据库"，再据此构建了一个统一的环境：一百多个专门工具、几十个数据库、上百个常用软件包。Agent 的行动方式不是一次调用一个固定的函数，而是**直接写代码**，在这个环境里自由组合工具，这和 [工具](/posts/agent-tools/) 那篇里讲的"代码即行动"是同一个思路。
 
@@ -277,9 +277,9 @@ Virtual Lab 有两点值得注意。一是它说明"角色扮演"式的多 Agent
 
 再往前一步，就是试图把整个研究循环自动化的系统。
 
-FutureHouse 在 2025 年展示的 [Robin](https://arxiv.org/abs/2505.13400) 是一个多 Agent 系统，它把文献 Agent 和数据分析 Agent 串起来，目标是干性年龄相关性黄斑变性（干性 AMD）的治疗。它先从文献里提出机制假设和候选药物，人类在实验室做完实验后，它再分析实验数据、提出下一轮假设。最后它提出了 ripasudil，一个已经在日本获批用于青光眼的 ROCK 抑制剂，作为干性 AMD 的候选药物，并通过后续的 RNA 测序分析提出了可能的作用机制。论文里几乎所有的假设、实验设计和数据分析都出自 Agent，人类负责的是动手做实验。
+FutureHouse 在 2025 年展示的 [Robin](https://arxiv.org/abs/2505.13400)<sup class="cite" id="cite-7"><a href="#ref-7" title="Robin">7</a></sup> 是一个多 Agent 系统，它把文献 Agent 和数据分析 Agent 串起来，目标是干性年龄相关性黄斑变性（干性 AMD）的治疗。它先从文献里提出机制假设和候选药物，人类在实验室做完实验后，它再分析实验数据、提出下一轮假设。最后它提出了 ripasudil，一个已经在日本获批用于青光眼的 ROCK 抑制剂，作为干性 AMD 的候选药物，并通过后续的 RNA 测序分析提出了可能的作用机制。论文里几乎所有的假设、实验设计和数据分析都出自 Agent，人类负责的是动手做实验。
 
-同一类工作还有很多：做 CRISPR 基因编辑实验设计的 [CRISPR-GPT](https://pmc.ncbi.nlm.nih.gov/articles/PMC12920143)，设计基因扰动实验的 [BioDiscoveryAgent](https://arxiv.org/abs/2405.17631)，把两百多个生物医学工具整合进来做治疗推理的 [TxAgent](https://arxiv.org/abs/2503.10970)，以及在机器学习领域尝试从选题到写论文全流程自动化的 [Sakana AI Scientist](https://arxiv.org/abs/2408.06292)。FutureHouse 后来分拆出的 Edison Scientific 在 2025 年底推出的 [Kosmos](https://arxiv.org/abs/2511.02824) 则把时间尺度拉得更长：一次运行最长 12 小时，并行跑文献 Agent 和数据分析 Agent，用一个共享的"世界模型"串起几百轮工作，平均每次读约 1500 篇论文、执行约四万行代码，报告里的每个论断都链接到代码或原始文献。独立评估中，大约八成的论断被判断为准确，但"综合推断"类的论断准确率只有不到六成，这个落差本身就很说明问题。
+同一类工作还有很多：做 CRISPR 基因编辑实验设计的 [CRISPR-GPT](https://pmc.ncbi.nlm.nih.gov/articles/PMC12920143)<sup class="cite" id="cite-8"><a href="#ref-8" title="CRISPR-GPT">8</a></sup>，设计基因扰动实验的 [BioDiscoveryAgent](https://arxiv.org/abs/2405.17631)<sup class="cite" id="cite-9"><a href="#ref-9" title="BioDiscoveryAgent">9</a></sup>，把两百多个生物医学工具整合进来做治疗推理的 [TxAgent](https://arxiv.org/abs/2503.10970)<sup class="cite" id="cite-10"><a href="#ref-10" title="TxAgent">10</a></sup>，以及在机器学习领域尝试从选题到写论文全流程自动化的 [Sakana AI Scientist](https://arxiv.org/abs/2408.06292)<sup class="cite" id="cite-11"><a href="#ref-11" title="AI Scientist">11</a></sup>。FutureHouse 后来分拆出的 Edison Scientific 在 2025 年底推出的 [Kosmos](https://arxiv.org/abs/2511.02824)<sup class="cite" id="cite-12"><a href="#ref-12" title="Kosmos">12</a></sup> 则把时间尺度拉得更长：一次运行最长 12 小时，并行跑文献 Agent 和数据分析 Agent，用一个共享的"世界模型"串起几百轮工作，平均每次读约 1500 篇论文、执行约四万行代码，报告里的每个论断都链接到代码或原始文献。独立评估中，大约八成的论断被判断为准确，但"综合推断"类的论断准确率只有不到六成，这个落差本身就很说明问题。
 
 它们的共同趋势是：**Agent 负责的环节越来越多，人越来越像一个审批者和实验执行者。**
 
@@ -392,16 +392,16 @@ FutureHouse 在 2025 年展示的 [Robin](https://arxiv.org/abs/2505.13400) 是�
 
 这个方向的演进路线很清楚，正好是从"模型"走向"Agent"的缩影。
 
-**第一步是证明大模型懂细胞。** [GPTCelltype](https://www.biorxiv.org/content/10.1101/2023.04.16.537094) 的工作（Hou 和 Ji，2024 年发表在 *Nature Methods*）做了一件很简单的事：把每个聚类的差异基因列表交给 GPT-4，让它说出细胞类型。结果在大量组织和细胞类型上，它的注释和人工注释高度一致。这还不是 Agent，只是一次调用，但它说明了紫色那一步可以交给模型。
+**第一步是证明大模型懂细胞。** [GPTCelltype](https://www.biorxiv.org/content/10.1101/2023.04.16.537094)<sup class="cite" id="cite-13"><a href="#ref-13" title="GPTCelltype">13</a></sup> 的工作（Hou 和 Ji，2024 年发表在 *Nature Methods*）做了一件很简单的事：把每个聚类的差异基因列表交给 GPT-4，让它说出细胞类型。结果在大量组织和细胞类型上，它的注释和人工注释高度一致。这还不是 Agent，只是一次调用，但它说明了紫色那一步可以交给模型。
 
-**第二步是把整条流程交出去。** [CellAgent](https://arxiv.org/abs/2407.09811)（后发表于 ICLR 2026）用了一个规划者、执行者、评估者的三角色结构：规划者把"分析这份数据"拆成质控、整合、聚类、注释等步骤；执行者为每一步选工具、写代码；评估者检查结果，不满意就让执行者换个工具或参数重来。这个"自我迭代"正对应琥珀色步骤里那些选参数的问题：与其让人一遍遍试，不如让 Agent 试，并用一个评估标准来选。
+**第二步是把整条流程交出去。** [CellAgent](https://arxiv.org/abs/2407.09811)<sup class="cite" id="cite-14"><a href="#ref-14" title="CellAgent">14</a></sup>（后发表于 ICLR 2026）用了一个规划者、执行者、评估者的三角色结构：规划者把"分析这份数据"拆成质控、整合、聚类、注释等步骤；执行者为每一步选工具、写代码；评估者检查结果，不满意就让执行者换个工具或参数重来。这个"自我迭代"正对应琥珀色步骤里那些选参数的问题：与其让人一遍遍试，不如让 Agent 试，并用一个评估标准来选。
 
 **第三步是走进空间。** 2025 年出现了好几个专门面向空间组学的 Agent，各有侧重：
 
-- [SpatialAgent](https://www.biorxiv.org/content/10.1101/2025.04.03.646459v1) 来自 Genentech 的团队，结构是记忆、规划、行动三个模块，配有十几个专门工具和预先写好的分析模板。它覆盖了从实验设计到假设生成的完整流程：在人类前额叶皮层的面板设计任务上，它设计的基因面板在细胞类型预测上超过了大约九成人类专家的设计，而且人和 Agent 合作设计的面板通常比任何一方单独设计的更好；在发育中的人类心脏数据上，它的细胞和生态位注释超过了 GPTCelltype 和 CellTypist，接近最好的人类专家；在小鼠结肠炎数据上，它给出的细胞通讯分析既复现了原论文的结论，也补充了原文没有强调的信号通路。它还同时支持全自动和"共驾"两种模式，后者允许研究者中途追问和修改目标。
-- [STAgent](https://www.biorxiv.org/content/10.1101/2025.04.01.646731) 来自哈佛的 Liu 组，强调多模态：它用多模态大模型直接"看"分析生成的图和组织图像，再结合检索到的文献写出带引用的研究报告。论文里它被用来分析人多能干细胞分化的胰岛移植物在小鼠体内不同时间点的空间转录组数据，刻画了胰岛样结构逐步成熟的过程。
-- [OmicsNavigator](https://www.biorxiv.org/content/10.1101/2025.07.21.665821) 面向的是 CODEX、成像质谱这类空间蛋白组数据。它把图像形态和分子表达分给两个 Agent 分别解读，再由第三个 Agent 融合，实验表明融合比只看任何一种模态都好。它最值得一提的设计是**预注册的假设验证**：研究者先写下假设，Agent 再去数据里检验，并如实报告"不支持"。论文里确实有一个假设被它否定了。
-- [PhenoGraph](https://www.biorxiv.org/content/10.1101/2025.06.06.658341) 换了个角度：从 TCGA 的大规模临床和表达数据出发，找出空间切片上和某个表型（比如生存期）相关的区域，再用生物医学知识图谱解释这些区域里的关键基因和疾病、通路、药物之间的联系。
+- [SpatialAgent](https://www.biorxiv.org/content/10.1101/2025.04.03.646459v1)<sup class="cite" id="cite-15"><a href="#ref-15" title="SpatialAgent">15</a></sup> 来自 Genentech 的团队，结构是记忆、规划、行动三个模块，配有十几个专门工具和预先写好的分析模板。它覆盖了从实验设计到假设生成的完整流程：在人类前额叶皮层的面板设计任务上，它设计的基因面板在细胞类型预测上超过了大约九成人类专家的设计，而且人和 Agent 合作设计的面板通常比任何一方单独设计的更好；在发育中的人类心脏数据上，它的细胞和生态位注释超过了 GPTCelltype 和 CellTypist，接近最好的人类专家；在小鼠结肠炎数据上，它给出的细胞通讯分析既复现了原论文的结论，也补充了原文没有强调的信号通路。它还同时支持全自动和"共驾"两种模式，后者允许研究者中途追问和修改目标。
+- [STAgent](https://www.biorxiv.org/content/10.1101/2025.04.01.646731)<sup class="cite" id="cite-16"><a href="#ref-16" title="STAgent">16</a></sup> 来自哈佛的 Liu 组，强调多模态：它用多模态大模型直接"看"分析生成的图和组织图像，再结合检索到的文献写出带引用的研究报告。论文里它被用来分析人多能干细胞分化的胰岛移植物在小鼠体内不同时间点的空间转录组数据，刻画了胰岛样结构逐步成熟的过程。
+- [OmicsNavigator](https://www.biorxiv.org/content/10.1101/2025.07.21.665821)<sup class="cite" id="cite-17"><a href="#ref-17" title="OmicsNavigator">17</a></sup> 面向的是 CODEX、成像质谱这类空间蛋白组数据。它把图像形态和分子表达分给两个 Agent 分别解读，再由第三个 Agent 融合，实验表明融合比只看任何一种模态都好。它最值得一提的设计是**预注册的假设验证**：研究者先写下假设，Agent 再去数据里检验，并如实报告"不支持"。论文里确实有一个假设被它否定了。
+- [PhenoGraph](https://www.biorxiv.org/content/10.1101/2025.06.06.658341)<sup class="cite" id="cite-18"><a href="#ref-18" title="PhenoGraph">18</a></sup> 换了个角度：从 TCGA 的大规模临床和表达数据出发，找出空间切片上和某个表型（比如生存期）相关的区域，再用生物医学知识图谱解释这些区域里的关键基因和疾病、通路、药物之间的联系。
 
 <figure class="diagram">
 <svg viewBox="0 0 640 300" role="img" aria-label="多模态空间组学 Agent：输入表达矩阵、空间坐标、组织图像和文献，经过规划、代码执行、读图和文献检索，输出注释、细胞通讯、面板设计和报告">
@@ -429,7 +429,7 @@ FutureHouse 在 2025 年展示的 [Robin](https://arxiv.org/abs/2505.13400) 是�
 <figcaption>图 8：一个多模态空间组学 Agent 的大致形状，综合了 SpatialAgent、STAgent 和 OmicsNavigator 的共同设计。</figcaption>
 </figure>
 
-**第四步是让 Agent 自己提问题。** 斯坦福 Zou 组的 [CellVoyager](https://www.biorxiv.org/content/10.1101/2025.06.03.657517) 做的不是"按要求分析"，而是**重新分析已发表的数据**：它读一篇单细胞论文和对应的数据，弄清原作者做了哪些分析，然后提出原文没做过的假设，在一个类似 Jupyter 的环境里写代码检验，遇到报错自己修，用视觉模型看图来决定下一步，最后写出报告。作者用它重新分析了几个已发表的数据集，得到了一些新的观察，比如新冠患者的 CD8 T 细胞可能更容易发生细胞焦亡，原论文作者评估后认为其中不少假设是合理且有意思的。
+**第四步是让 Agent 自己提问题。** 斯坦福 Zou 组的 [CellVoyager](https://www.biorxiv.org/content/10.1101/2025.06.03.657517)<sup class="cite" id="cite-19"><a href="#ref-19" title="CellVoyager">19</a></sup> 做的不是"按要求分析"，而是**重新分析已发表的数据**：它读一篇单细胞论文和对应的数据，弄清原作者做了哪些分析，然后提出原文没做过的假设，在一个类似 Jupyter 的环境里写代码检验，遇到报错自己修，用视觉模型看图来决定下一步，最后写出报告。作者用它重新分析了几个已发表的数据集，得到了一些新的观察，比如新冠患者的 CD8 T 细胞可能更容易发生细胞焦亡，原论文作者评估后认为其中不少假设是合理且有意思的。
 
 这条路线和 Biomni 这样的通用 Agent 也在汇合：单细胞分析本来就是 Biomni 测试的任务之一。可以预见，以后"专用 Agent"和"通用 Agent 加专用工具"的界线会越来越模糊。
 
@@ -465,7 +465,7 @@ FutureHouse 在 2025 年展示的 [Robin](https://arxiv.org/abs/2505.13400) 是�
 
 大模型编造一个不存在的函数名，代码一跑就报错；但它编造一篇不存在的论文、一个错误的基因功能、一条不存在的通路联系，往往没有任何东西会立即报错。更糟的是，这些错误读起来和正确的结论一样专业。
 
-缓解的办法是 **让每一个事实性的论断都有出处**。像 FutureHouse 的 [PaperQA](https://arxiv.org/abs/2409.13740) 系列那样，回答必须基于检索到的原文段落，并附上引用；数据库查询的结果原样保存，不让模型"凭记忆"填空。原则是：模型负责推理，事实来自工具。
+缓解的办法是 **让每一个事实性的论断都有出处**。像 FutureHouse 的 [PaperQA](https://arxiv.org/abs/2409.13740)<sup class="cite" id="cite-20"><a href="#ref-20" title="PaperQA2">20</a></sup> 系列那样，回答必须基于检索到的原文段落，并附上引用；数据库查询的结果原样保存，不让模型"凭记忆"填空。原则是：模型负责推理，事实来自工具。
 
 ### 验证是真正的瓶颈
 
@@ -508,7 +508,7 @@ AI co-scientist 那个耐药机制的例子之所以引人注目，正是因为�
 
 [评测](/posts/agent-evaluation/) 那篇说过，Agent 评测要评结果、要跑多次、要读轨迹。在科研场景里，这些原则都还成立，但有一个额外的麻烦：**真正的目标，也就是做出新发现，几乎无法直接评测。**
 
-现有的做法大多是退而求其次。[LAB-Bench](https://arxiv.org/abs/2407.10362) 测文献检索、序列操作、实验方案理解这些研究中的具体技能；[BixBench](https://arxiv.org/abs/2503.00096) 测 Agent 能否完成真实的生物信息学分析任务；[ScienceAgentBench](https://arxiv.org/abs/2410.05080) 测能否根据论文复现数据分析。这些基准都有用，但它们测的是"研究助理"的能力，而不是"科学家"的能力。至于后者，目前最可信的评测仍然是湿实验，加上领域专家的判断。
+现有的做法大多是退而求其次。[LAB-Bench](https://arxiv.org/abs/2407.10362)<sup class="cite" id="cite-21"><a href="#ref-21" title="LAB-Bench">21</a></sup> 测文献检索、序列操作、实验方案理解这些研究中的具体技能；[BixBench](https://arxiv.org/abs/2503.00096)<sup class="cite" id="cite-22"><a href="#ref-22" title="BixBench">22</a></sup> 测 Agent 能否完成真实的生物信息学分析任务；[ScienceAgentBench](https://arxiv.org/abs/2410.05080)<sup class="cite" id="cite-23"><a href="#ref-23" title="ScienceAgentBench">23</a></sup> 测能否根据论文复现数据分析。这些基准都有用，但它们测的是"研究助理"的能力，而不是"科学家"的能力。至于后者，目前最可信的评测仍然是湿实验，加上领域专家的判断。
 
 ChemCrow 的教训在这里值得再提一次：在专业领域里，**用模型评审模型，很可能会奖励流畅而不是正确。** 评测集里一定要有专家参与。
 
@@ -571,40 +571,192 @@ AlphaFold 告诉我们，模型可以在一个定义清楚的问题上超过人�
 
 ## 参考文献
 
-**综合与背景**
-
-1. Xu Z. et al. [A generative AI-discovered TNIK inhibitor for idiopathic pulmonary fibrosis: a randomized phase 2a trial](https://pubmed.ncbi.nlm.nih.gov/40461817/). *Nature Medicine*, 2025.
-
-**化学与药物发现 Agent**
-
-2. Bran A. M. et al. [Augmenting large language models with chemistry tools](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11116106/)（ChemCrow）. *Nature Machine Intelligence*, 2024.
-3. Boiko D. A. et al. [Autonomous chemical research with large language models](https://pmc.ncbi.nlm.nih.gov/articles/PMC10733136)（Coscientist）. *Nature*, 2023.
-4. Gao S. et al. [TxAgent: An AI Agent for Therapeutic Reasoning Across a Universe of Tools](https://arxiv.org/abs/2503.10970). arXiv, 2025.
-
-**科学发现与 AI 科学家**
-
-5. Gottweis J. et al. [Towards an AI co-scientist](https://arxiv.org/abs/2502.18864). arXiv, 2025.
-6. Swanson K. et al. [The Virtual Lab of AI agents designs new SARS-CoV-2 nanobodies](https://www.nature.com/nature-index/article/10.1038/s41586-025-09442-9). *Nature*, 2025.（[预印本](https://www.biorxiv.org/content/10.1101/2024.11.11.623004)）
-7. Huang K. et al. [Biomni: A General-Purpose Biomedical AI Agent](https://www.biorxiv.org/content/10.1101/2025.05.30.656746v1). bioRxiv, 2025.
-8. Ghareeb A. E. et al. [Robin: A multi-agent system for automating scientific discovery](https://arxiv.org/abs/2505.13400). arXiv, 2025.
-9. Mitchener L. et al. [Kosmos: An AI Scientist for Autonomous Discovery](https://arxiv.org/abs/2511.02824). arXiv, 2025.
-10. Lu C. et al. [The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery](https://arxiv.org/abs/2408.06292). arXiv, 2024.
-11. Qu Y. et al. [CRISPR-GPT for agentic automation of gene-editing experiments](https://pmc.ncbi.nlm.nih.gov/articles/PMC12920143). *Nature Biomedical Engineering*, 2025.（[预印本](https://arxiv.org/abs/2404.18021)）
-12. Roohani Y. et al. [BioDiscoveryAgent: An AI Agent for Designing Genetic Perturbation Experiments](https://arxiv.org/abs/2405.17631). ICLR, 2025.
-13. Skarlinski M. D. et al. [Language agents achieve superhuman synthesis of scientific knowledge](https://arxiv.org/abs/2409.13740)（PaperQA2）. arXiv, 2024.
-
-**单细胞与空间多组学 Agent**
-
-14. Hou W., Ji Z. [Assessing GPT-4 for cell type annotation in single-cell RNA-seq analysis](https://www.biorxiv.org/content/10.1101/2023.04.16.537094)（GPTCelltype）. *Nature Methods*, 2024.
-15. Xiao Y. et al. [CellAgent: An LLM-driven Multi-Agent Framework for Automated Single-cell Data Analysis](https://arxiv.org/abs/2407.09811). ICLR, 2026.
-16. Wang H. et al. [SpatialAgent: An autonomous AI agent for spatial biology](https://www.biorxiv.org/content/10.1101/2025.04.03.646459v1). bioRxiv, 2025.
-17. [Spatial transcriptomics AI agent charts hPSC-pancreas maturation in vivo](https://www.biorxiv.org/content/10.1101/2025.04.01.646731)（STAgent）. bioRxiv, 2025.
-18. Li Y. et al. [OmicsNavigator: an LLM-driven multi-agent system for autonomous zero-shot biological analysis in spatial omics](https://www.biorxiv.org/content/10.1101/2025.07.21.665821). bioRxiv, 2025.
-19. [PhenoGraph: A Multi-Agent Framework for Phenotype-driven Discovery in Spatial Transcriptomics Data Augmented with Knowledge Graphs](https://www.biorxiv.org/content/10.1101/2025.06.06.658341). bioRxiv, 2025.
-20. Alber S. et al. [CellVoyager: AI CompBio agent generates new insights by autonomously analyzing biological data](https://www.biorxiv.org/content/10.1101/2025.06.03.657517). bioRxiv, 2025.
-
-**评测基准**
-
-21. Laurent J. M. et al. [LAB-Bench: Measuring Capabilities of Language Models for Biology Research](https://arxiv.org/abs/2407.10362). arXiv, 2024.
-22. Mitchener L. et al. [BixBench: a Comprehensive Benchmark for LLM-based Agents in Computational Biology](https://arxiv.org/abs/2503.00096). arXiv, 2025.
-23. Chen Z. et al. [ScienceAgentBench: Toward Rigorous Assessment of Language Agents for Data-Driven Scientific Discovery](https://arxiv.org/abs/2410.05080). ICLR, 2025.
+<section class="refs">
+<p class="refs-note">按正文中首次出现的顺序编号。点击正文里的上标数字可以跳到对应条目，点击条目右侧的"↩ 正文"可以回到原处。</p>
+<ol>
+<li id="ref-1">
+<span class="ref-n">1</span>
+<div class="ref-body">
+<div class="ref-head"><span class="ref-alias">rentosertib</span><span class="ref-kind k-journal">期刊</span><span class="ref-cat">药物发现</span></div>
+<a class="ref-title" href="https://pubmed.ncbi.nlm.nih.gov/40461817/">A generative AI-discovered TNIK inhibitor for idiopathic pulmonary fibrosis: a randomized phase 2a trial</a>
+<div class="ref-meta">Xu Z. et al. · <i>Nature Medicine</i> · 2025<a class="ref-back" href="#cite-1" aria-label="回到正文">↩ 正文</a></div>
+</div>
+</li>
+<li id="ref-2">
+<span class="ref-n">2</span>
+<div class="ref-body">
+<div class="ref-head"><span class="ref-alias">ChemCrow</span><span class="ref-kind k-journal">期刊</span><span class="ref-cat">药物发现</span></div>
+<a class="ref-title" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11116106/">Augmenting large language models with chemistry tools</a>
+<div class="ref-meta">Bran A. M. et al. · <i>Nature Machine Intelligence</i> · 2024<a class="ref-back" href="#cite-2" aria-label="回到正文">↩ 正文</a></div>
+</div>
+</li>
+<li id="ref-3">
+<span class="ref-n">3</span>
+<div class="ref-body">
+<div class="ref-head"><span class="ref-alias">Coscientist</span><span class="ref-kind k-journal">期刊</span><span class="ref-cat">药物发现</span></div>
+<a class="ref-title" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10733136">Autonomous chemical research with large language models</a>
+<div class="ref-meta">Boiko D. A. et al. · <i>Nature</i> · 2023<a class="ref-back" href="#cite-3" aria-label="回到正文">↩ 正文</a></div>
+</div>
+</li>
+<li id="ref-4">
+<span class="ref-n">4</span>
+<div class="ref-body">
+<div class="ref-head"><span class="ref-alias">AI co-scientist</span><span class="ref-kind k-preprint">预印本</span><span class="ref-cat">科学发现</span></div>
+<a class="ref-title" href="https://arxiv.org/abs/2502.18864">Towards an AI co-scientist</a>
+<div class="ref-meta">Gottweis J. et al. · <i>arXiv</i> · 2025<a class="ref-back" href="#cite-4" aria-label="回到正文">↩ 正文</a></div>
+</div>
+</li>
+<li id="ref-5">
+<span class="ref-n">5</span>
+<div class="ref-body">
+<div class="ref-head"><span class="ref-alias">Virtual Lab</span><span class="ref-kind k-journal">期刊</span><span class="ref-cat">科学发现</span></div>
+<a class="ref-title" href="https://www.nature.com/nature-index/article/10.1038/s41586-025-09442-9">The Virtual Lab of AI agents designs new SARS-CoV-2 nanobodies</a>
+<div class="ref-meta">Swanson K. et al. · <i>Nature</i> · 2025 · <a href="https://www.biorxiv.org/content/10.1101/2024.11.11.623004">预印本</a><a class="ref-back" href="#cite-5" aria-label="回到正文">↩ 正文</a></div>
+</div>
+</li>
+<li id="ref-6">
+<span class="ref-n">6</span>
+<div class="ref-body">
+<div class="ref-head"><span class="ref-alias">Biomni</span><span class="ref-kind k-preprint">预印本</span><span class="ref-cat">科学发现</span></div>
+<a class="ref-title" href="https://www.biorxiv.org/content/10.1101/2025.05.30.656746v1">Biomni: A General-Purpose Biomedical AI Agent</a>
+<div class="ref-meta">Huang K. et al. · <i>bioRxiv</i> · 2025<a class="ref-back" href="#cite-6" aria-label="回到正文">↩ 正文</a></div>
+</div>
+</li>
+<li id="ref-7">
+<span class="ref-n">7</span>
+<div class="ref-body">
+<div class="ref-head"><span class="ref-alias">Robin</span><span class="ref-kind k-preprint">预印本</span><span class="ref-cat">科学发现</span></div>
+<a class="ref-title" href="https://arxiv.org/abs/2505.13400">Robin: A multi-agent system for automating scientific discovery</a>
+<div class="ref-meta">Ghareeb A. E. et al. · <i>arXiv</i> · 2025<a class="ref-back" href="#cite-7" aria-label="回到正文">↩ 正文</a></div>
+</div>
+</li>
+<li id="ref-8">
+<span class="ref-n">8</span>
+<div class="ref-body">
+<div class="ref-head"><span class="ref-alias">CRISPR-GPT</span><span class="ref-kind k-journal">期刊</span><span class="ref-cat">科学发现</span></div>
+<a class="ref-title" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12920143">CRISPR-GPT for agentic automation of gene-editing experiments</a>
+<div class="ref-meta">Qu Y. et al. · <i>Nature Biomedical Engineering</i> · 2025<a class="ref-back" href="#cite-8" aria-label="回到正文">↩ 正文</a></div>
+</div>
+</li>
+<li id="ref-9">
+<span class="ref-n">9</span>
+<div class="ref-body">
+<div class="ref-head"><span class="ref-alias">BioDiscoveryAgent</span><span class="ref-kind k-conf">会议</span><span class="ref-cat">科学发现</span></div>
+<a class="ref-title" href="https://arxiv.org/abs/2405.17631">BioDiscoveryAgent: An AI Agent for Designing Genetic Perturbation Experiments</a>
+<div class="ref-meta">Roohani Y. et al. · <i>ICLR</i> · 2025<a class="ref-back" href="#cite-9" aria-label="回到正文">↩ 正文</a></div>
+</div>
+</li>
+<li id="ref-10">
+<span class="ref-n">10</span>
+<div class="ref-body">
+<div class="ref-head"><span class="ref-alias">TxAgent</span><span class="ref-kind k-preprint">预印本</span><span class="ref-cat">药物发现</span></div>
+<a class="ref-title" href="https://arxiv.org/abs/2503.10970">TxAgent: An AI Agent for Therapeutic Reasoning Across a Universe of Tools</a>
+<div class="ref-meta">Gao S. et al. · <i>arXiv</i> · 2025<a class="ref-back" href="#cite-10" aria-label="回到正文">↩ 正文</a></div>
+</div>
+</li>
+<li id="ref-11">
+<span class="ref-n">11</span>
+<div class="ref-body">
+<div class="ref-head"><span class="ref-alias">AI Scientist</span><span class="ref-kind k-preprint">预印本</span><span class="ref-cat">科学发现</span></div>
+<a class="ref-title" href="https://arxiv.org/abs/2408.06292">The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery</a>
+<div class="ref-meta">Lu C. et al. · <i>arXiv</i> · 2024<a class="ref-back" href="#cite-11" aria-label="回到正文">↩ 正文</a></div>
+</div>
+</li>
+<li id="ref-12">
+<span class="ref-n">12</span>
+<div class="ref-body">
+<div class="ref-head"><span class="ref-alias">Kosmos</span><span class="ref-kind k-preprint">预印本</span><span class="ref-cat">科学发现</span></div>
+<a class="ref-title" href="https://arxiv.org/abs/2511.02824">Kosmos: An AI Scientist for Autonomous Discovery</a>
+<div class="ref-meta">Mitchener L. et al. · <i>arXiv</i> · 2025<a class="ref-back" href="#cite-12" aria-label="回到正文">↩ 正文</a></div>
+</div>
+</li>
+<li id="ref-13">
+<span class="ref-n">13</span>
+<div class="ref-body">
+<div class="ref-head"><span class="ref-alias">GPTCelltype</span><span class="ref-kind k-journal">期刊</span><span class="ref-cat">单细胞与空间</span></div>
+<a class="ref-title" href="https://www.biorxiv.org/content/10.1101/2023.04.16.537094">Assessing GPT-4 for cell type annotation in single-cell RNA-seq analysis</a>
+<div class="ref-meta">Hou W., Ji Z. · <i>Nature Methods</i> · 2024<a class="ref-back" href="#cite-13" aria-label="回到正文">↩ 正文</a></div>
+</div>
+</li>
+<li id="ref-14">
+<span class="ref-n">14</span>
+<div class="ref-body">
+<div class="ref-head"><span class="ref-alias">CellAgent</span><span class="ref-kind k-conf">会议</span><span class="ref-cat">单细胞与空间</span></div>
+<a class="ref-title" href="https://arxiv.org/abs/2407.09811">CellAgent: An LLM-driven Multi-Agent Framework for Automated Single-cell Data Analysis</a>
+<div class="ref-meta">Xiao Y. et al. · <i>ICLR</i> · 2026<a class="ref-back" href="#cite-14" aria-label="回到正文">↩ 正文</a></div>
+</div>
+</li>
+<li id="ref-15">
+<span class="ref-n">15</span>
+<div class="ref-body">
+<div class="ref-head"><span class="ref-alias">SpatialAgent</span><span class="ref-kind k-preprint">预印本</span><span class="ref-cat">单细胞与空间</span></div>
+<a class="ref-title" href="https://www.biorxiv.org/content/10.1101/2025.04.03.646459v1">SpatialAgent: An autonomous AI agent for spatial biology</a>
+<div class="ref-meta">Wang H. et al. · <i>bioRxiv</i> · 2025<a class="ref-back" href="#cite-15" aria-label="回到正文">↩ 正文</a></div>
+</div>
+</li>
+<li id="ref-16">
+<span class="ref-n">16</span>
+<div class="ref-body">
+<div class="ref-head"><span class="ref-alias">STAgent</span><span class="ref-kind k-preprint">预印本</span><span class="ref-cat">单细胞与空间</span></div>
+<a class="ref-title" href="https://www.biorxiv.org/content/10.1101/2025.04.01.646731">Spatial transcriptomics AI agent charts hPSC-pancreas maturation in vivo</a>
+<div class="ref-meta"><i>bioRxiv</i> · 2025<a class="ref-back" href="#cite-16" aria-label="回到正文">↩ 正文</a></div>
+</div>
+</li>
+<li id="ref-17">
+<span class="ref-n">17</span>
+<div class="ref-body">
+<div class="ref-head"><span class="ref-alias">OmicsNavigator</span><span class="ref-kind k-preprint">预印本</span><span class="ref-cat">单细胞与空间</span></div>
+<a class="ref-title" href="https://www.biorxiv.org/content/10.1101/2025.07.21.665821">OmicsNavigator: an LLM-driven multi-agent system for autonomous zero-shot biological analysis in spatial omics</a>
+<div class="ref-meta">Li Y. et al. · <i>bioRxiv</i> · 2025<a class="ref-back" href="#cite-17" aria-label="回到正文">↩ 正文</a></div>
+</div>
+</li>
+<li id="ref-18">
+<span class="ref-n">18</span>
+<div class="ref-body">
+<div class="ref-head"><span class="ref-alias">PhenoGraph</span><span class="ref-kind k-preprint">预印本</span><span class="ref-cat">单细胞与空间</span></div>
+<a class="ref-title" href="https://www.biorxiv.org/content/10.1101/2025.06.06.658341">PhenoGraph: A Multi-Agent Framework for Phenotype-driven Discovery in Spatial Transcriptomics Data Augmented with Knowledge Graphs</a>
+<div class="ref-meta"><i>bioRxiv</i> · 2025<a class="ref-back" href="#cite-18" aria-label="回到正文">↩ 正文</a></div>
+</div>
+</li>
+<li id="ref-19">
+<span class="ref-n">19</span>
+<div class="ref-body">
+<div class="ref-head"><span class="ref-alias">CellVoyager</span><span class="ref-kind k-preprint">预印本</span><span class="ref-cat">单细胞与空间</span></div>
+<a class="ref-title" href="https://www.biorxiv.org/content/10.1101/2025.06.03.657517">CellVoyager: AI CompBio agent generates new insights by autonomously analyzing biological data</a>
+<div class="ref-meta">Alber S. et al. · <i>bioRxiv</i> · 2025<a class="ref-back" href="#cite-19" aria-label="回到正文">↩ 正文</a></div>
+</div>
+</li>
+<li id="ref-20">
+<span class="ref-n">20</span>
+<div class="ref-body">
+<div class="ref-head"><span class="ref-alias">PaperQA2</span><span class="ref-kind k-preprint">预印本</span><span class="ref-cat">科学发现</span></div>
+<a class="ref-title" href="https://arxiv.org/abs/2409.13740">Language agents achieve superhuman synthesis of scientific knowledge</a>
+<div class="ref-meta">Skarlinski M. D. et al. · <i>arXiv</i> · 2024<a class="ref-back" href="#cite-20" aria-label="回到正文">↩ 正文</a></div>
+</div>
+</li>
+<li id="ref-21">
+<span class="ref-n">21</span>
+<div class="ref-body">
+<div class="ref-head"><span class="ref-alias">LAB-Bench</span><span class="ref-kind k-preprint">预印本</span><span class="ref-cat">评测</span></div>
+<a class="ref-title" href="https://arxiv.org/abs/2407.10362">LAB-Bench: Measuring Capabilities of Language Models for Biology Research</a>
+<div class="ref-meta">Laurent J. M. et al. · <i>arXiv</i> · 2024<a class="ref-back" href="#cite-21" aria-label="回到正文">↩ 正文</a></div>
+</div>
+</li>
+<li id="ref-22">
+<span class="ref-n">22</span>
+<div class="ref-body">
+<div class="ref-head"><span class="ref-alias">BixBench</span><span class="ref-kind k-preprint">预印本</span><span class="ref-cat">评测</span></div>
+<a class="ref-title" href="https://arxiv.org/abs/2503.00096">BixBench: a Comprehensive Benchmark for LLM-based Agents in Computational Biology</a>
+<div class="ref-meta">Mitchener L. et al. · <i>arXiv</i> · 2025<a class="ref-back" href="#cite-22" aria-label="回到正文">↩ 正文</a></div>
+</div>
+</li>
+<li id="ref-23">
+<span class="ref-n">23</span>
+<div class="ref-body">
+<div class="ref-head"><span class="ref-alias">ScienceAgentBench</span><span class="ref-kind k-conf">会议</span><span class="ref-cat">评测</span></div>
+<a class="ref-title" href="https://arxiv.org/abs/2410.05080">ScienceAgentBench: Toward Rigorous Assessment of Language Agents for Data-Driven Scientific Discovery</a>
+<div class="ref-meta">Chen Z. et al. · <i>ICLR</i> · 2025<a class="ref-back" href="#cite-23" aria-label="回到正文">↩ 正文</a></div>
+</div>
+</li>
+</ol>
+</section>
