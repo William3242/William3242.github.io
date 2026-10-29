@@ -1,0 +1,75 @@
+---
+import type { MarkdownHeading } from 'astro';
+
+interface Props {
+  headings: MarkdownHeading[];
+}
+const items = Astro.props.headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+{items.length >= 3 && (
+  <aside class="toc">
+    <details open>
+      <summary>目录</summary>
+      <ol>
+        {items.map((h) => (
+          <li class={`d${h.depth}`}><a href={`#${h.slug}`}>{h.text}</a></li>
+        ))}
+      </ol>
+    </details>
+  </aside>
+)}
+
+<script>
+  const toc = document.querySelector<HTMLElement>('.toc');
+  if (toc) {
+    const details = toc.querySelector('details')!;
+    const links = [...toc.querySelectorAll<HTMLAnchorElement>('a')];
+    const targets = links.map((a) => document.getElementById(decodeURIComponent(a.hash.slice(1))));
+
+    // 宽屏时目录在侧栏常驻展开；窄屏默认收起，点开后选中条目会自动收起
+    const wide = matchMedia('(min-width: 76rem)');
+    const sync = () => { details.open = wide.matches; };
+    sync();
+    wide.addEventListener('change', sync);
+    links.forEach((a) => a.addEventListener('click', () => { if (!wide.matches) details.open = false; }));
+
+    let ticking = false;
+    const update = () => {
+      ticking = false;
+      let current = -1;
+      targets.forEach((el, i) => { if (el && el.getBoundingClientRect().top < 120) current = i; });
+      links.forEach((a, i) => a.classList.toggle('active', i === current));
+    };
+    addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+    update();
+  }
+</script>
+
+<style>
+  .toc { font-size: .88rem; line-height: 1.5; margin: 0 0 2rem; }
+  details { border: 1px solid var(--border); border-radius: 6px; padding: .55rem .9rem; }
+  summary { cursor: pointer; color: var(--muted); font-weight: 600; list-style: none; user-select: none; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: '+'; float: right; font-weight: 400; }
+  details[open] summary::after { content: '−'; }
+  ol { list-style: none; margin: .5rem 0 .2rem; padding: 0; }
+  li { margin: .3rem 0; }
+  li.d3 { padding-left: 1rem; }
+  a { color: var(--muted); display: block; }
+  a:hover { color: var(--fg); text-decoration: none; }
+  a.active { color: var(--accent); }
+
+  /* 宽屏：正文右侧的粘性侧栏 */
+  @media (min-width: 76rem) {
+    .toc { position: absolute; top: 0; bottom: 0; left: calc(100% + 3rem); width: 14rem; margin: 0; }
+    details { position: sticky; top: 2rem; max-height: calc(100vh - 4rem); overflow-y: auto; border: 0; padding: 0; }
+    summary { pointer-events: none; font-size: .8rem; letter-spacing: .04em; }
+    details[open] summary::after { content: none; }
+    ol { border-left: 1px solid var(--border); }
+    li { margin: 0; }
+    a { padding: .22rem 0 .22rem .9rem; margin-left: -1px; border-left: 2px solid transparent; }
+    li.d3 { padding-left: 0; }
+    li.d3 a { padding-left: 1.8rem; font-size: .84rem; }
+    a.active { border-left-color: var(--accent); }
+  }
+</style>

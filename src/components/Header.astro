@@ -1,6 +1,7 @@
 ---
 import { SITE_TITLE } from '../consts';
 import { url } from '../utils';
+const path = Astro.url.pathname;
 const links = [
   { href: url('/'), label: '文章' },
   { href: url('/tags/'), label: '标签' },
@@ -9,12 +10,20 @@ const links = [
 ---
 <header>
   <a class="brand" href={url('/')}>{SITE_TITLE}</a>
-  <nav>{links.map((l) => <a href={l.href}>{l.label}</a>)}</nav>
+  <nav>
+    {links.map((l, i) => {
+      // 文章页归到“文章”，标签详情页归到“标签”
+      const active = i === 0 ? path === l.href || path.startsWith(url('/posts/')) : path.startsWith(l.href);
+      return <a href={l.href} class:list={{ active }} aria-current={active ? 'page' : undefined}>{l.label}</a>;
+    })}
+  </nav>
 </header>
 <style>
   header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: .5rem; padding: 2rem 0 2.5rem; }
   .brand { font-weight: 600; color: var(--fg); }
   nav a { margin-left: 1.2rem; color: var(--muted); }
   nav a:first-child { margin-left: 0; }
+  nav a { padding-bottom: .15rem; border-bottom: 1.5px solid transparent; transition: color .15s, border-color .15s; }
   nav a:hover { color: var(--fg); text-decoration: none; }
+  nav a.active { color: var(--fg); border-bottom-color: var(--accent); }
 </style>
