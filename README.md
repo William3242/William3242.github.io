@@ -63,20 +63,20 @@ GitHub Actions ──rsync──▶ /var/www/blog ──软链接──▶ /www/
    - 根目录：`/www/wwwroot/blog`
    - PHP 版本：纯静态；不创建 FTP 和数据库
 
-4. 把站点目录交给 `deploy` 用户，并建立软链接（宝塔给 `.user.ini` 加了不可修改属性，要先解锁删除）：
+4. 宝塔站点 → 设置：
+   - 网站目录：取消勾选「防跨站攻击（open_basedir）」，否则会生成锁定的 `.user.ini`，导致 rsync `--delete` 失败
+   - 伪静态：填入 `location / { try_files $uri $uri/ $uri.html =404; }`
+
+5. 在服务器上（root）把站点目录交给 `deploy` 用户，并让 `/var/www/blog` 成为指向它的软链接（宝塔给 `.user.ini` 加了不可修改属性，要先解锁删除）：
 
    ```bash
-   chattr -i /www/wwwroot/blog/.user.ini 2>/dev/null
-   rm -f /www/wwwroot/blog/.user.ini
+   chattr -i /www/wwwroot/blog/.user.ini 2>/dev/null; rm -f /www/wwwroot/blog/.user.ini
    chown -R deploy:deploy /www/wwwroot/blog
-   rm -rf /var/www/blog            # 若已存在旧的部署目录
    mkdir -p /var/www
-   ln -s /www/wwwroot/blog /var/www/blog
+   rm -rf /var/www/blog && ln -s /www/wwwroot/blog /var/www/blog
    ```
 
-5. 宝塔站点 → 设置：
-   - 网站目录：取消勾选「防跨站攻击（open_basedir）」，否则会重新生成锁定的 `.user.ini`，导致 rsync `--delete` 失败
-   - 伪静态：填入 `location / { try_files $uri $uri/ $uri.html =404; }`
+   如果 `/var/www/blog` 已经是一个装有文件的真实目录，先执行 `cp -a /var/www/blog/. /www/wwwroot/blog/` 再删除。
 
 6. 阿里云控制台 → ECS 实例 → 安全组 → 入方向放行 TCP 80（以及 SSH 22，授权对象 `0.0.0.0/0`，因为 GitHub Actions 的出口 IP 不固定）。
 
@@ -90,7 +90,11 @@ GitHub Actions ──rsync──▶ /var/www/blog ──软链接──▶ /www/
    gh secret set DEPLOY_SSH_KEY -R William3242/William3242.github.io < ~/.ssh/blog_deploy
    ```
 
-8. 在 Actions 页面手动运行 **Deploy to Aliyun ECS**（会覆盖宝塔生成的默认 `index.html`），或推送到 `main`。
+8. 手动运行一次部署，覆盖宝塔生成的默认 `index.html`（也可以在 Actions 页面点 Run workflow，或直接推送到 `main`）：
+
+   ```bash
+   gh workflow run "Deploy to Aliyun ECS" -R William3242/William3242.github.io
+   ```
 
 **ICP 备案完成后启用域名和 HTTPS**
 
