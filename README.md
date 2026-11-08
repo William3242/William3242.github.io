@@ -32,13 +32,13 @@ draft: false
 
 ### 阿里云 ECS（宝塔面板）
 
-服务器上用[宝塔面板](https://www.bt.cn)的 nginx 提供静态服务。`.github/workflows/deploy-aliyun.yml` 在推送到 `main` 时构建站点，以 `deploy` 用户通过 SSH 把 `dist/` rsync 到服务器的 `/var/www/blog/`。宝塔站点根目录 `/www/wwwroot/blog` 是指向它的软链接：
+服务器上用[宝塔面板](https://www.bt.cn)的 nginx 提供静态服务。`.github/workflows/deploy-aliyun.yml` 在推送到 `main` 时构建站点，以 `deploy` 用户通过 SSH 把 `dist/` rsync 到服务器的 `/var/www/blog/`。站点文件实际存放在宝塔站点根目录 `/www/wwwroot/blog`，`/var/www/blog` 是指向它的软链接：
 
 ```
-GitHub Actions ──rsync──▶ /var/www/blog ◀──软链接── /www/wwwroot/blog ◀── 宝塔 nginx ◀── 浏览器
+GitHub Actions ──rsync──▶ /var/www/blog ──软链接──▶ /www/wwwroot/blog ◀── 宝塔 nginx ◀── 浏览器
 ```
 
-宝塔不允许把站点根目录设在 `/var` 下，所以要用软链接；部署目录与宝塔目录分开，也让 workflow 不依赖宝塔。
+宝塔不允许把站点根目录设在 `/var` 下，所以文件放在宝塔目录里，再用软链接保留 workflow 使用的部署路径，workflow 无需修改。
 
 **首次配置**
 
@@ -48,7 +48,7 @@ GitHub Actions ──rsync──▶ /var/www/blog ◀──软链接── /www/
    ssh-keygen -t ed25519 -f ~/.ssh/blog_deploy -N "" -C github-actions-deploy
    ```
 
-2. 在服务器上（root）安装 rsync、创建 `deploy` 用户和部署目录，把上一步的公钥（`~/.ssh/blog_deploy.pub` 的内容）写进去：
+2. 在服务器上（root）安装 rsync、创建 `deploy` 用户，把上一步的公钥（`~/.ssh/blog_deploy.pub` 的内容）写进去：
 
    ```bash
    dnf install -y rsync
@@ -56,7 +56,6 @@ GitHub Actions ──rsync──▶ /var/www/blog ◀──软链接── /www/
    install -d -m 700 -o deploy -g deploy /home/deploy/.ssh
    echo '<公钥内容>' > /home/deploy/.ssh/authorized_keys
    chown deploy:deploy /home/deploy/.ssh/authorized_keys && chmod 600 /home/deploy/.ssh/authorized_keys
-   install -d -m 755 -o deploy -g deploy /var/www/blog
    ```
 
 3. 宝塔面板 → 网站 → 添加站点：
@@ -64,12 +63,15 @@ GitHub Actions ──rsync──▶ /var/www/blog ◀──软链接── /www/
    - 根目录：`/www/wwwroot/blog`
    - PHP 版本：纯静态；不创建 FTP 和数据库
 
-4. 把宝塔生成的目录换成软链接（宝塔给 `.user.ini` 加了不可修改属性，要先解锁）：
+4. 把站点目录交给 `deploy` 用户，并建立软链接（宝塔给 `.user.ini` 加了不可修改属性，要先解锁删除）：
 
    ```bash
    chattr -i /www/wwwroot/blog/.user.ini 2>/dev/null
-   rm -rf /www/wwwroot/blog
-   ln -s /var/www/blog /www/wwwroot/blog
+   rm -f /www/wwwroot/blog/.user.ini
+   chown -R deploy:deploy /www/wwwroot/blog
+   rm -rf /var/www/blog            # 若已存在旧的部署目录
+   mkdir -p /var/www
+   ln -s /www/wwwroot/blog /var/www/blog
    ```
 
 5. 宝塔站点 → 设置：
