@@ -117,9 +117,9 @@ const nested = tree.some((n) => n.children.length > 0);
   .toc :global(li.d2 > .row > a) { color: var(--fg); }
   .toc :global(li.d2 > .row > a.active) { color: var(--accent); }
 
-  /* 宽屏：正文右侧的粘性侧栏 */
+  /* 宽屏：正文左侧的粘性侧栏 */
   @media (min-width: 76rem) {
-    .toc { position: absolute; top: 0; bottom: 0; left: calc(100% + 3rem); width: 15rem; margin: 0; }
+    .toc { position: absolute; top: 0; bottom: 0; right: calc(100% + 2.5rem); width: 14rem; margin: 0; }
     details { position: sticky; top: 2rem; max-height: calc(100vh - 4rem); overflow-y: auto; border: 0; padding: 0; }
     summary { pointer-events: none; font-size: .8rem; letter-spacing: .04em; }
     details[open] summary::after { content: none; }
