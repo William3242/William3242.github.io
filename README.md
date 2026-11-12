@@ -83,7 +83,7 @@ GitHub Actions ──rsync──▶ /var/www/blog ──软链接──▶ /www/
 7. 在 GitHub 仓库 Settings → Secrets and variables → Actions 中添加：
    - Secret `DEPLOY_HOST`：服务器公网 IP
    - Secret `DEPLOY_SSH_KEY`：`~/.ssh/blog_deploy` 私钥的完整内容
-   - （可选）Variable `SITE_URL`：站点完整地址；未设置时使用 `http://<DEPLOY_HOST>`
+   - （可选）Variable `SITE_URL`：站点完整地址；未设置时使用 `https://www.wlhuang32.me`
 
    ```bash
    gh secret set DEPLOY_HOST -b <服务器IP> -R William3242/William3242.github.io
@@ -113,12 +113,7 @@ ICP 备案号 `湘ICP备2026054092号-1`，备案域名 `wlhuang32.me`，首页 
 3. 安全组入方向放行 TCP 443。
 4. 宝塔站点 → 设置 → SSL → Let's Encrypt，勾选上面两个域名、文件验证，申请；成功后打开「强制 HTTPS」。宝塔会自动续期。
 5. （可选）宝塔站点 → 设置 → 重定向：把 `wlhuang32.me` 301 到 `https://www.wlhuang32.me`，让站点只有一个主地址。
-6. 把仓库 Variable `SITE_URL` 设为 `https://www.wlhuang32.me`，再跑一次部署，让 RSS、sitemap 和 canonical 链接使用新域名：
-
-   ```bash
-   gh variable set SITE_URL -b https://www.wlhuang32.me -R William3242/William3242.github.io
-   gh workflow run "Deploy to Aliyun ECS" -R William3242/William3242.github.io
-   ```
+6. 部署 workflow 默认用 `https://www.wlhuang32.me` 作为站点地址（RSS、sitemap、canonical），无需另外设置。
 
 服务器在中国内地，未备案的域名会被阿里云拦截（返回 `403 Non-compliance ICP Filing`）。网站开通后 30 日内还需在 https://beian.mps.gov.cn/ 办理公安联网备案，拿到「X公网安备 xxxx 号」后也加到页脚。
 
