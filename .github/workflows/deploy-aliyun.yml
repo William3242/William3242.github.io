@@ -34,7 +34,8 @@ jobs:
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H "${{ secrets.DEPLOY_HOST }}" >> ~/.ssh/known_hosts
 
+      # .well-known/ 是宝塔申请和续签 Let's Encrypt 证书时写入的验证文件（属主 root），不能被 --delete 删掉
       - name: Upload with rsync
         run: |
-          rsync -az --delete -e "ssh -i ~/.ssh/deploy_key -o ConnectTimeout=20" \
+          rsync -az --delete --exclude=/.well-known/ --exclude=/.user.ini -e "ssh -i ~/.ssh/deploy_key -o ConnectTimeout=20" \
             dist/ "deploy@${{ secrets.DEPLOY_HOST }}:/var/www/blog/"
