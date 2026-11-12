@@ -31,7 +31,7 @@ cat > /etc/nginx/conf.d/blog.conf <<'NGINX'
 server {
     listen 80 default_server;
     listen [::]:80 default_server;
-    server_name _;
+    server_name wlhuang32.me www.wlhuang32.me _;
 
     root /var/www/blog;
     index index.html;

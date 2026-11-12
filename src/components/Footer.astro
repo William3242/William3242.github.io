@@ -1,10 +1,14 @@
 ---
-import { AUTHOR, GITHUB_URL } from '../consts';
+import { AUTHOR, GITHUB_URL, ICP_BEIAN } from '../consts';
 import { url } from '../utils';
 ---
 <footer class="muted">
-  © {new Date().getFullYear()} {AUTHOR} · <a href={GITHUB_URL}>GitHub</a> · <a href={url('/rss.xml')}>RSS</a>
+  <p>© {new Date().getFullYear()} {AUTHOR} · <a href={GITHUB_URL}>GitHub</a> · <a href={url('/rss.xml')}>RSS</a></p>
+  <p><a class="beian" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">{ICP_BEIAN}</a></p>
 </footer>
 <style>
   footer { font-size: .85rem; padding: 4rem 0 2rem; }
+  footer p { margin: 0; }
+  footer p + p { margin-top: .35rem; }
+  .beian { color: inherit; }
 </style>
