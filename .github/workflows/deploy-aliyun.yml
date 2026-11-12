@@ -13,8 +13,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      # 有域名后在仓库 Variables 里设置 SITE_URL（如 https://example.com）；未设置时用服务器 IP。
-      SITE_URL: ${{ vars.SITE_URL || format('http://{0}', secrets.DEPLOY_HOST) }}
+      # 站点正式地址；仓库 Variable SITE_URL 可覆盖。
+      SITE_URL: ${{ vars.SITE_URL || 'https://www.wlhuang32.me' }}
     steps:
       - uses: actions/checkout@v4
 
