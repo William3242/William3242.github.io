@@ -1,14 +1,21 @@
 ---
-import { AUTHOR, GITHUB_URL, ICP_BEIAN } from '../consts';
+import { AUTHOR, GITHUB_URL, ICP_BEIAN, POLICE_BEIAN, POLICE_BEIAN_CODE } from '../consts';
 import { url } from '../utils';
 ---
 <footer class="muted">
   <p>© {new Date().getFullYear()} {AUTHOR} · <a href={GITHUB_URL}>GitHub</a> · <a href={url('/rss.xml')}>RSS</a></p>
-  <p><a class="beian" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">{ICP_BEIAN}</a></p>
+  <p class="beian">
+    <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">{ICP_BEIAN}</a>
+    <a href={`https://beian.mps.gov.cn/#/query/webSearch?code=${POLICE_BEIAN_CODE}`} target="_blank" rel="noopener noreferrer">
+      <img src={url('/beian-police.png')} alt="" width="14" height="14" />{POLICE_BEIAN}
+    </a>
+  </p>
 </footer>
 <style>
   footer { font-size: .85rem; padding: 4rem 0 2rem; }
   footer p { margin: 0; }
   footer p + p { margin-top: .35rem; }
-  .beian { color: inherit; }
+  .beian { display: flex; flex-wrap: wrap; align-items: center; gap: .1rem 1rem; }
+  .beian a { color: inherit; display: inline-flex; align-items: center; gap: .3rem; }
+  .beian img { display: block; }
 </style>

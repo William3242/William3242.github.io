@@ -115,7 +115,7 @@ ICP 备案号 `湘ICP备2026054092号-1`，备案域名 `wlhuang32.me`，首页 
 5. （可选）宝塔站点 → 设置 → 重定向：把 `wlhuang32.me` 301 到 `https://www.wlhuang32.me`，让站点只有一个主地址。
 6. 部署 workflow 默认用 `https://www.wlhuang32.me` 作为站点地址（RSS、sitemap、canonical），无需另外设置。
 
-服务器在中国内地，未备案的域名会被阿里云拦截（返回 `403 Non-compliance ICP Filing`）。网站开通后 30 日内还需在 https://beian.mps.gov.cn/ 办理公安联网备案，拿到「X公网安备 xxxx 号」后也加到页脚。
+服务器在中国内地，未备案的域名会被阿里云拦截（返回 `403 Non-compliance ICP Filing`）。公安联网备案号 `粤公网安备44198202000285号` 也在页脚（`src/consts.ts` 的 `POLICE_BEIAN`，图标 `public/beian-police.png`），链接到全国互联网安全管理服务平台。
 
 **不使用宝塔时**
 
