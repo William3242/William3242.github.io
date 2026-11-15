@@ -100,3 +100,20 @@ sup.cite a::after { content: ']'; }
 .refs a:hover { color: var(--accent); }
 .refs i { font-style: italic; }
 .refs .ref-back { margin-left: .25rem; color: var(--muted); }
+
+/* 术语图标：列表项前的小图 */
+.term-ic { display: inline-flex; align-items: center; justify-content: center; width: 1.6em; height: 1.6em; margin-right: .4em; vertical-align: -.42em; border-radius: .4em; background: color-mix(in srgb, var(--accent) 12%, transparent); color: var(--accent); }
+ul:has(> li > .term-ic:first-child) { list-style: none; padding-left: .3rem; }
+.term-ic svg { width: 1em; height: 1em; }
+
+/* 时间线总览图 */
+.tl-fig { margin: 1.6rem 0 2rem; padding: 1.1rem 1.2rem .6rem; border: 1px solid var(--border); border-radius: 10px; background: var(--code-bg); }
+.tl-fig figcaption { margin-top: .4rem; font-size: .8rem; color: var(--muted); text-align: center; }
+.tl { list-style: none; margin: 0; padding: 0; position: relative; }
+.tl::before { content: ''; position: absolute; left: calc(3.5rem - 1px); top: .6rem; bottom: .9rem; width: 2px; background: var(--border); }
+.tl > li { display: grid; grid-template-columns: 2.8rem 1fr; gap: 0 1.4rem; margin: 0 0 .9rem; position: relative; }
+.tl > li::before { content: ''; position: absolute; left: calc(3.5rem - 5px); top: .55rem; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 3px var(--code-bg); }
+.tl-year { font-weight: 700; font-variant-numeric: tabular-nums; color: var(--accent); line-height: 1.6; font-size: .95rem; }
+.tl-theme { font-weight: 600; line-height: 1.6; margin-bottom: .3rem; }
+.tl-terms { display: flex; flex-wrap: wrap; gap: .3rem; }
+.tl-terms span { font-size: .78rem; line-height: 1.5; padding: .05rem .5rem; border-radius: 999px; border: 1px solid var(--border); background: var(--bg); color: var(--fg); }
