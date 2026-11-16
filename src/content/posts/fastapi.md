@@ -7,7 +7,7 @@ tags: [FastAPI, Python, 后端]
 
 最近几篇写的都是 Agent 和大模型，但真要把一个模型能力做成服务，最后总得落到一个 Web API 上。在 Python 这一侧，这几年最常见的选择就是 FastAPI：模型推理服务、RAG 后端、MCP 服务器，很多项目的第一行代码都是 `app = FastAPI()`。
 
-这篇是后端基础设施系列的第一篇，后面两篇会分别讲 PostgreSQL 的行级安全（RLS）和 Redis。三篇放在一起，基本就是一个小型后端服务最常见的骨架：FastAPI 接请求，PostgreSQL 存数据并在数据库层面隔离租户，Redis 做缓存、限流和队列。
+这篇是后端基础设施系列的第一篇，后面两篇会分别讲 [PostgreSQL](/posts/postgresql/) 和 [Redis](/posts/redis/)（PostgreSQL 的行级安全另有[单独一篇](/posts/postgres-rls/)）。三篇放在一起，基本就是一个小型后端服务最常见的骨架：FastAPI 接请求，PostgreSQL 存数据，Redis 做缓存、限流和队列。
 
 FastAPI 的官方文档写得非常好，教程部分本身就是很好的入门材料<sup class="cite" id="cite-1"><a href="#ref-1" title="FastAPI">1</a></sup>。所以这篇不打算复述教程，而是想讲清楚三件事：它**是怎么工作的**，几个**最容易用错的地方**，以及**新版本里值得知道的变化**。文中的代码都在 FastAPI 0.163、Pydantic 2.14、Python 3.13 上跑过。
 
