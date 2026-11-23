@@ -36,6 +36,27 @@ tags: [LLM, 评测, 工具]
 
 不管评什么，评测的骨架都一样：**一批输入 → 让模型生成 → 用某种方式判断输出好不好 → 汇总成分数。** 差别主要在"怎么判断"这一步。
 
+<figure class="diagram">
+<svg viewBox="0 0 680 230" role="img" aria-label="一次模型评测的流程：评测数据、模型生成、答案提取、评分器、汇总报告">
+<defs><marker id="es1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+<rect class="c-amber" x="16" y="88" width="104" height="60" rx="6"/><text class="t" x="68" y="113" text-anchor="middle">评测数据</text><text class="ts" x="68" y="133" text-anchor="middle">基准 · 私有数据</text>
+<path class="ln" d="M122 118 H142" marker-end="url(#es1)"/>
+<rect class="c-blue" x="146" y="88" width="104" height="60" rx="6"/><text class="t" x="198" y="113" text-anchor="middle">模型生成</text><text class="ts" x="198" y="133" text-anchor="middle">模板 · 采样参数</text>
+<path class="ln" d="M252 118 H272" marker-end="url(#es1)"/>
+<rect class="c-gray" x="276" y="88" width="104" height="60" rx="6"/><text class="t" x="328" y="113" text-anchor="middle">答案提取</text><text class="ts" x="328" y="133" text-anchor="middle">格式约束 · 解析</text>
+<path class="ln" d="M382 118 H402" marker-end="url(#es1)"/>
+<rect class="frame" x="406" y="30" width="140" height="180" rx="10"/><text class="ts" x="476" y="22" text-anchor="middle">评分器（选一种或组合）</text>
+<rect class="c-green" x="416" y="42" width="120" height="34" rx="5"/><text class="t" x="476" y="64" text-anchor="middle">规则匹配</text>
+<rect class="c-gray" x="416" y="84" width="120" height="34" rx="5"/><text class="t" x="476" y="106" text-anchor="middle">参考答案相似度</text>
+<rect class="c-purple" x="416" y="126" width="120" height="34" rx="5"/><text class="t" x="476" y="148" text-anchor="middle">LLM 裁判 · 对战</text>
+<rect class="c-amber" x="416" y="168" width="120" height="34" rx="5"/><text class="t" x="476" y="190" text-anchor="middle">执行验证</text>
+<path class="ln" d="M548 118 H568" marker-end="url(#es1)"/>
+<rect class="c-green" x="572" y="88" width="96" height="60" rx="6"/><text class="t" x="620" y="113" text-anchor="middle">汇总报告</text><text class="ts" x="620" y="133" text-anchor="middle">按子集拆分</text>
+<path class="ln dash" d="M30 172 H366"/><text class="ts" x="198" y="194" text-anchor="middle">这三步都受配置影响：模板、few-shot、温度、提取规则</text>
+</svg>
+<figcaption>图 1：一次模型评测的骨架。不同评测的差别主要在评分器这一步。</figcaption>
+</figure>
+
 ### 规则匹配
 
 最简单也最可靠的方式。选择题看模型选的字母对不对，数学题从输出里抽出最终数字和标准答案比较，代码题直接跑单元测试。
@@ -113,6 +134,45 @@ MMLU、GSM8K 这类基准，头部模型已经普遍做到 90% 以上，几个�
 - **pass^k**：k 次全部正确的概率，反映"可靠性"，对 Agent 和生产场景更有意义；
 - **多数投票（vote@k / maj@k）**：k 次结果投票后再判对错。
 
+<figure class="diagram">
+<svg viewBox="0 0 640 240" role="img" aria-label="同一组结果用 mean@5、pass@5、pass^5 三种口径汇总的对比">
+<text class="ts" x="24" y="30">题目</text><text class="ts" x="220" y="30" text-anchor="middle">同一题生成 5 次</text>
+<text class="ts" x="380" y="30" text-anchor="middle">mean@5</text><text class="ts" x="480" y="30" text-anchor="middle">pass@5</text><text class="ts" x="580" y="30" text-anchor="middle">pass^5</text>
+<text class="ts" x="480" y="46" text-anchor="middle">至少一次对</text><text class="ts" x="580" y="46" text-anchor="middle">五次全对</text>
+<text class="t" x="24" y="83">题 A</text>
+<circle class="c-green" cx="140" cy="78" r="13"/><text class="t" x="140" y="83" text-anchor="middle">✓</text>
+<circle class="c-green" cx="180" cy="78" r="13"/><text class="t" x="180" y="83" text-anchor="middle">✓</text>
+<circle class="c-green" cx="220" cy="78" r="13"/><text class="t" x="220" y="83" text-anchor="middle">✓</text>
+<circle class="c-green" cx="260" cy="78" r="13"/><text class="t" x="260" y="83" text-anchor="middle">✓</text>
+<circle class="c-green" cx="300" cy="78" r="13"/><text class="t" x="300" y="83" text-anchor="middle">✓</text>
+<text class="t" x="380" y="83" text-anchor="middle">100%</text>
+<text class="t" x="480" y="83" text-anchor="middle">✓</text>
+<text class="t" x="580" y="83" text-anchor="middle">✓</text>
+<text class="t" x="24" y="127">题 B</text>
+<circle class="c-red" cx="140" cy="122" r="13"/><text class="t" x="140" y="127" text-anchor="middle">✗</text>
+<circle class="c-green" cx="180" cy="122" r="13"/><text class="t" x="180" y="127" text-anchor="middle">✓</text>
+<circle class="c-red" cx="220" cy="122" r="13"/><text class="t" x="220" y="127" text-anchor="middle">✗</text>
+<circle class="c-red" cx="260" cy="122" r="13"/><text class="t" x="260" y="127" text-anchor="middle">✗</text>
+<circle class="c-green" cx="300" cy="122" r="13"/><text class="t" x="300" y="127" text-anchor="middle">✓</text>
+<text class="t" x="380" y="127" text-anchor="middle">40%</text>
+<text class="t" x="480" y="127" text-anchor="middle">✓</text>
+<text class="t" x="580" y="127" text-anchor="middle">✗</text>
+<text class="t" x="24" y="171">题 C</text>
+<circle class="c-red" cx="140" cy="166" r="13"/><text class="t" x="140" y="171" text-anchor="middle">✗</text>
+<circle class="c-red" cx="180" cy="166" r="13"/><text class="t" x="180" y="171" text-anchor="middle">✗</text>
+<circle class="c-red" cx="220" cy="166" r="13"/><text class="t" x="220" y="171" text-anchor="middle">✗</text>
+<circle class="c-red" cx="260" cy="166" r="13"/><text class="t" x="260" y="171" text-anchor="middle">✗</text>
+<circle class="c-red" cx="300" cy="166" r="13"/><text class="t" x="300" y="171" text-anchor="middle">✗</text>
+<text class="t" x="380" y="171" text-anchor="middle">0%</text>
+<text class="t" x="480" y="171" text-anchor="middle">✗</text>
+<text class="t" x="580" y="171" text-anchor="middle">✗</text>
+<path class="ln" d="M20 192 H620"/>
+<text class="t" x="24" y="220">整体</text>
+<text class="t" x="380" y="220" text-anchor="middle">47%</text><text class="t" x="480" y="220" text-anchor="middle">67%</text><text class="t" x="580" y="220" text-anchor="middle">33%</text>
+</svg>
+<figcaption>图 2：同样 15 次生成，三种口径给出三个不同的数。题 B 这种"时对时错"的题，决定了 pass@k 和 pass^k 的差距。</figcaption>
+</figure>
+
 这几个口径回答的是不同的问题。一个 pass@5 很高但 pass^5 很低的模型，说明它"有时候能做对"，但不能放心交给它独立完成任务。
 
 ### 只看总分
@@ -139,6 +199,25 @@ MMLU、GSM8K 这类基准，头部模型已经普遍做到 90% 以上，几个�
 1. **输入层**：模型（本地或 API）+ 数据集（标准基准或自定义数据）；
 2. **核心层**：多后端评测、LLM 裁判、Agent 循环、性能监控；
 3. **输出层**：结构化报告（JSON、表格、日志）+ 可视化面板。
+
+<figure class="diagram">
+<svg viewBox="0 0 680 300" role="img" aria-label="EvalScope 架构：输入层、核心层、输出层">
+<defs><marker id="es3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+<rect class="frame" x="16" y="36" width="180" height="250" rx="10"/><text class="ts" x="106" y="26" text-anchor="middle">输入层</text>
+<rect class="frame" x="236" y="36" width="208" height="250" rx="10"/><text class="ts" x="340" y="26" text-anchor="middle">核心层</text>
+<rect class="frame" x="484" y="36" width="180" height="250" rx="10"/><text class="ts" x="574" y="26" text-anchor="middle">输出层</text>
+<rect class="c-blue" x="30" y="56" width="152" height="96" rx="6"/><text class="t" x="106" y="84" text-anchor="middle">模型</text><text class="ts" x="106" y="106" text-anchor="middle">本地 checkpoint</text><text class="ts" x="106" y="126" text-anchor="middle">OpenAI 兼容 API 等</text>
+<rect class="c-amber" x="30" y="172" width="152" height="96" rx="6"/><text class="t" x="106" y="200" text-anchor="middle">数据</text><text class="ts" x="106" y="222" text-anchor="middle">内置基准 · 自定义</text><text class="ts" x="106" y="242" text-anchor="middle">Collection 指数</text>
+<rect class="c-gray" x="250" y="50" width="180" height="50" rx="6"/><text class="t" x="340" y="71" text-anchor="middle">评测后端</text><text class="ts" x="340" y="89" text-anchor="middle">Native + 第三方后端</text>
+<rect class="c-purple" x="250" y="108" width="180" height="50" rx="6"/><text class="t" x="340" y="129" text-anchor="middle">打分</text><text class="ts" x="340" y="147" text-anchor="middle">规则 · LLM 裁判 · 沙箱</text>
+<rect class="c-blue" x="250" y="166" width="180" height="50" rx="6"/><text class="t" x="340" y="187" text-anchor="middle">Agent 循环</text><text class="ts" x="340" y="205" text-anchor="middle">工具 · MCP · Docker/E2B</text>
+<rect class="c-amber" x="250" y="224" width="180" height="50" rx="6"/><text class="t" x="340" y="245" text-anchor="middle">性能压测</text><text class="ts" x="340" y="263" text-anchor="middle">evalscope perf</text>
+<rect class="c-green" x="498" y="56" width="152" height="96" rx="6"/><text class="t" x="574" y="84" text-anchor="middle">outputs 目录</text><text class="ts" x="574" y="106" text-anchor="middle">configs · predictions</text><text class="ts" x="574" y="126" text-anchor="middle">reviews · reports</text>
+<rect class="c-green" x="498" y="172" width="152" height="96" rx="6"/><text class="t" x="574" y="200" text-anchor="middle">可视化面板</text><text class="ts" x="574" y="222" text-anchor="middle">多模型对比 · 逐条查看</text><text class="ts" x="574" y="242" text-anchor="middle">Agent 轨迹回放</text>
+<path class="ln" d="M198 161 H232" marker-end="url(#es3)"/><path class="ln" d="M446 161 H480" marker-end="url(#es3)"/>
+</svg>
+<figcaption>图 3：EvalScope 的三层结构。每次运行的配置、原始预测和打分结果都会落盘。</figcaption>
+</figure>
 
 ## 上手：三种方式跑起来
 
