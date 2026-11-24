@@ -120,3 +120,25 @@ ICP 备案号 `湘ICP备2026054092号-1`，备案域名 `wlhuang32.me`，首页 
 **不使用宝塔时**
 
 `deploy/server-setup.sh` 可以在一台干净的 Alibaba Cloud Linux 3 上用系统 nginx 完成同样的配置（配置见 `deploy/nginx-blog.conf`）：`bash server-setup.sh '<公钥内容>'`。它会占用 80 端口，不要和宝塔的 nginx 同时使用。
+
+### 文档助手的生成回答
+
+“搜索”在浏览器中检索静态文章索引。“提问”调用同源的 `POST /api/chat`。服务端用相同的关键词检索选出最多三段摘录，让 DeepSeek 按段给出答案和引用编号。文章链接由服务端索引提供。模型超时或引用编号无效时，页面保留原文摘录。
+
+本地使用 Node 22.13 或更高版本，先执行 `npm ci && npm run build` 生成文章索引。启动接口后，在另一个终端执行 `npm run dev`，Astro 会把提问转发给本地接口。
+
+```sh
+RESEARCH_AGENT_ENV=../research-agent/.env npm run chat
+```
+
+接口从指定文件读取 research-agent 的 DeepSeek 配置，也支持单独设置服务端环境变量 `DEEPSEEK_API_KEY`、`DEEPSEEK_MODEL` 和 `DEEPSEEK_BASE_URL`。环境变量优先。默认模型与 research-agent 一致，为 `deepseek-flash`。
+
+正式部署时，现有发布流程只同步静态文件。将仓库中的 `server/answers.mjs` 和 `src/lib/document-search.ts` 按原相对路径部署到站点公开目录之外，使用常驻服务执行 `node --experimental-strip-types server/answers.mjs`。设置 `BLOG_INDEX=/var/www/blog/document-index.json`，服务会在查询时读取最新发布的索引。密钥配置文件也应位于站点公开目录之外。接口默认只监听本机 8787 端口。在宝塔的博客站点 nginx 配置中加入以下规则并重载：
+
+```nginx
+location = /api/chat {
+    client_max_body_size 2k;
+    proxy_pass http://127.0.0.1:8787;
+    proxy_read_timeout 45s;
+}
+```

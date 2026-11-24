@@ -1,0 +1,19 @@
+[Unit]
+Description=Blog document assistant
+After=network-online.target
+
+[Service]
+DynamicUser=yes
+WorkingDirectory=/opt/blog-chat
+EnvironmentFile=/etc/blog-chat.env
+Environment=BLOG_INDEX=/var/www/blog/document-index.json
+ExecStart=/opt/blog-chat/bin/node --experimental-strip-types /opt/blog-chat/server/answers.mjs
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target

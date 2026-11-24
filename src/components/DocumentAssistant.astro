@@ -9,7 +9,7 @@ import { url } from '../utils';
   </header>
   <form>
     <label for="doc-query">搜索关键词，或向博客提问</label>
-    <div><input id="doc-query" type="search" required maxlength="240" placeholder="例如，Agent 如何跨会话记住信息？" autofocus /><button>查询</button></div>
+    <div><input id="doc-query" type="search" required maxlength="240" placeholder="例如，Agent 如何跨会话记住信息？" autofocus /><button value="ask">提问</button><button value="search">搜索</button></div>
   </form>
   <p role="status"></p>
   <section aria-label="文章回答"></section>
@@ -39,6 +39,7 @@ import { url } from '../utils';
       if (request !== id) return;
       const matches = search(articles, query);
       status.textContent = matches.length ? '相关原文与出处' : '没有找到相关原文，可以换个关键词。';
+      if (!matches.length) return;
       for (const match of matches) {
         const answer = document.createElement('p');
         answer.textContent = match.excerpt;
@@ -48,6 +49,50 @@ import { url } from '../utils';
         const item = document.createElement('article');
         item.append(answer, source);
         results.append(item);
+      }
+      if ((event.submitter as HTMLButtonElement | null)?.value === 'search') return;
+      status.textContent = '正在根据下方原文生成回答…';
+      try {
+        const response = await fetch('/api/chat', {
+          method: 'POST', headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({question: query}), signal: AbortSignal.timeout(40000)
+        });
+        if (!response.ok) throw Error();
+        const {paragraphs, sources} = await response.json();
+        if (id !== request) return;
+        if (!paragraphs.length) {
+          status.textContent = '原文依据不足，请参考以下摘录。';
+          return;
+        }
+        const generated = document.createDocumentFragment();
+        for (const paragraph of paragraphs) {
+          const block = document.createElement('p');
+          block.textContent = paragraph.text + ' ';
+          for (const number of new Set<number>(paragraph.sources)) {
+            const source = sources[number - 1];
+            const citation = document.createElement('a');
+            citation.href = source.href;
+            citation.textContent = '[' + number + ']';
+            citation.title = source.title;
+            citation.setAttribute('aria-label', '来源 ' + number + '：' + source.title);
+            block.append(citation);
+          }
+          generated.append(block);
+        }
+        for (const [i, source] of sources.entries()) {
+          const item = document.createElement('article');
+          const link = document.createElement('a');
+          link.href = source.href;
+          link.textContent = '[' + (i + 1) + '] ' + source.title;
+          const excerpt = document.createElement('p');
+          excerpt.textContent = source.excerpt;
+          item.append(link, excerpt);
+          generated.append(item);
+        }
+        results.replaceChildren(generated);
+        status.textContent = '根据博客原文生成的回答';
+      } catch {
+        if (id === request) status.textContent = '暂时无法生成回答，以下是相关原文。';
       }
     } catch {
       if (request === id) status.textContent = '文章索引暂时无法读取，请重新查询。';

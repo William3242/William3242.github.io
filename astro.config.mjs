@@ -8,6 +8,7 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: process.env.SITE_URL ?? 'https://william3242.github.io',
   base: '/',
+  vite: { server: { proxy: { '/api/chat': 'http://127.0.0.1:8787' } } },
   integrations: [mdx(), sitemap()],
   markdown: {
     shikiConfig: {
