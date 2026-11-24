@@ -1,0 +1,74 @@
+---
+import { url } from '../utils';
+---
+<button id="assistant-launch" type="button" popovertarget="doc-panel">文档助手</button>
+<dialog id="doc-panel" popover aria-labelledby="doc-heading" data-index={url('/document-index.json')}>
+  <header>
+    <h2 id="doc-heading">文档助手</h2>
+    <button type="button" popovertarget="doc-panel" popovertargetaction="hide" aria-label="关闭文档助手">关闭</button>
+  </header>
+  <form>
+    <label for="doc-query">搜索关键词，或向博客提问</label>
+    <div><input id="doc-query" type="search" required maxlength="240" placeholder="例如，Agent 如何跨会话记住信息？" autofocus /><button>查询</button></div>
+  </form>
+  <p role="status"></p>
+  <section aria-label="文章回答"></section>
+</dialog>
+<script>
+  import { search } from '../lib/document-search';
+  const panel = document.querySelector<HTMLDialogElement>('#doc-panel')!;
+  const form = panel.querySelector('form')!;
+  const input = form.querySelector('input')!;
+  const status = panel.querySelector('[role=status]')!;
+  const results = panel.querySelector('section')!;
+  let index: Promise<Parameters<typeof search>[0]> | undefined;
+  let request = 0;
+  form.addEventListener('submit', async event => {
+    event.preventDefault();
+    const id = ++request;
+    const query = input.value.trim();
+    results.replaceChildren();
+    if (!query) { status.textContent = '请输入关键词或问题。'; return; }
+    status.textContent = '正在查找文章…';
+    try {
+      index ??= fetch(panel.dataset.index!).then(response => {
+        if (!response.ok) throw Error();
+        return response.json();
+      }).catch(error => { index = undefined; throw error; });
+      const articles = await index;
+      if (request !== id) return;
+      const matches = search(articles, query);
+      status.textContent = matches.length ? '相关原文与出处' : '没有找到相关原文，可以换个关键词。';
+      for (const match of matches) {
+        const answer = document.createElement('p');
+        answer.textContent = match.excerpt;
+        const source = document.createElement('a');
+        source.href = match.href;
+        source.textContent = [match.title, match.heading].filter(Boolean).join(' · ');
+        const item = document.createElement('article');
+        item.append(answer, source);
+        results.append(item);
+      }
+    } catch {
+      if (request === id) status.textContent = '文章索引暂时无法读取，请重新查询。';
+    }
+  });
+</script>
+<style>
+  #assistant-launch, dialog { position: fixed; inset: auto max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) auto; }
+  button, input { font: inherit; }
+  button { color: var(--fg); background: var(--code-bg); border: 1px solid var(--border); border-radius: .5rem; padding: .45rem .8rem; cursor: pointer; }
+  #assistant-launch { z-index: 5; border-radius: 2rem; padding: .55rem 1.1rem; }
+  #assistant-launch, form button { background: var(--fg); color: var(--bg); }
+  dialog { margin: 0 0 3.5rem; width: min(25rem, calc(100vw - 2rem)); max-height: calc(100dvh - 6rem); overflow: auto; overscroll-behavior: contain; padding: 1.1rem; background: var(--bg); color: var(--fg); border: 1px solid var(--border); border-radius: .9rem; box-shadow: 0 8px 32px #0002; font-size: .94rem; }
+  header, form div { display: flex; align-items: center; gap: .5rem; }
+  header { justify-content: space-between; }
+  h2 { font-size: 1.2rem; margin: 0; }
+  label { display: block; margin: 1rem 0 .35rem; }
+  input { flex: 1; min-width: 0; padding: .5rem; border: 1px solid var(--border); border-radius: .5rem; color: var(--fg); background: var(--bg); }
+  [role=status] { color: var(--muted); margin-bottom: 0; }
+  [role=status]:empty { margin: 0; }
+  section :global(article) { border-top: 1px solid var(--border); padding: .7rem 0; overflow-wrap: anywhere; }
+  section :global(p) { margin: 0 0 .35rem; }
+  section :global(a) { font-size: .86rem; }
+</style>
