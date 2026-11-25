@@ -19,7 +19,7 @@ const { nodes } = Astro.props;
             <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4l4 4-4 4" /></svg>
           </button>
         ) : <span class="tw-gap" />}
-        <a href={`#${n.slug}`}>{n.text}</a>
+        <a href={`#${n.slug}`} title={n.text}>{n.text}</a>
       </div>
       {n.children.length > 0 && <Astro.self nodes={n.children} />}
     </li>

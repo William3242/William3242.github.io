@@ -12,8 +12,10 @@ interface Props {
   title?: string;
   description?: string;
   headings?: MarkdownHeading[];
+  /** 列表类页面（首页、标签）用更宽的版心放卡片 */
+  wide?: boolean;
 }
-const { title, description = SITE_DESCRIPTION, headings = [] } = Astro.props;
+const { title, description = SITE_DESCRIPTION, headings = [], wide = false } = Astro.props;
 const fullTitle = title ? `${title} | ${SITE_TITLE}` : SITE_TITLE;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
@@ -39,8 +41,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     </script>
   </head>
   <body>
-    <div class="container">
-      <Header />
+    <div class="backdrop" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <Header />
+    <div class:list={['container', { wide }]}>
       <main>
         <Toc headings={headings} />
         <slot />
@@ -50,4 +53,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <DocumentAssistant />
   </body>
 </html>
-<style>main { position: relative; }</style>
+<style>
+  main { position: relative; }
+  .wide { max-width: 68rem; }
+</style>

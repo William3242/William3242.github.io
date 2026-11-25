@@ -1,0 +1,55 @@
+---
+/**
+ * 文章卡片的封面，按优先级：
+ * 1. frontmatter 的 cover（图片路径）；
+ * 2. 正文里的示意图：coverFigure 指定第几幅，否则挑元素最多（信息量最大）的一幅，越靠前越优先；
+ * 3. 没有图时，生成素色封面：浅灰蓝底 + 网格 + 主题词。
+ */
+interface Props { id: string; tags: string[]; body?: string; cover?: string; coverFigure?: number }
+const { id, tags, body = '', cover, coverFigure } = Astro.props;
+
+const svgs = [...body.matchAll(/<figure class="diagram">\s*(<svg[\s\S]*?<\/svg>)/g)].map((m) => m[1]);
+let figure: string | undefined;
+if (svgs.length) {
+  if (coverFigure && svgs[coverFigure - 1]) figure = svgs[coverFigure - 1];
+  else {
+    const score = (s: string, i: number) => (s.match(/<(rect|circle|ellipse|path|line|polyline|polygon|text)\b/g)?.length ?? 0) * (1 - Math.min(i, 8) * 0.06);
+    figure = svgs.reduce((best, s, i) => (score(s, i) > score(best.s, best.i) ? { s, i } : best), { s: svgs[0], i: 0 }).s;
+  }
+  // 同一页面有多张封面，给 SVG 内部的 id 加前缀避免冲突；去掉无障碍标签（卡片标题已说明内容）
+  const pre = `cv-${id.replace(/[^a-z0-9-]/gi, '')}-`;
+  figure = figure
+    .replace(/\bid="([^"]+)"/g, `id="${pre}$1"`)
+    .replace(/url\(#([^)]+)\)/g, `url(#${pre}$1)`)
+    .replace(/<svg\b([^>]*?)\s+role="img"/, '<svg$1')
+    .replace(/\saria-label="[^"]*"/, ' aria-hidden="true" preserveAspectRatio="xMidYMid meet"');
+}
+
+const GENERIC = new Set(['LLM', 'Agent']);
+const label = tags.find((t) => !GENERIC.has(t)) ?? tags[0] ?? 'Note';
+const fontSize = label.length > 8 ? 34 : label.length > 4 ? 44 : 56;
+---
+{cover ? (
+  <img class="cover" src={cover} alt="" loading="lazy" />
+) : figure ? (
+  <div class="cover fig diagram" set:html={figure} />
+) : (
+  <svg class="cover plain" viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <text x="28" y="190" font-size={fontSize} font-weight="700" letter-spacing="-.5">{label}</text>
+  </svg>
+)}
+<style>
+  .cover { display: block; width: 100%; height: 100%; object-fit: cover; }
+  /* 示意图封面：在浅底上完整显示 */
+  .fig { margin: 0; padding: 6% 7%; display: grid; place-items: center; background: color-mix(in srgb, var(--bg) 70%, transparent); }
+  .fig :global(svg) { width: 100%; height: 100%; min-width: 0; }
+  /* 素色封面：浅灰蓝渐变 + 细网格 */
+  .plain {
+    background:
+      linear-gradient(rgb(77 107 254 / .06) 1px, transparent 1px) 0 0 / 24px 24px,
+      linear-gradient(90deg, rgb(77 107 254 / .06) 1px, transparent 1px) 0 0 / 24px 24px,
+      radial-gradient(120% 100% at 0% 0%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 60%),
+      color-mix(in srgb, var(--bg) 80%, #fff);
+  }
+  .plain text { fill: color-mix(in srgb, var(--accent) 70%, var(--fg)); opacity: .85; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; }
+</style>

@@ -1,7 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import PostList from '../../components/PostList.astro';
-import { getPublishedPosts } from '../../utils';
+import { getPublishedPosts, url } from '../../utils';
 
 export async function getStaticPaths() {
   const posts = await getPublishedPosts();
@@ -14,7 +14,18 @@ export async function getStaticPaths() {
 const { tag } = Astro.params;
 const { posts } = Astro.props;
 ---
-<Base title={`#${tag}`}>
-  <h1>#{tag}</h1>
+<Base title={`#${tag}`} wide>
+  <section class="hero">
+    <a class="back" href={url('/tags/')}>← 全部标签</a>
+    <h1>#{tag}</h1>
+    <p class="muted">{posts.length} 篇文章</p>
+  </section>
   <PostList posts={posts} />
 </Base>
+<style>
+  .hero { margin: .5rem 0 1.8rem; }
+  .hero h1 { font-size: 2.2rem; margin: .3rem 0 .2rem; }
+  .hero p { margin: 0; }
+  .back { font-size: .88rem; color: var(--muted); }
+  .back:hover { color: var(--accent); text-decoration: none; }
+</style>

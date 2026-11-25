@@ -1,19 +1,64 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import Cover from './Cover.astro';
 import { formatDate, url } from '../utils';
-interface Props { posts: CollectionEntry<'posts'>[] }
-const { posts } = Astro.props;
+interface Props {
+  posts: CollectionEntry<'posts'>[];
+  /** 首页把最新一篇放大成横向的大卡片 */
+  featured?: boolean;
+}
+const { posts, featured = false } = Astro.props;
 ---
-<ul>
-  {posts.map((p) => (
-    <li>
-      <time class="muted">{formatDate(p.data.pubDate)}</time>
-      <a href={url(`/posts/${p.id}/`)}>{p.data.title}</a>
+<ul class="cards">
+  {posts.map((p, i) => (
+    <li class:list={['card glass', { feature: featured && i === 0 }]}>
+      <a class="media" href={url(`/posts/${p.id}/`)} tabindex="-1" aria-hidden="true">
+        <Cover id={p.id} tags={p.data.tags} body={p.body} cover={p.data.cover} coverFigure={p.data.coverFigure} />
+      </a>
+      <div class="body">
+        <time class="muted">{formatDate(p.data.pubDate)}</time>
+        <h2><a class="title" href={url(`/posts/${p.id}/`)}>{p.data.title}</a></h2>
+        <p class="desc">{p.data.description}</p>
+        {p.data.tags.length > 0 && (
+          <div class="tags">{p.data.tags.slice(0, 4).map((t) => <a class="tag" href={url(`/tags/${t}/`)}>#{t}</a>)}</div>
+        )}
+      </div>
     </li>
   ))}
 </ul>
 <style>
-  ul { list-style: none; padding: 0; margin: 0; }
-  li { display: flex; gap: 1.2rem; padding: .35rem 0; }
-  time { flex-shrink: 0; font-variant-numeric: tabular-nums; font-size: .92rem; }
+  .cards { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(19rem, 1fr)); gap: 1.4rem; }
+  .card { position: relative; display: flex; flex-direction: column; overflow: hidden; border-radius: 20px; transition: transform .25s ease, box-shadow .25s ease; }
+  .card:hover { transform: translateY(-3px); box-shadow: 0 2px 4px rgb(29 36 51 / .04), 0 18px 36px -18px rgb(29 36 51 / .22); }
+  .media { display: block; aspect-ratio: 16 / 9; overflow: hidden; margin: .55rem .55rem 0; border-radius: 14px; border: 1px solid var(--border); }
+  .media :global(.cover) { transition: transform .5s ease; }
+  .card:hover .media :global(.cover) { transform: scale(1.03); }
+  .body { display: flex; flex-direction: column; flex: 1; padding: .9rem 1.15rem 1.1rem; }
+  time { font-size: .8rem; font-variant-numeric: tabular-nums; }
+  h2 { margin: .2rem 0 .45rem; font-size: 1.08rem; line-height: 1.45; }
+  .title { color: var(--fg); }
+  /* 整张卡片都可点击：标题链接的伪元素铺满卡片，标签链接浮在上面 */
+  .title::after { content: ''; position: absolute; inset: 0; z-index: 1; }
+  .title:hover { text-decoration: none; }
+  .card:hover .title { color: var(--accent); }
+  .desc { margin: 0 0 .8rem; font-size: .88rem; line-height: 1.65; color: var(--muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .tags { margin-top: auto; position: relative; z-index: 2; }
+  .tags .tag { margin-bottom: 0; }
+
+  .feature { grid-column: 1 / -1; flex-direction: row; }
+  .feature .media { flex: 0 0 52%; aspect-ratio: auto; min-height: 16rem; margin: .6rem 0 .6rem .6rem; }
+  .feature .body { justify-content: center; padding: 1.6rem 2rem; }
+  .feature h2 { font-size: 1.5rem; margin: .35rem 0 .7rem; }
+  .feature .desc { font-size: .95rem; -webkit-line-clamp: 4; margin-bottom: 1.1rem; }
+  .feature .tags { margin-top: 0; }
+  @media (max-width: 44rem) {
+    .feature { flex-direction: column; }
+    .feature .media { flex: none; aspect-ratio: 16 / 9; min-height: 0; margin: .55rem .55rem 0; }
+    .feature .body { padding: .9rem 1.15rem 1.1rem; }
+    .feature h2 { font-size: 1.2rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .card, .media :global(.cover) { transition: none; }
+    .card:hover { transform: none; }
+  }
 </style>

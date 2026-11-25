@@ -20,9 +20,16 @@ const nested = tree.some((n) => n.children.length > 0);
 ---
 {items.length >= 3 && (
   <aside class="toc">
-    <details open>
-      <summary>目录</summary>
-      {nested && <button class="all" type="button">全部展开</button>}
+    <details open class="glass">
+      <summary>
+        <svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 4h11M5 8h8.5M5 12h8.5" /></svg>
+        <span>目录</span>
+      </summary>
+      {nested && (
+        <button class="all" type="button" title="全部展开" aria-label="全部展开">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path class="open-ic" d="M4.5 6.5L8 3l3.5 3.5M4.5 9.5L8 13l3.5-3.5" /><path class="close-ic" d="M4.5 3L8 6.5 11.5 3M4.5 13L8 9.5l3.5 3.5" /></svg>
+        </button>
+      )}
       <TocList nodes={tree} />
     </details>
   </aside>
@@ -51,7 +58,12 @@ const nested = tree.some((n) => n.children.length > 0);
         const auto = expandAll || (activeLi !== null && li.contains(activeLi));
         setOpen(li, manual.get(li) ?? auto);
       });
-      if (allBtn) allBtn.textContent = expandAll ? '全部收起' : '全部展开';
+      if (allBtn) {
+        const label = expandAll ? '全部收起' : '全部展开';
+        allBtn.title = label;
+        allBtn.setAttribute('aria-label', label);
+        allBtn.classList.toggle('expanded', expandAll);
+      }
     };
 
     toc.addEventListener('click', (e) => {
@@ -68,7 +80,7 @@ const nested = tree.some((n) => n.children.length > 0);
     });
 
     // 宽屏时目录在侧栏常驻展开；窄屏默认收起，点开后选中条目会自动收起
-    const wide = matchMedia('(min-width: 76rem)');
+    const wide = matchMedia('(min-width: 80rem)');
     const sync = () => { details.open = wide.matches; };
     sync();
     wide.addEventListener('change', sync);
@@ -81,7 +93,19 @@ const nested = tree.some((n) => n.children.length > 0);
       targets.forEach((el, i) => { if (el && el.getBoundingClientRect().top < 120) current = i; });
       links.forEach((a, i) => a.classList.toggle('active', i === current));
       const li = current >= 0 ? links[current].closest('li') : null;
-      if (li !== activeLi) { activeLi = li; applyCollapse(); }
+      if (li !== activeLi) {
+        activeLi = li;
+        applyCollapse();
+        // 和飞书一样：目录很长时，让当前条目始终留在目录的可视区域里
+        const a = current >= 0 ? links[current] : null;
+        if (a && wide.matches) {
+          const box = details.getBoundingClientRect();
+          const r = a.getBoundingClientRect();
+          if (r.top < box.top + 48 || r.bottom > box.bottom - 16) {
+            details.scrollTo({ top: details.scrollTop + r.top - box.top - box.height / 3, behavior: 'smooth' });
+          }
+        }
+      }
     };
     addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
     applyCollapse();
@@ -90,41 +114,47 @@ const nested = tree.some((n) => n.children.length > 0);
 </script>
 
 <style>
-  .toc { font-size: .88rem; line-height: 1.5; margin: 0 0 2rem; }
-  details { position: relative; border: 1px solid var(--border); border-radius: 6px; padding: .55rem .9rem; }
-  summary { cursor: pointer; color: var(--muted); font-weight: 600; list-style: none; user-select: none; }
+  /* 目录：参考飞书文档的大纲样式——圆角条目、悬停灰底、当前章节蓝字浅蓝底 */
+  .toc { font-size: .86rem; line-height: 1.5; margin: 0 0 2rem; }
+  details { position: relative; padding: .7rem .6rem .6rem; border-radius: 14px; }
+  summary { display: flex; align-items: center; gap: .45rem; padding: .1rem .5rem .1rem .45rem; cursor: pointer; color: var(--fg); font-weight: 600; font-size: .9rem; list-style: none; user-select: none; }
   summary::-webkit-details-marker { display: none; }
-  summary::after { content: '+'; float: right; font-weight: 400; }
-  details[open] summary::after { content: '−'; }
-  .all { position: absolute; top: .6rem; right: 2.2rem; padding: 0; border: 0; background: none; font: inherit; font-size: .78rem; color: var(--muted); cursor: pointer; }
-  .all:hover { color: var(--accent); }
+  summary::after { content: ''; margin-left: auto; width: .45rem; height: .45rem; border-right: 1.6px solid var(--muted); border-bottom: 1.6px solid var(--muted); transform: rotate(45deg) translate(-2px, -2px); transition: transform .2s; }
+  details[open] summary::after { transform: rotate(-135deg) translate(-2px, -2px); }
+  .ic { width: 1rem; height: 1rem; fill: none; stroke: var(--muted); stroke-width: 1.6; stroke-linecap: round; }
+  .all { position: absolute; top: .6rem; right: 2.3rem; display: grid; place-items: center; width: 1.6rem; height: 1.6rem; padding: 0; border: 0; border-radius: 6px; background: none; color: var(--muted); cursor: pointer; }
+  .all:hover { color: var(--fg); background: var(--hover); }
+  .all svg { width: .95rem; height: .95rem; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .all .close-ic, .all.expanded .open-ic { display: none; }
+  .all.expanded .close-ic { display: inline; }
   details:not([open]) .all { display: none; }
 
   .toc :global(ol) { list-style: none; margin: 0; padding: 0; }
-  .toc > details > :global(ol) { margin: .5rem 0 .2rem; }
-  .toc :global(li) { margin: .15rem 0; }
-  .toc :global(li ol) { padding-left: 1.1rem; }
+  .toc > details > :global(ol) { margin: .55rem 0 0; }
+  .toc :global(li) { margin: 1px 0; }
+  .toc :global(li ol) { padding-left: .9rem; }
   .toc :global(li.collapsed > ol) { display: none; }
-  .toc :global(.row) { display: flex; align-items: flex-start; }
-  .toc :global(.tw), .toc :global(.tw-gap) { flex: none; width: 1.1rem; height: 1.32rem; }
-  .toc :global(.tw) { display: grid; place-items: center; padding: 0; border: 0; background: none; color: var(--muted); cursor: pointer; border-radius: 3px; }
-  .toc :global(.tw:hover) { color: var(--fg); background: var(--code-bg); }
-  .toc :global(.tw svg) { width: .75rem; height: .75rem; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; transform: rotate(90deg); transition: transform .15s; }
+  .toc :global(.row) { position: relative; display: flex; align-items: flex-start; border-radius: 7px; transition: background-color .15s; }
+  .toc :global(.row:hover) { background: var(--hover); }
+  .toc :global(.row:has(a.active)) { background: var(--active-bg); }
+  .toc :global(.row:has(a.active))::before { content: ''; position: absolute; left: 0; top: 22%; bottom: 22%; width: 3px; border-radius: 3px; background: var(--accent); }
+  .toc :global(.tw), .toc :global(.tw-gap) { flex: none; width: 1.25rem; height: 1.95rem; }
+  .toc :global(.tw) { display: grid; place-items: center; padding: 0; border: 0; background: none; color: var(--muted); cursor: pointer; border-radius: 5px; }
+  .toc :global(.tw:hover) { color: var(--fg); }
+  .toc :global(.tw svg) { width: .7rem; height: .7rem; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; transform: rotate(90deg); transition: transform .18s; }
   .toc :global(li.collapsed > .row .tw svg) { transform: none; }
-  .toc :global(a) { color: var(--muted); display: block; flex: 1; min-width: 0; padding: .05rem 0; }
+  .toc :global(a) { color: var(--muted); display: block; flex: 1; min-width: 0; padding: .3rem .55rem .3rem 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .toc :global(a:hover) { color: var(--fg); text-decoration: none; }
-  .toc :global(a.active) { color: var(--accent); }
+  .toc :global(a.active) { color: var(--accent); font-weight: 600; }
   .toc :global(li.d2 > .row > a) { color: var(--fg); }
   .toc :global(li.d2 > .row > a.active) { color: var(--accent); }
 
   /* 宽屏：正文左侧的粘性侧栏 */
-  @media (min-width: 76rem) {
-    .toc { position: absolute; top: 0; bottom: 0; right: calc(100% + 2.5rem); width: 14rem; margin: 0; }
-    details { position: sticky; top: 2rem; max-height: calc(100vh - 4rem); overflow-y: auto; border: 0; padding: 0; }
-    summary { pointer-events: none; font-size: .8rem; letter-spacing: .04em; }
-    details[open] summary::after { content: none; }
-    .all { top: .05rem; right: 0; }
-    .toc > details > :global(ol) { border-left: 1px solid var(--border); padding-left: .3rem; }
-    .toc :global(a.active) { font-weight: 500; }
+  @media (min-width: 80rem) {
+    .toc { position: absolute; top: 0; bottom: 0; right: calc(100% + 3.75rem); width: 15rem; margin: 0; }
+    details { position: sticky; top: 5.5rem; max-height: calc(100vh - 7rem); overflow-y: auto; scrollbar-width: thin; }
+    summary { pointer-events: none; }
+    summary::after { content: none; }
+    .all { right: .6rem; }
   }
 </style>

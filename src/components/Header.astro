@@ -3,14 +3,15 @@ import { SITE_TITLE } from '../consts';
 import { url } from '../utils';
 const path = Astro.url.pathname;
 const links = [
-  { href: url('/map/'), label: '地图' },
   { href: url('/'), label: '文章' },
+  { href: url('/map/'), label: '地图' },
   { href: url('/tags/'), label: '标签' },
   { href: url('/about/'), label: '关于' },
 ];
 ---
-<header>
-  <a class="brand" href={url('/')}>{SITE_TITLE}</a>
+<header class="site-header">
+ <div class="bar glass">
+  <a class="brand" href={url('/')}><span class="logo" aria-hidden="true">W</span>{SITE_TITLE}</a>
   <nav>
     {links.map((l) => {
       // 文章页归到“文章”，标签详情页归到“标签”
@@ -22,9 +23,10 @@ const links = [
       <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z" /></svg>
     </button>
   </nav>
+ </div>
 </header>
 <script>
-  const btn = document.querySelector<HTMLButtonElement>('header .theme')!;
+  const btn = document.querySelector<HTMLButtonElement>('.site-header .theme')!;
   const root = document.documentElement;
   const system = matchMedia('(prefers-color-scheme: dark)');
   const isDark = () => (root.dataset.theme ?? (system.matches ? 'dark' : 'light')) === 'dark';
@@ -39,18 +41,26 @@ const links = [
   });
 </script>
 <style>
-  header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: .5rem; padding: 2rem 0 2.5rem; }
-  .brand { font-weight: 600; color: var(--fg); }
-  nav a { margin-left: 1.2rem; color: var(--muted); }
-  nav a:first-child { margin-left: 0; }
-  nav a { padding-bottom: .15rem; border-bottom: 1.5px solid transparent; transition: color .15s, border-color .15s; }
-  nav a:hover { color: var(--fg); text-decoration: none; }
-  nav a.active { color: var(--fg); border-bottom-color: var(--accent); }
-  nav { display: flex; align-items: center; }
-  .theme { margin-left: 1.1rem; padding: .2rem; border: 0; background: none; color: var(--muted); cursor: pointer; line-height: 0; border-radius: 4px; }
-  .theme:hover { color: var(--fg); }
+  /* 顶部导航：悬浮的玻璃条，滚动时保持在顶部 */
+  .site-header { position: sticky; top: 0; z-index: 20; padding: .7rem 1rem 0; margin-bottom: 2.2rem; }
+  .bar { max-width: 68rem; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: .5rem; padding: .5rem .6rem .5rem 1rem; border-radius: 999px; }
+  .brand { display: inline-flex; align-items: center; gap: .55rem; font-weight: 650; color: var(--fg); letter-spacing: .01em; }
+  .brand:hover { text-decoration: none; }
+  .logo { display: grid; place-items: center; width: 1.7rem; height: 1.7rem; border-radius: 50%; font-size: .85rem; font-weight: 700; color: #fff; background: var(--accent); }
+  nav { display: flex; align-items: center; gap: .15rem; }
+  nav a { padding: .32rem .85rem; border-radius: 999px; color: var(--muted); font-size: .95rem; transition: color .15s, background-color .15s; }
+  nav a:hover { color: var(--fg); background: var(--hover); text-decoration: none; }
+  nav a.active { color: var(--accent); background: var(--active-bg); font-weight: 600; }
+  .theme { margin-left: .3rem; width: 2.1rem; height: 2.1rem; display: grid; place-items: center; padding: 0; border: 0; background: none; color: var(--muted); cursor: pointer; border-radius: 50%; transition: background-color .15s, color .15s; }
+  .theme:hover { color: var(--fg); background: var(--hover); }
   .theme svg { width: 1.05rem; height: 1.05rem; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
   .theme .moon { display: none; }
   .theme[aria-pressed="true"] .sun { display: none; }
   .theme[aria-pressed="true"] .moon { display: block; }
+  @media (max-width: 34rem) {
+    .site-header { padding: .6rem .6rem 0; margin-bottom: 1.5rem; }
+    .bar { border-radius: 18px; padding: .45rem .5rem .45rem .8rem; }
+    .brand { font-size: .95rem; }
+    nav a { padding: .28rem .6rem; font-size: .9rem; }
+  }
 </style>
