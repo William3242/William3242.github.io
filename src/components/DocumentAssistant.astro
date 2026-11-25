@@ -1,7 +1,18 @@
 ---
 import { url } from '../utils';
 ---
-<button id="assistant-launch" type="button" popovertarget="doc-panel">文档助手</button>
+<button id="assistant-launch" type="button" popovertarget="doc-panel" aria-label="文档助手">
+  <svg class="buddy" viewBox="0 0 32 32" width="30" height="30" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <g class="buddy-body">
+      <circle cx="16" cy="8" r="4" />
+      <path d="M14.6 8.4h.01M17.4 8.4h.01" stroke-width="1.6" />
+      <path d="M16 12v9M16 21l-4 7M16 21l4 7M16 15l-5 4" />
+      <path d="M8 18.2l4.6 2.6-1.6 2.9-4.6-2.6z" stroke-width="1.6" />
+      <path class="buddy-arm" d="M16 15l5-4" />
+    </g>
+  </svg>
+  <span>文档助手</span>
+</button>
 <dialog id="doc-panel" popover aria-labelledby="doc-heading" data-index={url('/document-index.json')}>
   <header>
     <h2 id="doc-heading">文档助手</h2>
@@ -17,6 +28,11 @@ import { url } from '../utils';
 <script>
   import { search } from '../lib/document-search';
   const panel = document.querySelector<HTMLDialogElement>('#doc-panel')!;
+  const launch = document.querySelector<HTMLButtonElement>('#assistant-launch')!;
+  // 面板打开时让按钮保持滑出状态
+  panel.addEventListener('toggle', event => {
+    launch.toggleAttribute('data-open', (event as ToggleEvent).newState === 'open');
+  });
   const form = panel.querySelector('form')!;
   const input = form.querySelector('input')!;
   const status = panel.querySelector('[role=status]')!;
@@ -103,8 +119,39 @@ import { url } from '../utils';
   #assistant-launch, dialog { position: fixed; inset: auto max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) auto; }
   button, input { font: inherit; }
   button { color: var(--fg); background: var(--code-bg); border: 1px solid var(--border); border-radius: .5rem; padding: .45rem .8rem; cursor: pointer; }
-  #assistant-launch { z-index: 25; border-radius: 2rem; padding: .6rem 1.2rem; box-shadow: 0 10px 28px -10px rgb(31 35 40 / .5); }
+  /* 平时收在右边缘，只露出小人；悬停、键盘聚焦或面板打开时整颗滑出 */
+  #assistant-launch {
+    --peek: 3.1rem;
+    z-index: 25; right: 0; display: flex; align-items: center; gap: .45rem;
+    border-radius: 2rem 0 0 2rem; border-right: 0;
+    padding: .4rem calc(.9rem + env(safe-area-inset-right)) .4rem .55rem;
+    box-shadow: 0 10px 28px -10px rgb(31 35 40 / .5);
+    transform: translateX(calc(100% - var(--peek)));
+    transition: transform .35s cubic-bezier(.2, .8, .2, 1), box-shadow .35s;
+  }
+  #assistant-launch span { white-space: nowrap; opacity: 0; transition: opacity .25s; }
+  #assistant-launch:focus-visible, #assistant-launch[data-open] { transform: none; }
+  #assistant-launch:focus-visible span, #assistant-launch[data-open] span { opacity: 1; }
+  /* 触屏没有真正的悬停，避免点完后按钮一直卡在滑出状态 */
+  @media (hover: hover) {
+    #assistant-launch:hover { transform: none; }
+    #assistant-launch:hover span { opacity: 1; }
+    #assistant-launch:hover .buddy-arm { animation: buddy-wave .9s ease-in-out infinite; }
+    #assistant-launch:hover .buddy-body { animation: buddy-hop .9s ease-in-out infinite; }
+  }
   #assistant-launch, form button { background: var(--fg); color: var(--bg); }
+  .buddy { flex: none; overflow: visible; }
+  .buddy-body { transform-origin: 16px 28px; animation: buddy-sway 4.8s ease-in-out infinite; }
+  .buddy-arm { transform-origin: 16px 15px; }
+  #assistant-launch:focus-visible .buddy-arm, #assistant-launch[data-open] .buddy-arm { animation: buddy-wave .9s ease-in-out 2; }
+  #assistant-launch:focus-visible .buddy-body { animation: buddy-hop .9s ease-in-out infinite; }
+  @keyframes buddy-sway { 0%, 60%, 100% { transform: rotate(0); } 70% { transform: rotate(-6deg); } 80% { transform: rotate(5deg); } 90% { transform: rotate(-2deg); } }
+  @keyframes buddy-wave { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-28deg); } 75% { transform: rotate(14deg); } }
+  @keyframes buddy-hop { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-1.5px); } }
+  @media (prefers-reduced-motion: reduce) {
+    #assistant-launch, #assistant-launch span { transition: none; }
+    #assistant-launch .buddy-body, #assistant-launch .buddy-arm { animation: none !important; }
+  }
   dialog { margin: 0 0 3.5rem; width: min(25rem, calc(100vw - 2rem)); max-height: calc(100dvh - 6rem); overflow: auto; overscroll-behavior: contain; padding: 1.1rem; background: var(--glass-strong); -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur); color: var(--fg); border: 1px solid var(--glass-border); border-radius: 1.1rem; box-shadow: var(--glass-shadow); font-size: .94rem; }
   header, form div { display: flex; align-items: center; gap: .5rem; }
   header { justify-content: space-between; }
