@@ -106,7 +106,7 @@ export const CROSS: MapLayer = {
     { zh: 'Agent 评测', en: 'Agent Evaluation', post: 'agent-evaluation' },
     { zh: '模型评测', en: 'LLM Benchmarking', post: 'evalscope-llm-evaluation' },
     { zh: '数据隔离', en: 'Data Isolation', post: 'postgres-rls' },
-    { zh: '可观测性', en: 'Observability' },
+    { zh: '可观测性', en: 'Observability', post: 'agent-observability' },
     { zh: '成本与延迟', en: 'Cost & Latency' },
     { zh: '安全与护栏', en: 'Safety & Guardrails' },
   ],
