@@ -5,7 +5,7 @@
   --border: #e4e7ec;
   --accent: #4d6bfe;
   --code-bg: #f6f8fa;
-  --maxw: 42rem;
+  --maxw: 50rem;
   /* 玻璃拟态：半透明底 + 背景模糊，全站卡片、导航、目录共用这一组变量 */
   --glass: rgb(255 255 255 / .55);
   --glass-strong: rgb(255 255 255 / .8);

@@ -14,8 +14,10 @@ interface Props {
   headings?: MarkdownHeading[];
   /** 列表类页面（首页、标签）用更宽的版心放卡片 */
   wide?: boolean;
+  /** 文章页自己渲染目录时传 true，宽屏下给左侧目录留位置 */
+  toc?: boolean;
 }
-const { title, description = SITE_DESCRIPTION, headings = [], wide = false } = Astro.props;
+const { title, description = SITE_DESCRIPTION, headings = [], wide = false, toc = false } = Astro.props;
 const fullTitle = title ? `${title} | ${SITE_TITLE}` : SITE_TITLE;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
@@ -43,7 +45,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
   <body>
     <div class="backdrop" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
     <Header />
-    <div class:list={['container', { wide }]}>
+    <div class:list={['container', { wide, 'has-toc': (toc || headings.filter((h) => h.depth >= 2 && h.depth <= 4).length >= 3) && !wide }]}>
       <main>
         <Toc headings={headings} />
         <slot />
@@ -56,4 +58,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 <style>
   main { position: relative; }
   .wide { max-width: 68rem; }
+  /* 宽屏时目录挂在正文左侧：正文栏变宽后，给左边留够放目录的位置，不够居中时整体右移 */
+  @media (min-width: 80rem) {
+    .has-toc { margin-left: max(22rem, (100% - var(--maxw)) / 2); }
+  }
 </style>
