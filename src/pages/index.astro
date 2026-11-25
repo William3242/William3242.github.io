@@ -5,8 +5,15 @@ import { SITE_DESCRIPTION } from '../consts';
 import { getPublishedPosts } from '../utils';
 const posts = await getPublishedPosts();
 ---
-<Base>
-  <p class="muted intro">{SITE_DESCRIPTION}</p>
-  <PostList posts={posts} />
+<Base wide>
+  <section class="hero">
+    <h1>文章</h1>
+    <p class="muted">{SITE_DESCRIPTION}共 {posts.length} 篇。</p>
+  </section>
+  <PostList posts={posts} featured />
 </Base>
-<style>.intro { margin: 0 0 2rem; }</style>
+<style>
+  .hero { margin: .5rem 0 1.8rem; }
+  .hero h1 { font-size: 2.2rem; margin: 0 0 .3rem; letter-spacing: -.01em; }
+  .hero p { margin: 0; }
+</style>

@@ -3,5 +3,13 @@ import Base from './Base.astro';
 const { frontmatter, headings } = Astro.props;
 ---
 <Base title={frontmatter.title} description={frontmatter.description} headings={headings}>
-  <slot />
+  <article class="prose glass">
+    <slot />
+  </article>
 </Base>
+<style>
+  .prose { padding: 2rem 2.4rem 2.4rem; margin: 0 -2.4rem; border-radius: 22px; }
+  @media (max-width: 48rem) {
+    .prose { margin: 0 -.4rem; padding: 1.4rem 1.2rem 1.8rem; border-radius: 18px; }
+  }
+</style>

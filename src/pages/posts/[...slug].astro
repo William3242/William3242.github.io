@@ -13,7 +13,7 @@ const { Content, headings } = await render(post);
 const { title, description, pubDate, updatedDate, tags } = post.data;
 ---
 <Base title={title} description={description}>
-  <article>
+  <article class="post glass">
     <h1>{title}</h1>
     <p class="muted meta">
       {formatDate(pubDate)}
@@ -25,4 +25,16 @@ const { title, description, pubDate, updatedDate, tags } = post.data;
     <Content />
   </article>
 </Base>
-<style>.meta { font-size: .9rem; margin: 0 0 2rem; }</style>
+<style>
+  /* 正文放在一块玻璃卡片里；宽屏时向两侧外扩，保持正文栏宽度不变 */
+  .post { padding: 2.2rem 2.4rem 2.6rem; margin: 0 -2.4rem; border-radius: 22px; }
+  .post > h1 { font-size: 2rem; letter-spacing: -.01em; margin-bottom: .8rem; }
+  .meta { font-size: .88rem; margin: 0 0 2rem; padding-bottom: 1.2rem; border-bottom: 1px solid var(--border); display: flex; flex-wrap: wrap; align-items: center; gap: .1rem .3rem; }
+  .meta .tag { margin-bottom: 0; }
+  .post :global(h2) { position: relative; padding-left: .85rem; }
+  .post :global(h2)::before { content: ''; position: absolute; left: 0; top: .28em; bottom: .28em; width: 4px; border-radius: 4px; background: linear-gradient(180deg, var(--accent), color-mix(in srgb, var(--accent) 30%, #a46bf5)); }
+  @media (max-width: 48rem) {
+    .post { margin: 0 -.4rem; padding: 1.4rem 1.2rem 1.8rem; border-radius: 18px; }
+    .post > h1 { font-size: 1.6rem; }
+  }
+</style>

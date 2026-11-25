@@ -11,6 +11,8 @@ const posts = defineCollection({
     updatedDate: z.coerce.date().optional(),
     tags: z.array(z.string()).default([]),
     draft: z.boolean().default(false),
+    // 可选封面图（相对站点根目录的路径，如 /covers/xxx.png）；不填则自动生成渐变封面
+    cover: z.string().optional(),
   }),
 });
 

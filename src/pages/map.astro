@@ -109,19 +109,19 @@ const pct = Math.round((written / all.length) * 100);
     --c-model: #9a6700;
     --c-infra: #cf222e;
     --c-cross: #57606a;
-    --card: color-mix(in srgb, var(--code-bg) 55%, var(--bg));
+    --card: var(--glass);
     --shadow: 0 1px 2px rgb(31 35 40 / .04), 0 8px 24px -12px rgb(31 35 40 / .12);
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) .atlas {
       --c-app: #a371f7; --c-harness: #58a6ff; --c-cap: #3fb950; --c-model: #d29922; --c-infra: #ff7b72; --c-cross: #8b949e;
-      --card: color-mix(in srgb, var(--code-bg) 70%, var(--bg));
+      --card: var(--glass);
       --shadow: 0 1px 2px rgb(0 0 0 / .3), 0 10px 30px -14px rgb(0 0 0 / .6);
     }
   }
   :root[data-theme="dark"] .atlas {
     --c-app: #a371f7; --c-harness: #58a6ff; --c-cap: #3fb950; --c-model: #d29922; --c-infra: #ff7b72; --c-cross: #8b949e;
-    --card: color-mix(in srgb, var(--code-bg) 70%, var(--bg));
+    --card: var(--glass);
     --shadow: 0 1px 2px rgb(0 0 0 / .3), 0 10px 30px -14px rgb(0 0 0 / .6);
   }
   .l-app { --c: var(--c-app); }
@@ -160,11 +160,14 @@ const pct = Math.round((written / all.length) * 100);
     gap: 1.2rem;
     padding: 1.05rem 1.15rem 1.05rem 1.35rem;
     border: 1px solid var(--border);
-    border-radius: 14px;
+    border-radius: 18px;
     background:
       radial-gradient(120% 140% at 0% 0%, color-mix(in srgb, var(--c) 9%, transparent), transparent 55%),
       var(--card);
     box-shadow: var(--shadow);
+    -webkit-backdrop-filter: var(--glass-blur);
+    backdrop-filter: var(--glass-blur);
+    border-color: var(--glass-border);
     overflow: hidden;
   }
   .layer::before {
