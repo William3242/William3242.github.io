@@ -6,7 +6,8 @@ const counts = new Map<string, number>();
 posts.forEach((p) => p.data.tags.forEach((t) => counts.set(t, (counts.get(t) ?? 0) + 1)));
 const tags = [...counts].sort((a, b) => b[1] - a[1]);
 const max = tags[0]?.[1] ?? 1;
-const PALETTE = ['#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#06b6d4', '#ef4444', '#6366f1', '#14b8a6', '#f97316'];
+// 单色系：文章越多颜色越深，保持素净
+const tone = (n: number) => Math.round(14 + 46 * Math.sqrt((n - 1) / Math.max(1, max - 1)));
 // 直径按文章数的平方根缩放，面积和篇数成正比
 const size = (n: number) => Math.round(62 + 108 * Math.sqrt((n - 1) / Math.max(1, max - 1)));
 // 估算标签文字宽度（以 em 计：中文约 1em，英文约 .6em），据此决定字号，保证一行放得下
@@ -20,7 +21,7 @@ const fit = (t: string) => Math.min(0.15, 0.74 / Math.max(textEm(t), 2.4)).toFix
   </section>
   <div class="field glass" data-bubbles>
     {tags.map(([t, n], i) => (
-      <a class="bubble" href={url(`/tags/${t}/`)} style={`--d:${size(n)}px;--c:${PALETTE[i % PALETTE.length]};--k:${fit(t)}`} data-d={size(n)} title={`${t}：${n} 篇`}>
+      <a class="bubble" href={url(`/tags/${t}/`)} style={`--d:${size(n)}px;--t:${tone(n)}%;--k:${fit(t)}`} data-d={size(n)} title={`${t}：${n} 篇`}>
         <span class="name">{t}</span>
         <span class="n">{n}</span>
       </a>
@@ -120,25 +121,26 @@ const fit = (t: string) => Math.min(0.15, 0.74 / Math.max(textEm(t), 2.4)).toFix
   .field.live .bubble { position: absolute; left: 0; top: 0; }
 
   .bubble {
+    --c: var(--accent);
     width: var(--d); height: var(--d);
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     border-radius: 50%; text-align: center; color: var(--fg); line-height: 1.2; padding: .3rem;
     background:
-      radial-gradient(circle at 32% 26%, rgb(255 255 255 / .85), transparent 42%),
-      radial-gradient(circle at 50% 60%, color-mix(in srgb, var(--c) 30%, transparent), color-mix(in srgb, var(--c) 55%, transparent));
-    border: 1px solid color-mix(in srgb, var(--c) 45%, rgb(255 255 255 / .6));
-    box-shadow: inset 0 -6px 14px color-mix(in srgb, var(--c) 30%, transparent), 0 10px 24px -12px color-mix(in srgb, var(--c) 70%, transparent);
+      radial-gradient(circle at 35% 28%, rgb(255 255 255 / .7), transparent 50%),
+      color-mix(in srgb, var(--c) var(--t), var(--glass-strong));
+    border: 1px solid color-mix(in srgb, var(--c) calc(var(--t) + 10%), var(--glass-border));
+    box-shadow: 0 6px 18px -12px color-mix(in srgb, var(--c) 60%, transparent);
     -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
-    transition: box-shadow .2s, filter .2s;
+    transition: box-shadow .2s, background-color .2s;
     will-change: transform;
     user-select: none;
   }
-  .bubble:hover { text-decoration: none; filter: brightness(1.06) saturate(1.2); box-shadow: inset 0 -6px 14px color-mix(in srgb, var(--c) 40%, transparent), 0 0 0 3px color-mix(in srgb, var(--c) 35%, transparent), 0 14px 30px -12px color-mix(in srgb, var(--c) 80%, transparent); z-index: 3; }
-  .name { font-weight: 650; font-size: max(9px, calc(var(--d) * var(--k))); white-space: nowrap; }
-  .n { font-size: clamp(.6rem, calc(var(--d) * .09), .9rem); color: color-mix(in srgb, var(--fg) 65%, var(--c)); font-variant-numeric: tabular-nums; margin-top: .1rem; }
+  .bubble:hover { text-decoration: none; color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--c) 22%, transparent), 0 10px 24px -12px color-mix(in srgb, var(--c) 70%, transparent); z-index: 3; }
+  .name { font-weight: 600; font-size: max(9px, calc(var(--d) * var(--k))); white-space: nowrap; }
+  .n { font-size: clamp(.6rem, calc(var(--d) * .09), .9rem); color: var(--muted); font-variant-numeric: tabular-nums; margin-top: .1rem; }
 
   @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) .bubble { background: radial-gradient(circle at 32% 26%, rgb(255 255 255 / .22), transparent 45%), radial-gradient(circle at 50% 60%, color-mix(in srgb, var(--c) 25%, transparent), color-mix(in srgb, var(--c) 50%, transparent)); }
+    :root:not([data-theme="light"]) .bubble { background: radial-gradient(circle at 35% 28%, rgb(255 255 255 / .1), transparent 50%), color-mix(in srgb, var(--c) var(--t), var(--glass-strong)); }
   }
-  :root[data-theme="dark"] .bubble { background: radial-gradient(circle at 32% 26%, rgb(255 255 255 / .22), transparent 45%), radial-gradient(circle at 50% 60%, color-mix(in srgb, var(--c) 25%, transparent), color-mix(in srgb, var(--c) 50%, transparent)); }
+  :root[data-theme="dark"] .bubble { background: radial-gradient(circle at 35% 28%, rgb(255 255 255 / .1), transparent 50%), color-mix(in srgb, var(--c) var(--t), var(--glass-strong)); }
 </style>

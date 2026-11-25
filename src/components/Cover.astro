@@ -1,57 +1,55 @@
 ---
 /**
- * 自动生成的文章封面：按主题配色的渐变 + 由文章 id 决定的几何图案 + 主题词。
- * 同一篇文章每次构建得到的图案都一样，不需要手动准备图片。
+ * 文章卡片的封面，按优先级：
+ * 1. frontmatter 的 cover（图片路径）；
+ * 2. 正文里的示意图：coverFigure 指定第几幅，否则挑元素最多（信息量最大）的一幅，越靠前越优先；
+ * 3. 没有图时，生成素色封面：浅灰蓝底 + 网格 + 主题词。
  */
-interface Props { id: string; tags: string[]; cover?: string; }
-const { id, tags, cover } = Astro.props;
+interface Props { id: string; tags: string[]; body?: string; cover?: string; coverFigure?: number }
+const { id, tags, body = '', cover, coverFigure } = Astro.props;
+
+const svgs = [...body.matchAll(/<figure class="diagram">\s*(<svg[\s\S]*?<\/svg>)/g)].map((m) => m[1]);
+let figure: string | undefined;
+if (svgs.length) {
+  if (coverFigure && svgs[coverFigure - 1]) figure = svgs[coverFigure - 1];
+  else {
+    const score = (s: string, i: number) => (s.match(/<(rect|circle|ellipse|path|line|polyline|polygon|text)\b/g)?.length ?? 0) * (1 - Math.min(i, 8) * 0.06);
+    figure = svgs.reduce((best, s, i) => (score(s, i) > score(best.s, best.i) ? { s, i } : best), { s: svgs[0], i: 0 }).s;
+  }
+  // 同一页面有多张封面，给 SVG 内部的 id 加前缀避免冲突；去掉无障碍标签（卡片标题已说明内容）
+  const pre = `cv-${id.replace(/[^a-z0-9-]/gi, '')}-`;
+  figure = figure
+    .replace(/\bid="([^"]+)"/g, `id="${pre}$1"`)
+    .replace(/url\(#([^)]+)\)/g, `url(#${pre}$1)`)
+    .replace(/<svg\b([^>]*?)\s+role="img"/, '<svg$1')
+    .replace(/\saria-label="[^"]*"/, ' aria-hidden="true" preserveAspectRatio="xMidYMid meet"');
+}
 
 const GENERIC = new Set(['LLM', 'Agent']);
 const label = tags.find((t) => !GENERIC.has(t)) ?? tags[0] ?? 'Note';
-
-// 主题 → 渐变色（按优先级匹配文章标签）
-const THEMES: [string[], [string, string, string]][] = [
-  [['AI Infra', 'GPU', '分布式训练'], ['#ff8a4c', '#f43f5e', '#7c3aed']],
-  [['数据库', '后端', 'PostgreSQL', 'Redis', 'FastAPI', 'Python'], ['#10b981', '#0ea5e9', '#2563eb']],
-  [['评测', '可观测性'], ['#f59e0b', '#ef4444', '#db2777']],
-  [['安全', '沙箱'], ['#475569', '#0f766e', '#0ea5e9']],
-  [['Transformer', '深度学习', '推理', 'KV Cache'], ['#8b5cf6', '#ec4899', '#f97316']],
-  [['AI for Science', '生物信息学'], ['#22c55e', '#14b8a6', '#6366f1']],
-  [['随笔', '职业'], ['#a78bfa', '#f472b6', '#fbbf24']],
-  [['Agent'], ['#3b82f6', '#6366f1', '#a855f7']],
-];
-const colors = THEMES.find(([keys]) => tags.some((t) => keys.includes(t)))?.[1] ?? ['#60a5fa', '#818cf8', '#c084fc'];
-
-// 简单的确定性随机数（FNV-1a 哈希 + mulberry32）
-let h = 2166136261;
-for (const c of id) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); }
-const rand = () => { h |= 0; h = (h + 0x6d2b79f5) | 0; let t = Math.imul(h ^ (h >>> 15), 1 | h); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
-const circles = Array.from({ length: 4 }, () => ({ cx: Math.round(rand() * 400), cy: Math.round(rand() * 225), r: Math.round(40 + rand() * 90), o: (0.12 + rand() * 0.18).toFixed(2) }));
-const angle = Math.round(rand() * 360);
-const gid = `g-${id.replace(/[^a-z0-9]/gi, '')}`;
-const fontSize = label.length > 8 ? 40 : label.length > 4 ? 54 : 70;
+const fontSize = label.length > 8 ? 34 : label.length > 4 ? 44 : 56;
 ---
 {cover ? (
   <img class="cover" src={cover} alt="" loading="lazy" />
+) : figure ? (
+  <div class="cover fig diagram" set:html={figure} />
 ) : (
-  <svg class="cover" viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-    <defs>
-      <linearGradient id={gid} gradientTransform={`rotate(${angle % 90 + 20} .5 .5)`}>
-        <stop offset="0" stop-color={colors[0]} />
-        <stop offset=".55" stop-color={colors[1]} />
-        <stop offset="1" stop-color={colors[2]} />
-      </linearGradient>
-      <pattern id={`${gid}-d`} width="16" height="16" patternUnits="userSpaceOnUse">
-        <circle cx="2" cy="2" r="1.1" fill="#fff" opacity=".22" />
-      </pattern>
-    </defs>
-    <rect width="400" height="225" fill={`url(#${gid})`} />
-    <rect width="400" height="225" fill={`url(#${gid}-d)`} />
-    {circles.map((c) => <circle cx={c.cx} cy={c.cy} r={c.r} fill="#fff" opacity={c.o} />)}
-    <text x="24" y="200" fill="#fff" opacity=".92" font-size={fontSize} font-weight="800" letter-spacing="-1">{label}</text>
+  <svg class="cover plain" viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <text x="28" y="190" font-size={fontSize} font-weight="700" letter-spacing="-.5">{label}</text>
   </svg>
 )}
 <style>
   .cover { display: block; width: 100%; height: 100%; object-fit: cover; }
-  text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; }
+  /* 示意图封面：在浅底上完整显示 */
+  .fig { margin: 0; padding: 6% 7%; display: grid; place-items: center; background: color-mix(in srgb, var(--bg) 70%, transparent); }
+  .fig :global(svg) { width: 100%; height: 100%; min-width: 0; }
+  /* 素色封面：浅灰蓝渐变 + 细网格 */
+  .plain {
+    background:
+      linear-gradient(rgb(77 107 254 / .06) 1px, transparent 1px) 0 0 / 24px 24px,
+      linear-gradient(90deg, rgb(77 107 254 / .06) 1px, transparent 1px) 0 0 / 24px 24px,
+      radial-gradient(120% 100% at 0% 0%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 60%),
+      color-mix(in srgb, var(--bg) 80%, #fff);
+  }
+  .plain text { fill: color-mix(in srgb, var(--accent) 70%, var(--fg)); opacity: .85; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; }
 </style>

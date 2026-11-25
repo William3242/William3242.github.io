@@ -32,7 +32,7 @@ const { title, description, pubDate, updatedDate, tags } = post.data;
   .meta { font-size: .88rem; margin: 0 0 2rem; padding-bottom: 1.2rem; border-bottom: 1px solid var(--border); display: flex; flex-wrap: wrap; align-items: center; gap: .1rem .3rem; }
   .meta .tag { margin-bottom: 0; }
   .post :global(h2) { position: relative; padding-left: .85rem; }
-  .post :global(h2)::before { content: ''; position: absolute; left: 0; top: .28em; bottom: .28em; width: 4px; border-radius: 4px; background: linear-gradient(180deg, var(--accent), color-mix(in srgb, var(--accent) 30%, #a46bf5)); }
+  .post :global(h2)::before { content: ''; position: absolute; left: 0; top: .28em; bottom: .28em; width: 3px; border-radius: 3px; background: var(--accent); opacity: .85; }
   @media (max-width: 48rem) {
     .post { margin: 0 -.4rem; padding: 1.4rem 1.2rem 1.8rem; border-radius: 18px; }
     .post > h1 { font-size: 1.6rem; }

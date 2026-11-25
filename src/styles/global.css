@@ -1,33 +1,34 @@
 :root {
-  --bg: #f4f6fb;
-  --fg: #1f2328;
-  --muted: #6e7781;
-  --border: #e5e7eb;
-  --accent: #0969da;
+  --bg: #f7f8fa;
+  --fg: #1d2433;
+  --muted: #6b7280;
+  --border: #e4e7ec;
+  --accent: #4d6bfe;
   --code-bg: #f6f8fa;
   --maxw: 42rem;
   /* 玻璃拟态：半透明底 + 背景模糊，全站卡片、导航、目录共用这一组变量 */
-  --glass: rgb(255 255 255 / .58);
-  --glass-strong: rgb(255 255 255 / .78);
-  --glass-border: rgb(255 255 255 / .75);
-  --glass-edge: rgb(31 35 40 / .07);
-  --glass-shadow: 0 1px 1px rgb(31 35 40 / .03), 0 12px 32px -12px rgb(31 35 40 / .16);
+  --glass: rgb(255 255 255 / .55);
+  --glass-strong: rgb(255 255 255 / .8);
+  --glass-border: rgb(255 255 255 / .9);
+  --glass-edge: rgb(29 36 51 / .08);
+  --glass-shadow: 0 1px 2px rgb(29 36 51 / .03), 0 8px 24px -14px rgb(29 36 51 / .12);
   --glass-blur: saturate(170%) blur(18px);
   --hover: rgb(31 35 40 / .055);
   --active-bg: color-mix(in srgb, var(--accent) 11%, transparent);
-  --blob-1: #a5c8ff;
-  --blob-2: #f5c2e7;
-  --blob-3: #b7ead2;
-  --blob-4: #ffe0b2;
+  --blob-1: #b9c9ee;
+  --blob-2: #d3ddf3;
+  --blob-3: #e3e9f6;
+  --blob-4: #c7d3ef;
+  --grid: rgb(29 36 51 / .035);
 }
 /* 夜间模式：默认跟随系统；手动切换后 <html data-theme> 覆盖系统设置 */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #0b0f17;
+    --bg: #0e121a;
     --fg: #e6edf3;
     --muted: #8b949e;
     --border: #30363d;
-    --accent: #58a6ff;
+    --accent: #7b93ff;
     --code-bg: #161b22;
     --glass: rgb(22 27 36 / .55);
     --glass-strong: rgb(22 27 36 / .78);
@@ -36,10 +37,11 @@
     --glass-shadow: 0 1px 1px rgb(0 0 0 / .3), 0 16px 40px -16px rgb(0 0 0 / .7);
     --hover: rgb(255 255 255 / .06);
     --active-bg: color-mix(in srgb, var(--accent) 16%, transparent);
-    --blob-1: #1f3b73;
-    --blob-2: #4a2357;
-    --blob-3: #0f4a3b;
-    --blob-4: #4d3415;
+    --blob-1: #1c2a4d;
+    --blob-2: #172038;
+    --blob-3: #151c2e;
+    --blob-4: #1a2647;
+    --grid: rgb(255 255 255 / .025);
     color-scheme: dark;
   }
   :root:not([data-theme="light"]) .astro-code,
@@ -49,11 +51,11 @@
   }
 }
 :root[data-theme="dark"] {
-  --bg: #0b0f17;
+  --bg: #0e121a;
   --fg: #e6edf3;
   --muted: #8b949e;
   --border: #30363d;
-  --accent: #58a6ff;
+  --accent: #7b93ff;
   --code-bg: #161b22;
   --glass: rgb(22 27 36 / .55);
   --glass-strong: rgb(22 27 36 / .78);
@@ -62,10 +64,11 @@
   --glass-shadow: 0 1px 1px rgb(0 0 0 / .3), 0 16px 40px -16px rgb(0 0 0 / .7);
   --hover: rgb(255 255 255 / .06);
   --active-bg: color-mix(in srgb, var(--accent) 16%, transparent);
-  --blob-1: #1f3b73;
-  --blob-2: #4a2357;
-  --blob-3: #0f4a3b;
-  --blob-4: #4d3415;
+  --blob-1: #1c2a4d;
+  --blob-2: #172038;
+  --blob-3: #151c2e;
+  --blob-4: #1a2647;
+  --grid: rgb(255 255 255 / .025);
   color-scheme: dark;
 }
 :root[data-theme="dark"] .astro-code,
@@ -87,21 +90,21 @@ body {
 
 /* 背景：几团柔和的彩色光斑，给玻璃面板提供可以被模糊的内容 */
 .backdrop { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; background: var(--bg); }
-.backdrop i { position: absolute; border-radius: 50%; filter: blur(80px); opacity: .55; }
-.backdrop i:nth-child(1) { width: 42vw; height: 42vw; left: -10vw; top: -12vw; background: var(--blob-1); }
-.backdrop i:nth-child(2) { width: 36vw; height: 36vw; right: -8vw; top: 8vh; background: var(--blob-2); }
-.backdrop i:nth-child(3) { width: 40vw; height: 40vw; left: 20vw; bottom: -18vw; background: var(--blob-3); }
-.backdrop i:nth-child(4) { width: 26vw; height: 26vw; right: 12vw; bottom: 6vh; background: var(--blob-4); opacity: .4; }
+/* 淡淡的网格线，只在页面上半部分可见 */
+.backdrop::after { content: ''; position: absolute; inset: 0; background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: 100px 100px; -webkit-mask-image: linear-gradient(180deg, #000, transparent 70%); mask-image: linear-gradient(180deg, #000, transparent 70%); }
+.backdrop i { position: absolute; border-radius: 50%; filter: blur(90px); opacity: .7; }
+.backdrop i:nth-child(1) { width: 34vw; height: 46vw; left: -12vw; top: -6vw; background: var(--blob-1); }
+.backdrop i:nth-child(2) { width: 40vw; height: 22vw; right: -10vw; top: -10vw; background: var(--blob-2); }
+.backdrop i:nth-child(3) { width: 50vw; height: 24vw; left: 25vw; top: -14vw; background: var(--blob-3); }
+.backdrop i:nth-child(4) { width: 22vw; height: 22vw; right: -6vw; top: 40vh; background: var(--blob-4); opacity: .35; }
 @media (prefers-reduced-motion: no-preference) {
-  .backdrop i { animation: drift 28s ease-in-out infinite alternate; }
-  .backdrop i:nth-child(2) { animation-duration: 34s; animation-delay: -8s; }
-  .backdrop i:nth-child(3) { animation-duration: 40s; animation-delay: -16s; }
-  .backdrop i:nth-child(4) { animation-duration: 31s; animation-delay: -4s; }
+  .backdrop i { animation: drift 40s ease-in-out infinite alternate; }
+  .backdrop i:nth-child(2) { animation-delay: -12s; }
+  .backdrop i:nth-child(3) { animation-delay: -24s; }
 }
 @keyframes drift {
-  0% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(4vw, 3vh) scale(1.08); }
-  100% { transform: translate(-3vw, 5vh) scale(.95); }
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(2vw, 2vh); }
 }
 
 /* 通用玻璃面板 */

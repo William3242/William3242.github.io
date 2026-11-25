@@ -13,7 +13,7 @@ const { posts, featured = false } = Astro.props;
   {posts.map((p, i) => (
     <li class:list={['card glass', { feature: featured && i === 0 }]}>
       <a class="media" href={url(`/posts/${p.id}/`)} tabindex="-1" aria-hidden="true">
-        <Cover id={p.id} tags={p.data.tags} cover={p.data.cover} />
+        <Cover id={p.id} tags={p.data.tags} body={p.body} cover={p.data.cover} coverFigure={p.data.coverFigure} />
       </a>
       <div class="body">
         <time class="muted">{formatDate(p.data.pubDate)}</time>
@@ -29,10 +29,10 @@ const { posts, featured = false } = Astro.props;
 <style>
   .cards { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(19rem, 1fr)); gap: 1.4rem; }
   .card { position: relative; display: flex; flex-direction: column; overflow: hidden; border-radius: 20px; transition: transform .25s ease, box-shadow .25s ease; }
-  .card:hover { transform: translateY(-4px); box-shadow: 0 2px 4px rgb(31 35 40 / .05), 0 22px 44px -18px rgb(31 35 40 / .35); }
-  .media { display: block; aspect-ratio: 16 / 9; overflow: hidden; margin: .55rem .55rem 0; border-radius: 14px; }
+  .card:hover { transform: translateY(-3px); box-shadow: 0 2px 4px rgb(29 36 51 / .04), 0 18px 36px -18px rgb(29 36 51 / .22); }
+  .media { display: block; aspect-ratio: 16 / 9; overflow: hidden; margin: .55rem .55rem 0; border-radius: 14px; border: 1px solid var(--border); }
   .media :global(.cover) { transition: transform .5s ease; }
-  .card:hover .media :global(.cover) { transform: scale(1.05); }
+  .card:hover .media :global(.cover) { transform: scale(1.03); }
   .body { display: flex; flex-direction: column; flex: 1; padding: .9rem 1.15rem 1.1rem; }
   time { font-size: .8rem; font-variant-numeric: tabular-nums; }
   h2 { margin: .2rem 0 .45rem; font-size: 1.08rem; line-height: 1.45; }
