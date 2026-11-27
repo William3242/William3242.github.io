@@ -60,7 +60,7 @@ export const LAYERS: MapLayer[] = [
       { zh: 'MCP 与 CLI', en: 'MCP & CLI', post: 'mcp-vs-cli' },
       { zh: '沙箱', en: 'Sandbox', post: 'agent-sandbox' },
       { zh: '检索增强', en: 'RAG', post: 'ai-app-development' },
-      { zh: '向量检索', en: 'Vector Search', post: 'postgresql' },
+      { zh: '向量检索', en: 'Vector Search', post: 'vector-database' },
       { zh: '结构化输出', en: 'Structured Output' },
       { zh: '计算机使用', en: 'Computer Use' },
     ],
